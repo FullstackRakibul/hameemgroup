@@ -13,12 +13,18 @@ h1,h2,h3,p { margin:0; }
 h1,h2,.business-stat b,.metrics b { font-family:"Fira Sans Condensed",sans-serif; }
 .eyebrow { color:var(--red); font-size:12px; font-weight:600; letter-spacing:.12em; line-height:1.2; }
 
-.hero { height:100vh; min-height:720px; max-height:1000px; position:relative; overflow:hidden; color:white; background:var(--ink); }
+.hero { height:100vh; min-height:720px; max-height:1000px; position:relative; overflow:visible; color:white; background:var(--ink); }
 .hero-image,.hero-shade { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .hero-shade { background:linear-gradient(180deg,rgba(5,12,17,.48),rgba(5,12,17,.23) 38%,rgba(5,12,17,.56)); }
 .site-header { position:relative; z-index:2; height:88px; display:flex; align-items:center; justify-content:space-between; }
 .brand { display:flex; align-items:center; gap:12px; width:180px; }
-.brand img {  height:45px; object-fit:contain; }
+
+.brand img {
+  height: 28px;
+  /* slightly larger than the original 45px? No, 28px is smaller. Let's make it 32px for better presence */
+  height: 32px;
+  object-fit: contain;
+}
 .brand span { display:flex; flex-direction:column; line-height:1; }
 .brand b { font-size:16px; letter-spacing:.1em; }
 .brand small { font-size:9px; letter-spacing:.36em; margin-top:5px; }
@@ -211,4 +217,111 @@ footer { height:575px; background:var(--mist); color:var(--mute); }
   .sustain-inner h2,.people h2 { font-size:48px; }.metrics { grid-template-columns:1fr; }
   .news-head > .eyebrow { display:none; }.career-copy { padding-inline:20px; }.career-copy h2 { font-size:50px; }
   .footer-main { grid-template-columns:1fr; }.address { grid-column:auto; }
+}
+
+/* --- MEGA MENU --- */
+.site-header nav a.active {
+  color: var(--red);
+}
+
+.mega-menu {
+  position: absolute;
+  top: 88px; /* Height of the header */
+  left: 0;
+  width: 100%;
+  background: #fff;
+  z-index: 100;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  border-top: 1px solid var(--hair);
+  animation: megaFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes megaFadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mega-menu-inner {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  gap: 80px;
+  padding-block: 64px;
+}
+
+.mega-menu-left h2 {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 600;
+  margin-top: 20px;
+  color: var(--ink);
+}
+
+.mega-cta {
+  display: inline-block;
+  margin-top: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--red);
+  letter-spacing: 0.05em;
+}
+
+.mega-cta:hover {
+  text-decoration: underline;
+}
+
+.mega-menu-grid {
+  display: grid;
+  gap: 0;
+}
+
+.mega-menu-grid.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.mega-menu-grid.grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+.mega-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--hair);
+  transition: background 0.2s ease, padding-left 0.2s ease;
+}
+
+.mega-link:hover {
+  background: var(--mist);
+  padding-left: 32px;
+}
+
+.mega-link-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mega-link-text strong {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.mega-link-text span {
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.mega-link-arrow {
+  font-size: 18px;
+  color: var(--mute);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.mega-link:hover .mega-link-arrow {
+  transform: translateX(4px);
+  color: var(--red);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .mega-menu { display: none; } /* Rely on mobile menu instead */
 }

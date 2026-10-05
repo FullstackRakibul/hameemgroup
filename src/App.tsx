@@ -62,10 +62,54 @@ function Brand({ dark = false }: { dark?: boolean }) {
   );
 }
 
+const megaMenuData: Record<string, any> = {
+  company: {
+    eyebrow: "COMPANY",
+    headline: "One group from yarn to shipped carton, built in Dhaka since 1984.",
+    gridCols: 2,
+    links: [
+      { title: "About us", sub: "The group at a glance", href: "#company" },
+      { title: "Founders & leadership", sub: "A. K. Azad · Md. Delwar Hossain", href: "#company" },
+      { title: "Recognition & awards", sub: "National export trophies, buyer awards", href: "#recognition" },
+      { title: "People & community", sub: "75,000+ people, schools, scholarships", href: "#people" },
+      { title: "Contact", sub: "Head office, Tejgaon, Dhaka", href: "#contact" },
+    ]
+  },
+  businesses: {
+    eyebrow: "BUSINESSES",
+    headline: "Nine units, one chain.",
+    cta: { text: "View all businesses", href: "#businesses" },
+    gridCols: 3,
+    links: [
+      { title: "Woven garments", sub: "400 production lines", href: "#businesses" },
+      { title: "Denim mill", sub: "5.5M yards a month", href: "#businesses" },
+      { title: "Spinning & textiles", sub: "100 MT yarn a day", href: "#businesses" },
+      { title: "Washing & finishing", sub: "142M pieces a year", href: "#businesses" },
+      { title: "Sweaters", sub: "400 Stoll machines", href: "#businesses" },
+      { title: "Design & sampling", sub: "800 samples a day", href: "#businesses" },
+      { title: "Embroidery, printing & trims", sub: "40 embroidery machines", href: "#businesses" },
+      { title: "Packaging", sub: "100% export-oriented", href: "#businesses" },
+      { title: "Beyond apparel", sub: "2005 Samakal founded", href: "#businesses" },
+    ]
+  },
+  products: {
+    eyebrow: "PRODUCTS",
+    headline: "What leaves the looms and lines — and how to spec it.",
+    gridCols: 2,
+    links: [
+      { title: "Fabric library", sub: "18 denim and woven families", href: "#products" },
+      { title: "How we make it", sub: "Six steps, fibre to vessel", href: "#chain" },
+      { title: "360° virtual tour", sub: "Walk four facilities", href: "#products" },
+      { title: "Washing & finishing", sub: "142M pieces a year", href: "#businesses" },
+    ]
+  }
+};
+
 export default function App() {
   const [product, setProduct] = useState(0);
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   useEffect(() => {
     // Dismiss preloader after animation plays for a sufficient duration
@@ -73,27 +117,75 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const wrapper = document.querySelector('.header-wrapper');
+      if (window.scrollY > 50) {
+        wrapper?.classList.add('scrolled');
+      } else {
+        wrapper?.classList.remove('scrolled');
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       {loading && <Preloader />}
       <main style={{ opacity: loading ? 0 : 1, transition: "opacity 0.6s ease-in-out" }}>
+        
+        <div className="header-wrapper">
+          <header className="site-header wrap" onMouseLeave={() => setActiveMenu(null)}>
+            <Brand />
+            <nav>
+              <a href="#company" onMouseEnter={() => setActiveMenu('company')} className={activeMenu === 'company' ? 'active' : ''}>COMPANY⌄</a>
+              <a href="#businesses" onMouseEnter={() => setActiveMenu('businesses')} className={activeMenu === 'businesses' ? 'active' : ''}>BUSINESSES⌄</a>
+              <a href="#products" onMouseEnter={() => setActiveMenu('products')} className={activeMenu === 'products' ? 'active' : ''}>PRODUCTS⌄</a>
+              <a href="#sustainability" onMouseEnter={() => setActiveMenu(null)}>SUSTAINABILITY</a>
+              <a href="#news" onMouseEnter={() => setActiveMenu(null)}>NEWS</a>
+              <a href="#careers" onMouseEnter={() => setActiveMenu(null)}>CAREERS</a>
+            </nav>
+            <button className="menu" aria-label="Open menu">MENU</button>
+          </header>
+
+          {/* MEGA MENU OVERLAY */}
+          {activeMenu && (
+            <div className="mega-menu" onMouseLeave={() => setActiveMenu(null)}>
+              <div className="mega-menu-inner wrap">
+                <div className="mega-menu-left">
+                  <p className="eyebrow">{megaMenuData[activeMenu].eyebrow}</p>
+                  <h2>{megaMenuData[activeMenu].headline}</h2>
+                  {megaMenuData[activeMenu].cta && (
+                    <a href={megaMenuData[activeMenu].cta.href} className="mega-cta">
+                      {megaMenuData[activeMenu].cta.text} →
+                    </a>
+                  )}
+                </div>
+                <div className={`mega-menu-grid grid-${megaMenuData[activeMenu].gridCols}`}>
+                  {megaMenuData[activeMenu].links.map((link: any, i: number) => (
+                    <a href={link.href} key={i} className="mega-link">
+                      <div className="mega-link-text">
+                        <strong>{link.title}</strong>
+                        <span>{link.sub}</span>
+                      </div>
+                      <span className="mega-link-arrow">→</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
         <section id="top" className="hero">
-        <img className="hero-image" src={`${media}cine/looms.jpg`} alt="Long rows of looms weaving indigo denim" />
-        <div className="hero-shade" />
-        <header className="site-header wrap">
-          <Brand />
-          <nav>
-            <a href="#company">COMPANY⌄</a><a href="#businesses">BUSINESSES⌄</a>
-            <a href="#products">PRODUCTS⌄</a><a href="#sustainability">SUSTAINABILITY</a>
-            <a href="#news">NEWS</a><a href="#people">CAREERS</a>
-          </nav>
-          <button className="menu" aria-label="Open menu">MENU</button>
-        </header>
-        <div className="hero-title wrap"><h1>Wholesale clothing<br />manufacturer in Bangladesh.</h1></div>
-        <p className="hero-caption wrap">From fibre to finish — Ha-Meem Group</p>
-        <div className="hero-controls"><button>←</button><button>Ⅱ</button><button>→</button></div>
-        <img className="hero-seal" src={`${media}brand/mark-white.png`} alt="" />
-      </section>
+          <img className="hero-image" src={`${media}cine/looms.jpg`} alt="Long rows of looms weaving indigo denim" />
+          <div className="hero-shade" />
+          <div className="hero-title wrap"><h1>Wholesale clothing<br />manufacturer in Bangladesh.</h1></div>
+          <p className="hero-caption wrap">From fibre to finish — Ha-Meem Group</p>
+          <div className="hero-controls"><button>←</button><button>Ⅱ</button><button>→</button></div>
+          <img className="hero-seal" src={`${media}brand/mark-white.png`} alt="" />
+        </section>
 
       <div className="raised">
         <section id="company" className="company">
@@ -111,12 +203,6 @@ export default function App() {
             <div className="world-foot">
               <p>Today the group employs around 50,000 people and operates 26 garment factories, 300 production lines and seven washing plants, producing about seven million pieces each month. Denim production is around four million metres monthly. Its wider interests include shipping, newspapers and tea gardens.</p>
               <div className="legend"><span>● BANGLADESH</span><span>● SOURCING OFFICES</span><span>● EXPORT MARKETS</span></div>
-            </div>
-          </div>
-          <div className="buyers wrap">
-            <div className="buyers-title"><Label>OUR BUYERS</Label><h2>Retailers and brands<br />we manufacture for.<sup>*</sup></h2></div>
-            <div className="buyer-grid">
-              {buyers.map((name) => <div key={name}><img src={`${media}buyers/${name}.png`} alt={name.replaceAll("-", " ")} /></div>)}
             </div>
           </div>
 
