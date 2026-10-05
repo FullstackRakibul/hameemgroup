@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const media = "/media/";
+const media = "./media/";
 
 /* ── Data ── */
 const heroSlides = [
