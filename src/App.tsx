@@ -690,11 +690,11 @@ export default function App() {
               →
             </button>
           </div>
-          <img
+          {/* <img
             className="absolute right-8 bottom-6 z-2 w-16 h-16 p-2.5 rounded-full bg-white invert"
             src={`${media}brand/mark-white.png`}
             alt=""
-          />
+          /> */}
         </section>
 
         {/* ═══ RAISED CONTENT ═══ */}
