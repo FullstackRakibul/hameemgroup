@@ -112,6 +112,13 @@ export default function App() {
               {buyers.map((name) => <div key={name}><img src={`${media}buyers/${name}.png`} alt={name.replaceAll("-", " ")} /></div>)}
             </div>
           </div>
+
+          <div className="buyers wrap">
+            <div className="buyers-title"><Label>OUR BUYERS</Label><h2>Retailers and brands<br />we manufacture for.<sup>*</sup></h2></div>
+            <div className="buyer-grid">
+              {buyers.map((name) => <div key={name}><img src={`${media}buyers/${name}.png`} alt={name.replaceAll("-", " ")} /></div>)}
+            </div>
+          </div>
         </section>
 
         <section id="products" className="products">
