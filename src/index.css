@@ -14,7 +14,14 @@
 
 /* ── Global resets ── */
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { 
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
 body { margin: 0; background: #fff; }
 button, a { color: inherit; font: inherit; }
 a { text-decoration: none; }

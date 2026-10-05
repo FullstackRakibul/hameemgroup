@@ -544,36 +544,52 @@ export default function App() {
         }}
       >
         {/* ═══ FIXED HEADER ═══ */}
-        <div className="header-wrapper">
+        <div className="header-wrapper" onMouseLeave={() => setActiveMenu(null)}>
           <header
             className="site-header flex items-center justify-between h-20 wrap relative z-2"
-            onMouseLeave={() => setActiveMenu(null)}
           >
             <Brand />
-            <nav className="hidden md:flex gap-10 items-center">
+            <nav className="hidden text-white md:flex gap-10 items-center">
               {(["company", "businesses", "products"] as const).map((key) => (
-                <a
+                <div
                   key={key}
-                  href={`#${key}`}
+                  className="flex text-white items-center gap-1.5 cursor-pointer group nav-item"
                   onMouseEnter={() => setActiveMenu(key)}
-                  className={`font-['Fira_Sans_Condensed'] font-semibold text-[13px] tracking-[0.1em] text-white transition-colors duration-200 hover:text-[var(--red)] ${activeMenu === key ? "!text-[var(--red)]" : ""}`}
                 >
-                  {key.toUpperCase()}⌄
-                </a>
+                  <a
+                    href={`#${key}`}
+                    className={`nav-link font-['Fira_Sans_Condensed'] text-white font-semibold text-[14px] tracking-widest transition-colors duration-300 group-hover:text-(--red) ${activeMenu === key ? "text-(--red) active" : "text-(--white)"}`}
+                  >
+                    {key.toUpperCase()}
+                  </a>
+                  <svg
+                    className={`w-3.5 h-3.5 transition-transform duration-300 ${activeMenu === key ? "rotate-180 text-(--red)" : "text-(--white)"}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               ))}
               {["sustainability", "news", "careers"].map((key) => (
-                <a
+                <div
                   key={key}
-                  href={`#${key}`}
+                  className="flex items-center cursor-pointer group nav-item"
                   onMouseEnter={() => setActiveMenu(null)}
-                  className="font-['Fira_Sans_Condensed'] font-semibold text-[13px] tracking-[0.1em] text-white transition-colors duration-200 hover:text-[var(--red)]"
                 >
-                  {key.toUpperCase()}
-                </a>
+                  <a
+                    href={`#${key}`}
+                    className="nav-link font-['Fira_Sans_Condensed'] font-semibold text-[14px] tracking-widest text-white transition-colors duration-300 group-hover:text-(--red)"
+                  >
+                    {key.toUpperCase()}
+                  </a>
+                </div>
               ))}
             </nav>
             <button
-              className="menu-btn md:hidden text-white bg-transparent border-0 text-xs tracking-[0.1em]"
+              className="menu-btn md:hidden text-white bg-transparent border-0 text-xs tracking-widest"
               aria-label="Open menu"
             >
               MENU
@@ -583,19 +599,18 @@ export default function App() {
           {/* Mega Menu */}
           {activeMenu && (
             <div
-              className="mega-menu absolute top-20 left-0 w-full bg-white z-[100] shadow-[0_20px_40px_rgba(0,0,0,0.08)] border-t border-[var(--hair)]"
-              onMouseLeave={() => setActiveMenu(null)}
+              className="mega-menu absolute top-20 left-0 w-full bg-white z-100 shadow-[0_20px_40px_rgba(0,0,0,0.08)] border-t border-(--hair)"
             >
               <div className="wrap grid grid-cols-[1fr_2.5fr] gap-20 py-16">
                 <div>
                   <Eyebrow>{megaMenuData[activeMenu].eyebrow}</Eyebrow>
-                  <h2 className="font-['Fira_Sans_Condensed'] text-[32px] leading-[1.15] font-semibold mt-5 text-[var(--ink)]">
+                  <h2 className="font-['Fira_Sans_Condensed'] text-[32px] leading-[1.15] font-semibold mt-5 text-(--ink)">
                     {megaMenuData[activeMenu].headline}
                   </h2>
                   {megaMenuData[activeMenu].cta && (
                     <a
                       href={megaMenuData[activeMenu].cta.href}
-                      className="inline-block mt-8 text-sm font-semibold text-[var(--red)] tracking-[0.05em] hover:underline"
+                      className="inline-block mt-8 text-sm font-semibold text-(--red) tracking-wider hover:underline"
                     >
                       {megaMenuData[activeMenu].cta.text} →
                     </a>
@@ -609,17 +624,17 @@ export default function App() {
                       <a
                         href={link.href}
                         key={i}
-                        className="flex items-center justify-between px-6 py-5 border-b border-[var(--hair)] transition-all duration-200 hover:bg-[var(--mist)] hover:pl-8 group"
+                        className="flex items-center justify-between px-6 py-5 border-b border-(--hair) transition-all duration-200 hover:bg-(--mist) hover:pl-8 group"
                       >
                         <div className="flex flex-col gap-1.5">
-                          <strong className="font-['Fira_Sans_Condensed'] text-lg font-semibold text-[var(--ink)]">
+                          <strong className="font-['Fira_Sans_Condensed'] text-lg font-semibold text-(--ink)">
                             {link.title}
                           </strong>
                           <span className="text-[13px] text-(--mute)">
                             {link.sub}
                           </span>
                         </div>
-                        <span className="text-lg text-(--mute) transition-all duration-200 group-hover:translate-x-1 group-hover:text-[var(--red)]">
+                        <span className="text-lg text-(--mute) transition-all duration-200 group-hover:translate-x-1 group-hover:text-(--red)">
                           →
                         </span>
                       </a>
@@ -634,7 +649,7 @@ export default function App() {
         {/* ═══ HERO with KEN BURNS SLIDER ═══ */}
         <section
           id="top"
-          className="relative h-screen min-h-[720px] max-h-[1000px] overflow-hidden text-white bg-[var(--ink)]"
+          className="relative h-screen min-h-180 max-h-250 overflow-hidden text-white bg-(--ink)"
         >
           {heroSlides.map((slide, i) => (
             <img
@@ -644,9 +659,9 @@ export default function App() {
               className={`hero-slide ${heroSlide === i ? "active" : ""}`}
             />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(5,12,17,0.48)] via-[rgba(5,12,17,0.23)] to-[rgba(5,12,17,0.56)]" />
-          <div className="absolute z-2 left-1/2 top-1/2 -translate-x-1/2 -translate-y-[43%]">
-            <h1 className="font-['Fira_Sans_Condensed'] text-[clamp(68px,8vw,116px)] leading-[0.97] tracking-[-0.035em] font-semibold text-center">
+          <div className="absolute inset-0 bg-linear-to-b from-[rgba(5,12,17,0.48)] via-[rgba(5,12,17,0.23)] to-[rgba(5,12,17,0.56)]" />
+          <div className="absolute z-2 left-1/2 top-1/2 -translate-x-1/2 translate-y-[-43%]">
+            <h1 className="font-['Fira_Sans_Condensed'] text-[clamp(52px,8vw,98px)] leading-[0.97] tracking-[-0.035em] font-semibold text-center">
               Wholesale clothing
               <br />
               manufacturer in Bangladesh.
@@ -655,22 +670,22 @@ export default function App() {
           <p className="hero-caption-text absolute left-1/2 -translate-x-1/2 bottom-10 z-2 text-xs opacity-75">
             From fibre to finish — Ha-Meem Group
           </p>
-          <div className="hero-controls-wrap absolute right-[185px] bottom-8 z-2 flex gap-2">
+          <div className="hero-controls-wrap absolute right-46.25 bottom-8 z-2 flex gap-2">
             <button
               onClick={prevSlide}
-              className="border border-white/50 bg-[#11141826] text-white rounded-full w-[42px] h-[42px]"
+              className="border border-white/50 bg-[#11141826] text-white rounded-full w-10.5 h-10.5"
             >
               ←
             </button>
             <button
               onClick={togglePause}
-              className="border border-white/50 bg-[#11141826] text-white rounded-full w-[42px] h-[42px]"
+              className="border border-white/50 bg-[#11141826] text-white rounded-full w-10.5 h-10.5"
             >
               {heroPaused ? "▶" : "Ⅱ"}
             </button>
             <button
               onClick={nextSlide}
-              className="border border-white/50 bg-[#11141826] text-white rounded-full w-[42px] h-[42px]"
+              className="border border-white/50 bg-[#11141826] text-white rounded-full w-10.5 h-10.5"
             >
               →
             </button>
@@ -686,28 +701,28 @@ export default function App() {
         <div className="relative z-3 shadow-[0_-35px_70px_#00000040]">
           {/* ── FOUNDED IN 1984 ── */}
           <section id="company" className="bg-white py-24 md:py-32">
-            <div className="wrap text-center">
+            <div className="wrap text-center flex flex-col gap-3 justify-center items-center">
               <Eyebrow>FOUNDED IN 1984</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] text-[28px] md:text-[31px] leading-[1.18] font-normal mt-16 max-w-[800px] mx-auto">
+              <h2 className="font-['Fira_Sans_Condensed'] text-black font-black text-[30px] md:text-[38px] leading-[1.18]  mt-16 max-w-300 mx-auto">
                 Ha-Meem Group is one of Bangladesh&apos;s largest vertically
                 integrated apparel manufacturers. From our own yarn and denim to
                 sewing, washing, trims and shipping, we make bottoms, tops,
                 denim and sweaters for the world&apos;s leading retailers.
               </h2>
               {/* Stats grid */}
-              <div className="mt-16 pt-10 border-t border-[var(--hair)] grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-0">
+              <div className="mt-16 pt-10 border-t border-(--hair) grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-0">
                 {stats.map((s) => (
                   <div
                     key={s.value}
-                    className="py-8 px-4 text-center border-r border-[var(--hair)] last:border-r-0"
+                    className="py-8 px-4 text-center border-r border-(--hair) last:border-r-0"
                   >
                     <b className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[52px] font-semibold block leading-none">
                       {s.value}
                     </b>
-                    <span className="text-[var(--red)] text-[10px] font-semibold tracking-[0.12em] block mt-3">
+                    <span className="text-(--red) text-[10px] font-semibold tracking-[0.12em] block mt-3">
                       {s.label}
                     </span>
-                    <span className="text-[var(--mute)] text-[13px] block mt-2 leading-snug">
+                    <span className="text-(--mute) text-[13px] block mt-2 leading-snug">
                       {s.sub}
                     </span>
                   </div>
@@ -717,7 +732,7 @@ export default function App() {
           </section>
 
           {/* ── WHERE WE ARE ── */}
-          <section className="bg-white border-t border-[var(--hair)] py-24 md:py-32 relative overflow-hidden">
+          <section className="bg-white border-t border-(--hair) py-24 md:py-32 relative overflow-hidden">
             <div className="wrap">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
@@ -728,7 +743,7 @@ export default function App() {
                     to the world.
                   </h2>
                 </div>
-                <p className="text-[var(--mute)] text-base leading-relaxed self-end max-w-[430px] md:justify-self-end">
+                <p className="text-(--mute) text-base leading-relaxed self-end max-w-107.5 md:justify-self-end">
                   Every factory sits within an hour of Dhaka, with sourcing
                   offices in Hong Kong and Shanghai. Around ninety-five percent
                   of what we make ships to the United States, the rest to
@@ -741,20 +756,20 @@ export default function App() {
                 className="w-full mt-16 opacity-95"
               />
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between mt-12 gap-8">
-                <p className="max-w-[470px] text-[var(--mute)] text-sm leading-relaxed">
+                <p className="max-w-117.5 text-(--mute) text-sm leading-relaxed">
                   Today the group employs around 50,000 people and operates 26
                   garment factories, 300 production lines and seven washing
                   plants, producing about seven million pieces each month. Denim
                   production is around four million metres monthly.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-3 border border-[var(--hair)] rounded-full text-[11px] tracking-[0.07em] font-semibold text-[var(--red)]">
+                  <span className="px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--red)">
                     ● BANGLADESH
                   </span>
-                  <span className="px-4 py-3 border border-[var(--hair)] rounded-full text-[11px] tracking-[0.07em] font-semibold">
+                  <span className="px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
                     ● SOURCING OFFICES
                   </span>
-                  <span className="px-4 py-3 border border-[var(--hair)] rounded-full text-[11px] tracking-[0.07em] font-semibold">
+                  <span className="px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
                     ● EXPORT MARKETS
                   </span>
                 </div>
@@ -787,7 +802,7 @@ export default function App() {
                       src={`${media}buyers/${name}.png`}
                       alt={name.replaceAll("-", " ")}
                       loading="lazy"
-                      className="w-auto max-w-full object-contain opacity-80 grayscale transition-[filter,opacity] duration-500 group-hover:opacity-100 group-hover:grayscale-0 max-h-9 sm:max-h-11 sm:max-w-[7.5rem]"
+                      className="w-auto max-w-full object-contain opacity-80 grayscale transition-[filter,opacity] duration-500 group-hover:opacity-100 group-hover:grayscale-0 max-h-9 sm:max-h-11 sm:max-w-30"
                     />
                   </li>
                 ))}
@@ -798,9 +813,9 @@ export default function App() {
           {/* ── PRODUCTS (hover to switch) ── */}
           <section
             id="products"
-            className="grid md:grid-cols-2 min-h-[700px] md:h-[887px]"
+            className="grid md:grid-cols-2 min-h-175 md:h-221.75"
           >
-            <div className="product-image-wrap bg-[var(--mist)] overflow-hidden relative h-[400px] md:h-full">
+            <div className="product-image-wrap bg-(--mist) overflow-hidden relative h-100 md:h-full">
               {products.map((item, i) => (
                 <img
                   key={item[0]}
@@ -821,7 +836,7 @@ export default function App() {
                 <br />
                 denim and sweaters.
               </h2>
-              <p className="text-[var(--mute)] text-base leading-relaxed pb-9 border-b border-[var(--hair)]">
+              <p className="text-(--mute) text-base leading-relaxed pb-9 border-b border-(--hair)">
                 From fashionable denim fabrics to wholesale apparel, Ha-Meem
                 makes bottoms, tops and sweaters for global fashion brands, with
                 products ranging from infant to adult sizes.
@@ -830,10 +845,10 @@ export default function App() {
                 {products.map((item, i) => (
                   <button
                     key={item[0]}
-                    className={`product-btn block w-full text-left bg-transparent border-0 border-b border-[var(--hair)] py-5 text-[var(--mute)] ${product === i ? "active" : ""}`}
+                    className={`product-btn block w-full text-left bg-transparent border-0 border-b border-(--hair) py-5 text-(--mute) ${product === i ? "active" : ""}`}
                     onMouseEnter={() => setProduct(i)}
                   >
-                    <b className="tracking-[0.1em] text-[13px]">{item[0]}</b>
+                    <b className="tracking-widest text-[13px]">{item[0]}</b>
                     {product === i && item[1] && (
                       <span className="block pt-2 leading-relaxed text-sm">
                         {item[1]}
@@ -854,17 +869,17 @@ export default function App() {
                   Six steps, all ours.
                 </h2>
               </div>
-              <p className="max-w-[390px] text-[var(--mute)] leading-relaxed">
+              <p className="max-w-97.5 text-(--mute) leading-relaxed">
                 From yarn and denim fabric to finished garments, seven washing
                 plants and export-ready apparel, integrated facilities connect
                 each stage of production.
               </p>
             </div>
-            <div className="flex h-[620px] md:h-[672px] text-white bg-[var(--ink)] overflow-x-auto">
+            <div className="flex h-155 md:h-168 text-white bg-(--ink) overflow-x-auto">
               {steps.map((item, i) => (
                 <button
                   key={item.title}
-                  className={`step-panel relative border-0 border-r-2 border-white text-white bg-[var(--ink)] p-6 text-left bg-cover bg-center overflow-hidden cursor-pointer ${step === i ? "step-open flex-[1_1_50%]" : "flex-[0_0_10%]"}`}
+                  className={`step-panel relative border-0 border-r-2 border-white text-white bg-(--ink) p-6 text-left bg-cover bg-center overflow-hidden cursor-pointer ${step === i ? "step-open flex-[1_1_50%]" : "flex-[0_0_10%]"}`}
                   style={
                     step === i
                       ? {
@@ -880,13 +895,13 @@ export default function App() {
                   </span>
                   {step === i ? (
                     <span className="step-body absolute left-10 right-12 bottom-10 flex flex-col">
-                      <em className="text-[#c10943] not-italic text-xs font-semibold tracking-[0.1em]">
+                      <em className="text-(--red) not-italic text-xs font-semibold tracking-widest">
                         STEP {String(i + 1).padStart(2, "0")} OF 6
                       </em>
                       <strong className="font-['Fira_Sans_Condensed'] text-[32px] md:text-[40px] my-4">
                         {item.title}
                       </strong>
-                      <span className="max-w-[470px] text-[#e0e0e0] leading-relaxed">
+                      <span className="max-w-117.5 text-(--hair) leading-relaxed">
                         {item.text}
                       </span>
                       <b className="font-['Fira_Sans_Condensed'] text-[28px] mt-6">
@@ -908,14 +923,14 @@ export default function App() {
 
           {/* ── BUSINESSES ── */}
           <section id="businesses" className="wrap py-24 md:py-28">
-            <div className="text-center max-w-[620px] mx-auto">
+            <div className="text-center max-w-155 mx-auto">
               <Eyebrow>WHAT WE DO</Eyebrow>
               <h2 className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[59px] leading-[0.94] mt-7 mb-7">
                 One group, from yarn
                 <br />
                 to shipped carton.
               </h2>
-              <p className="text-[var(--mute)] text-base leading-relaxed">
+              <p className="text-(--mute) text-base leading-relaxed">
                 Every unit upstream of a sewing line exists to make that line
                 faster and more reliable. Around the apparel chain sit media,
                 jute, tea and logistics.
@@ -926,92 +941,92 @@ export default function App() {
                 <a
                   href="#contact"
                   key={b[2]}
-                  className="biz-card relative h-[298px] text-white overflow-hidden p-6 transition-all duration-[350ms] block"
+                  className="biz-card relative h-74.5 text-white overflow-hidden p-6 transition-all duration-350 block"
                 >
                   <img
                     src={`${media}${b[4]}`}
                     alt=""
-                    className="biz-img absolute inset-0 w-full h-full object-cover transition-transform duration-[350ms]"
+                    className="biz-img absolute inset-0 w-full h-full object-cover transition-transform duration-350"
                   />
-                  <span className="biz-overlay absolute inset-0 bg-gradient-to-b from-[#11141828] to-[#111418dc] transition-all duration-[350ms]" />
+                  <span className="biz-overlay absolute inset-0 bg-linear-to-b from-[#11141828] to-[#111418dc] transition-all duration-350" />
                   <span className="relative z-1 flex flex-col">
-                    <b className="font-['Fira_Sans_Condensed'] text-[37px]">
+                    <b className="font-['Fira_Sans_Condensed'] text-white text-[37px]">
                       {b[0]}
                     </b>
-                    <small className="text-[10px] tracking-[0.13em]">
+                    <small className="text-[10px] text-white tracking-[0.13em]">
                       {b[1]}
                     </small>
                   </span>
                   <span className="absolute left-6 right-6 bottom-6 z-1 flex flex-col">
-                    <strong className="font-['Fira_Sans_Condensed'] text-[25px] mb-2">
+                    <strong className="font-['Fira_Sans_Condensed'] text-white text-[25px] mb-2">
                       {b[2]}
                     </strong>
-                    <small className="leading-snug opacity-80 text-sm">
+                    <small className="leading-snug text-white opacity-80 text-sm">
                       {b[3]}
                     </small>
                   </span>
                 </a>
               ))}
             </div>
-            <p className="text-center text-[var(--mute)] text-[13px] mt-12">
+            <p className="text-center text-(--mute) text-[13px] mt-12">
               Tiles open the group&apos;s own pages for each unit.
             </p>
           </section>
 
           {/* ── RECOGNITION & AWARDS ── */}
-          <section id="recognition" className="bg-[var(--mist)] py-24 md:py-28">
+          <section id="recognition" className="bg-(--mist) py-24 md:py-28">
             <div className="wrap">
               <div className="flex flex-col md:flex-row justify-between md:items-end gap-8">
                 <div>
                   <Eyebrow>RECOGNITION</Eyebrow>
-                  <h2 className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[54px] leading-[0.98] mt-16">
+                  <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[54px] leading-[0.98] mt-16">
                     Judged by the people
                     <br />
                     who buy from us.
                   </h2>
                 </div>
-                <p className="max-w-[430px] text-[var(--mute)] leading-relaxed">
+                <p className="max-w-107.5 text-(--mute) leading-relaxed">
                   Two national export trophies in a row, and quality and
                   technical awards from the retailers whose audits we pass every
                   season.
                 </p>
               </div>
               {/* Awards row */}
-              <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 border-t border-[var(--hair)]">
+              <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 border-t border-(--hair)">
                 {awards.map((a) => (
                   <div
                     key={a[0]}
-                    className="min-h-[175px] p-5 pr-7 border-r border-[var(--hair)] last:border-r-0 grid grid-cols-[1fr_60px] gap-y-0"
+                    className="min-h-43.75 p-5 pr-7 border-r border-(--hair) last:border-r-0 grid grid-cols-[1fr_60px] gap-y-0"
                   >
-                    <b className="font-['Fira_Sans_Condensed'] text-[var(--red)] text-[40px]">
+                    <b className="font-['Fira_Sans_Condensed'] text-(--red) text-[40px]">
                       {a[0]}
                     </b>
                     <img
                       src={`${media}${a[3]}`}
                       alt=""
-                      className="justify-self-end w-[60px] h-[25px] object-contain"
+                      className="justify-self-end w-15 h-6.25 object-contain"
                     />
                     <strong className="col-span-2 mt-7 text-sm font-semibold">
                       {a[1]}
                     </strong>
-                    <small className="col-span-2 text-[var(--mute)] leading-snug mt-2 text-sm">
+                    <small className="col-span-2 text-(--mute) leading-snug mt-2 text-sm">
                       {a[2]}
                     </small>
                   </div>
                 ))}
               </div>
               {/* Certifications */}
-              <div className="border-t border-[var(--hair)] mt-9 pt-10 grid md:grid-cols-[260px_1fr] gap-6">
+              <div className="border-t border-(--hair) mt-9 pt-10 grid md:grid-cols-[260px_1fr] gap-6">
                 <Eyebrow>
-                  CERTIFIED<sup className="text-[var(--red)]">*</sup>
+                  CERTIFIED<sup className="text-(--red)">*</sup>
                 </Eyebrow>
                 <div className="flex flex-wrap gap-3">
                   {certifications.map((c) => (
                     <span
                       key={c.abbr}
-                      className="bg-white border border-[var(--hair)] rounded-full px-4 py-2.5 text-[var(--mute)] text-xs"
+                      className="bg-white border border-(--hair) rounded-full px-4 py-2.5 text-(--mute) text-xs"
                     >
-                      <b className="text-[var(--ink)] mr-2 font-semibold">
+                      <b className="text-(--ink) mr-2 font-semibold">
                         {c.abbr}
                       </b>
                       {c.name}
@@ -1025,7 +1040,7 @@ export default function App() {
           {/* ── SUSTAINABILITY ── */}
           <section
             id="sustainability"
-            className="relative min-h-[820px] md:h-[873px] bg-[var(--ink)] text-white overflow-hidden"
+            className="relative min-h-205 md:h-218.25 bg-(--ink) text-white overflow-hidden"
           >
             <img
               src={`${media}sustain-campus.jpg`}
@@ -1033,9 +1048,9 @@ export default function App() {
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-[rgba(10,14,18,0.9)]" />
-            <div className="relative z-1 max-w-[720px] mx-auto text-center pt-32 px-6">
-              <Eyebrow className="!text-white">SUSTAINABILITY</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] text-[48px] md:text-[61px] leading-[0.92] mt-8 mb-9">
+            <div className="relative z-1 max-w-45 mx-auto text-center pt-32 px-6">
+              <Eyebrow className="text-white!">SUSTAINABILITY</Eyebrow>
+              <h2 className="font-['Fira_Sans_Condensed'] font-black  text-[48px] md:text-[61px] leading-[0.92] mt-8 mb-9">
                 Cleaner water.
                 <br />
                 Cleaner power.
@@ -1082,23 +1097,23 @@ export default function App() {
           {/* ── PEOPLE ── */}
           <section
             id="people"
-            className="grid md:grid-cols-2 min-h-[600px] md:h-[736px] bg-[var(--mist)]"
+            className="grid md:grid-cols-2 min-h-150 md:h-184 bg-(--mist)"
           >
             <div className="flex flex-col justify-center py-16 md:py-0 px-8 md:px-[7vw]">
               <Eyebrow>PEOPLE</Eyebrow>
               <h2 className="font-['Fira_Sans_Condensed'] text-[48px] md:text-[62px] leading-[0.94] mt-7 mb-9">
                 More than
                 <br />
-                50,000 people.<sup className="text-[var(--red)]">*</sup>
+                50,000 people.<sup className="text-(--red)">*</sup>
               </h2>
-              <p className="text-[var(--mute)] max-w-[430px] leading-relaxed mb-10">
+              <p className="text-(--mute) max-w-107.5 leading-relaxed mb-10">
                 Most joined as machine operators. The group founded three
                 schools for their children, funds scholarships, and runs a
                 higher-education pathway with the Asian University for Women
                 called Dreams Beyond the Factory Floor.
               </p>
               <a
-                className="inline-block self-start px-8 py-4 border border-[var(--ink)] rounded-full text-[11px] font-semibold tracking-[0.1em] hover:bg-[var(--ink)] hover:text-white transition-colors duration-300"
+                className="inline-block self-start px-8 py-4 border border-(--ink) rounded-full text-xs font-semibold tracking-widest hover:bg-(--ink) hover:text-white transition-colors duration-300"
                 href="#contact"
               >
                 WORK WITH US
@@ -1120,22 +1135,22 @@ export default function App() {
                   Latest from the group.
                 </h2>
               </div>
-              <Eyebrow className="!text-[var(--mute)]">
+              <Eyebrow className="text-(--mute)!">
                 LINKS OPEN THE ORIGINAL REPORT
               </Eyebrow>
             </div>
-            <div className="grid md:grid-cols-3 min-h-[400px] md:h-[484px] bg-[#e9e9e6]">
+            <div className="grid md:grid-cols-3 min-h-100 md:h-123 bg-[#e9e9e6]">
               {newsItems.map((n) => (
                 <a
                   key={n.title}
-                  className="news-card relative overflow-hidden text-white p-8 flex flex-col justify-end h-[400px] md:h-full group cursor-pointer"
+                  className="news-card relative overflow-hidden text-white p-8 flex flex-col justify-end h-100 md:h-full group cursor-pointer"
                 >
                   <img
                     src={`${media}${n.img}`}
                     alt=""
-                    className="news-img absolute inset-0 w-full h-full object-cover brightness-[0.55] transition-all duration-[400ms]"
+                    className="news-img absolute inset-0 w-full h-full object-cover brightness-[0.55] transition-all duration-400"
                   />
-                  <span className="relative z-1 text-[#ef7898] text-[11px] tracking-[0.1em] font-semibold">
+                  <span className="relative z-1 text-[#ef7898] text-[11px] tracking-widest font-semibold">
                     {n.cat} · {n.date}
                   </span>
                   <strong className="news-title relative z-1 font-['Fira_Sans_Condensed'] text-[22px] md:text-[26px] leading-[1.05] mt-3">
@@ -1152,7 +1167,7 @@ export default function App() {
           {/* ── CAREERS CTA ── */}
           <section
             id="careers"
-            className="relative min-h-[550px] md:h-[642px] overflow-hidden text-white bg-[var(--ink)]"
+            className="relative min-h-137.5 md:h-160.5 overflow-hidden text-white bg-(--ink)"
           >
             <img
               src={`${media}cine/fabric.jpg`}
@@ -1174,13 +1189,13 @@ export default function App() {
               </p>
               <div className="flex gap-3 justify-center flex-wrap">
                 <a
-                  className="inline-block px-8 py-4 bg-white text-[var(--ink)] border border-white rounded-full text-[11px] font-semibold tracking-[0.1em] hover:bg-transparent hover:text-white transition-colors duration-300"
+                  className="inline-block px-8 py-4 bg-white text-(--ink) border border-white rounded-full text-[11px] font-semibold tracking-widest hover:bg-transparent hover:text-white transition-colors duration-300"
                   href="mailto:sales@hameemdenim.com"
                 >
                   TALK TO SALES
                 </a>
                 <a
-                  className="inline-block px-8 py-4 border border-white rounded-full text-[11px] font-semibold tracking-[0.1em] hover:bg-white hover:text-[var(--ink)] transition-colors duration-300"
+                  className="inline-block px-8 py-4 border border-white rounded-full text-[11px] font-semibold tracking-widest hover:bg-white hover:text-(--ink) transition-colors duration-300"
                   href="mailto:career@hameemgroup.com"
                 >
                   CAREERS
@@ -1190,7 +1205,7 @@ export default function App() {
           </section>
 
           {/* ── FOOTER ── */}
-          <footer id="contact" className="bg-[var(--mist)] text-[var(--mute)]">
+          <footer id="contact" className="bg-(--mist) text-(--mute)">
             <div className="wrap grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.6fr_repeat(5,1fr)] gap-10 pt-18 pb-16">
               <div className="flex flex-col gap-4 text-sm leading-relaxed lg:col-span-1 sm:col-span-2">
                 <Brand dark />
@@ -1200,24 +1215,24 @@ export default function App() {
                   Dhaka-1208, Bangladesh
                 </p>
                 <p>+880 2 8170592 · +880 2 8170593</p>
-                <b className="text-[var(--ink)] text-xs tracking-[0.08em]">
+                <b className="text-(--ink) text-xs tracking-[0.08em]">
                   SOURCING ENQUIRIES
                 </b>
-                <a className="text-[var(--red)]">sales@hameemdenim.com</a>
-                <b className="text-[var(--ink)] text-xs tracking-[0.08em]">
+                <a className="text-(--red)">sales@hameemdenim.com</a>
+                <b className="text-(--ink) text-xs tracking-[0.08em]">
                   CAREERS
                 </b>
-                <a className="text-[var(--red)]">career@hameemgroup.com</a>
+                <a className="text-(--red)">career@hameemgroup.com</a>
               </div>
               {footerColumns.map((c) => (
                 <div key={c[0]} className="flex flex-col gap-4 text-sm">
-                  <b className="text-[var(--ink)] text-xs tracking-[0.1em] mb-4">
+                  <b className="text-(--ink) text-xs tracking-widest mb-4">
                     {c[0]}
                   </b>
                   {c.slice(1).map((x) => (
                     <a
                       key={x}
-                      className="hover:text-[var(--ink)] transition-colors duration-200 cursor-pointer"
+                      className="hover:text-(--ink) transition-colors duration-200 cursor-pointer"
                     >
                       {x}
                     </a>
@@ -1225,7 +1240,7 @@ export default function App() {
                 </div>
               ))}
             </div>
-            <div className="border-t border-[var(--hair)]">
+            <div className="border-t border-(--hair)">
               <div className="wrap flex flex-col md:flex-row items-start md:items-center justify-between py-6 gap-3 text-xs">
                 <span>
                   © 2026 Ha-Meem Group. Concept homepage — not the official
@@ -1235,7 +1250,7 @@ export default function App() {
                   Privacy notice　　Terms of use　　Supplier code of conduct
                 </span>
                 <span>
-                  <b className="text-[var(--red)]">*</b> Figure from public
+                  <b className="text-(--red)">*</b> Figure from public
                   sources, pending confirmation by Ha-Meem Group.
                 </span>
               </div>

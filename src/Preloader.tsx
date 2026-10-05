@@ -39,7 +39,7 @@ export default function Preloader() {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-white z-[9999] flex items-center justify-center">
+    <div className="fixed inset-0 bg-white z-9999 flex items-center justify-center">
       <div className="relative w-full max-w-2xl px-2">
         <style>
           {`
