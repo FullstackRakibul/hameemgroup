@@ -1,0 +1,10 @@
+{
+  "description": "This web application offers a professional landing page design tailored for businesses, enhancing online presence and user engagement.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
