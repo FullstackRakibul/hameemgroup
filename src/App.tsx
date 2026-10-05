@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Preloader from "./Preloader";
 
-const media = "../public/media/";
+const media = "/media/";
 
 const buyers = [
   "gap", "hm", "zara", "pvh", "kohls", "jcpenney", "next", "mango",
@@ -21,18 +22,18 @@ const products = [
 
 const steps = [
   { title: "Spinning", text: "Cotton becomes yarn in our own spinning mills at Mawna, with rotor spinning and yarn dyeing added since.", stat: "100 MT", unit: "YARN SPUN A DAY", image: "chain-spinning.jpg" },
-  { title: "Weaving & dyeing", text: "Ha-Meem Denim runs rope and slasher dyeing with 220 Picanol looms. Ha-Meem Textiles weaves non-denim fabric beside it.", stat: "5.5M yd", unit: "DENIM A MONTH", image: "chain-fabric.jpg" },
-  { title: "Cutting & sewing", text: "Automatic spreading and cutting, then 400 sewing lines across Ashulia, Tongi, Kaliganj, Savar and Mirzapur.", stat: "120M", unit: "GARMENTS A YEAR", image: "chain-sewing.jpg" },
-  { title: "Washing & finishing", text: "Seven laundries: ozone, laser, PP spray, over-dye, dip-dye and 3D whisker, with dry process on every plant.", stat: "142M", unit: "PIECES A YEAR", image: "chain-wash.jpg" },
+  { title: "Weaving & dyeing", text: "Ha-Meem Denim produces rope-dyed and slasher-dyed denim fabric, with monthly production of around four million metres.", stat: "4M m", unit: "DENIM A MONTH", image: "chain-fabric.jpg" },
+  { title: "Cutting & sewing", text: "Automatic spreading and cutting across 26 garment factories, supported by 300 production lines.", stat: "7M pcs", unit: "GARMENTS A MONTH", image: "chain-sewing.jpg" },
+  { title: "Washing & finishing", text: "Seven washing plants support garment finishing, with processes including ozone, laser, over-dye, dip-dye and 3D whisker.", stat: "7", unit: "WASHING PLANTS", image: "chain-wash.jpg" },
   { title: "Trims & packaging", text: "Labels, elastic, twill tape, buttons, zips and hangers made in-house, then export cartons and poly bags from our own plants.", stat: "3.5M", unit: "LABELS A MONTH", image: "chain-trims.jpg" },
   { title: "Shipping", text: "Our own transport fleet and clearing and forwarding offices at every Bangladeshi port move goods from factory gate to vessel.", stat: "EVERY", unit: "PORT, OWN C&F", image: "biz/label.jpg" },
 ];
 
 const businesses = [
-  ["400*", "PRODUCTION LINES", "Woven garments", "Bottoms, tops and outerwear sewn across 26 factories in six locations around Dhaka.", "biz/woven.jpg"],
-  ["5.5M", "YARDS A MONTH", "Denim mill", "Ha-Meem Denim at Mawna: rope and slasher dyeing, 220 Picanol looms, on a 100-acre site.", "biz/denim.jpg"],
+  ["300", "PRODUCTION LINES", "Woven garments", "Around 50,000 people make apparel across 26 garment factories, with capacity of about seven million pieces each month.", "biz/woven.jpg"],
+  ["4M", "METRES A MONTH", "Denim mill", "Rope-dyed and slasher-dyed denim fabric made for fashion brands at Ha-Meem Denim.", "biz/denim.jpg"],
   ["100 MT", "YARN A DAY", "Spinning & textiles", "Ring and rotor yarn, woven non-denim fabric and, since 2025, yarn dyeing at Sreepur.", "biz/spinning.jpg"],
-  ["142M", "PIECES A YEAR", "Washing & finishing", "Seven laundries with ozone, laser, PP spray, dip-dye and 3D finishing lines.", "biz/laundry.jpg"],
+  ["7", "WASHING PLANTS", "Washing & finishing", "Seven plants support garment finishing across the group’s integrated manufacturing operations.", "biz/laundry.jpg"],
   ["400", "STOLL MACHINES", "Sweaters", "Computerised flat-knitting at Kashimpur and Ashulia, about 400,000 pieces a month.", "biz/sweater.jpg"],
   ["800", "SAMPLES A DAY", "Design & sampling", "In-house designers, CAD and a 500-machine sample room turn a brief into a counter sample.", "biz/design.jpg"],
   ["40", "EMBROIDERY MACHINES", "Embroidery, printing & trims", "Forty embroidery heads, screen and digital print, labels, elastic, belts and narrow fabric.", "biz/embroidery.jpg"],
@@ -55,8 +56,8 @@ function Label({ children }: { children: React.ReactNode }) {
 function Brand({ dark = false }: { dark?: boolean }) {
   return (
     <a className={`brand ${dark ? "brand-dark" : ""}`} href="#top" aria-label="Ha-Meem Group">
-      <img src={`${media}brand/${dark ? "mark.png" : "mark-white.png"}`} alt="" />
-      <span><b>HA-MEEM</b><small>GROUP</small></span>
+      <img src="./group-logo.png" alt="" />
+      {/* <span><b>HA-MEEM</b><small>GROUP</small></span> */}
     </a>
   );
 }
@@ -64,10 +65,19 @@ function Brand({ dark = false }: { dark?: boolean }) {
 export default function App() {
   const [product, setProduct] = useState(0);
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Dismiss preloader after animation plays for a sufficient duration
+    const timer = setTimeout(() => setLoading(false), 2800);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <main>
-      <section id="top" className="hero">
+    <>
+      {loading && <Preloader />}
+      <main style={{ opacity: loading ? 0 : 1, transition: "opacity 0.6s ease-in-out" }}>
+        <section id="top" className="hero">
         <img className="hero-image" src={`${media}cine/looms.jpg`} alt="Long rows of looms weaving indigo denim" />
         <div className="hero-shade" />
         <header className="site-header wrap">
@@ -79,8 +89,8 @@ export default function App() {
           </nav>
           <button className="menu" aria-label="Open menu">MENU</button>
         </header>
-        <div className="hero-title wrap"><h1>From fibre to finish.<br />Made in Bangladesh.</h1></div>
-        <p className="hero-caption wrap">Denim weaving — Mawna, Gazipur</p>
+        <div className="hero-title wrap"><h1>Wholesale clothing<br />manufacturer in Bangladesh.</h1></div>
+        <p className="hero-caption wrap">From fibre to finish — Ha-Meem Group</p>
         <div className="hero-controls"><button>←</button><button>Ⅱ</button><button>→</button></div>
         <img className="hero-seal" src={`${media}brand/mark-white.png`} alt="" />
       </section>
@@ -89,20 +99,17 @@ export default function App() {
         <section id="company" className="company">
           <div className="intro wrap">
             <Label>FOUNDED IN 1984</Label>
-            <h2>Ha-Meem Group is one of Bangladesh&apos;s largest vertically<br className="desktop" />
-              integrated apparel manufacturers. From our own yarn and denim<br className="desktop" />
-              to sewing, washing, trims and shipping, we make bottoms,<br className="desktop" />
-              tops, denim and sweaters for the world&apos;s leading retailers.</h2>
+            <h2>Ha-Meem Group is a leading wholesale clothing manufacturer in Bangladesh. Founded in 1984 by A. K. Azad and Mr. Delwar, the company has grown from a garment business into an integrated producer of denim fabric and apparel for leading fashion brands around the world.</h2>
           </div>
           <div className="world wrap">
             <div className="world-copy">
               <Label>WHERE WE ARE</Label>
               <h2>From Bangladesh<br />to the world.</h2>
-              <p>Every factory sits within an hour of Dhaka, with sourcing offices in Hong Kong and Shanghai. Around ninety-five percent of what we make ships to the United States, the rest to Europe, Japan and India.</p>
+              <p>From Bangladesh, Ha-Meem manufactures for some of the world&apos;s biggest fashion brands, with a strong presence in Europe and America. Its vertically integrated facilities bring denim and garment production together under one group.</p>
             </div>
             <img src={`${media}world-solid.svg`} alt="" />
             <div className="world-foot">
-              <p>Head office in Dhaka. 26 factories, mills and laundries around Gazipur, Ashulia and Tangail. A tea estate in Moulvibazar.</p>
+              <p>Today the group employs around 50,000 people and operates 26 garment factories, 300 production lines and seven washing plants, producing about seven million pieces each month. Denim production is around four million metres monthly. Its wider interests include shipping, newspapers and tea gardens.</p>
               <div className="legend"><span>● BANGLADESH</span><span>● SOURCING OFFICES</span><span>● EXPORT MARKETS</span></div>
             </div>
           </div>
@@ -126,7 +133,7 @@ export default function App() {
           <div className="product-copy">
             <Label>WHAT WE MAKE</Label>
             <h2>Bottoms, tops,<br />denim and sweaters.</h2>
-            <p>Seventy percent bottoms, thirty percent tops, half of it denim, sized from infant to adult.</p>
+            <p>From fashionable denim fabrics to wholesale apparel, Ha-Meem makes bottoms, tops and sweaters for global fashion brands, with products ranging from infant to adult sizes.</p>
             <div className="product-list">
               {products.map((item, i) => (
                 <button className={product === i ? "active" : ""} key={item[0]} onClick={() => setProduct(i)}>
@@ -140,7 +147,7 @@ export default function App() {
         <section id="chain" className="chain">
           <div className="chain-head wrap">
             <div><Label>VERTICAL INTEGRATION</Label><h2>Six steps, all ours.</h2></div>
-            <p>From yarn to the vessel, every step happens inside the group. Ahead of the line, 250 merchandisers and a 500-machine sample room turn a brief into a counter sample within days.</p>
+            <p>From yarn and denim fabric to finished garments, seven washing plants and export-ready apparel, integrated facilities connect each stage of production. The group also has interests in shipping, newspapers and tea.</p>
           </div>
           <div className="steps">
             {steps.map((item, i) => (
@@ -219,6 +226,7 @@ export default function App() {
         <Footer />
       </div>
     </main>
+    </>
   );
 }
 

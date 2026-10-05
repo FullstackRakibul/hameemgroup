@@ -18,7 +18,7 @@ h1,h2,.business-stat b,.metrics b { font-family:"Fira Sans Condensed",sans-serif
 .hero-shade { background:linear-gradient(180deg,rgba(5,12,17,.48),rgba(5,12,17,.23) 38%,rgba(5,12,17,.56)); }
 .site-header { position:relative; z-index:2; height:88px; display:flex; align-items:center; justify-content:space-between; }
 .brand { display:flex; align-items:center; gap:12px; width:180px; }
-.brand img { width:28px; height:28px; object-fit:contain; }
+.brand img {  height:45px; object-fit:contain; }
 .brand span { display:flex; flex-direction:column; line-height:1; }
 .brand b { font-size:16px; letter-spacing:.1em; }
 .brand small { font-size:9px; letter-spacing:.36em; margin-top:5px; }
