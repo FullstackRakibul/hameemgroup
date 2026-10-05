@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   const emitSourcemaps = mode === 'development'
 
   return {
-    base: process.env.VITE_PUBLIC_URL ? `${process.env.VITE_PUBLIC_URL}/` : '/',
+    // base: process.env.VITE_PUBLIC_URL ? `${process.env.VITE_PUBLIC_URL}/` : '/',
     build: {
       sourcemap: emitSourcemaps ? 'inline' : false,
       minify: !emitSourcemaps,
@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
       react(),
       tailwindcss(),
     ],
+    base: './',
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
