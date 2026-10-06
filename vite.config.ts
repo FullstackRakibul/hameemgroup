@@ -20,14 +20,14 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve(import.meta.dirname, "./src"),
       },
     },
-    server: {
-      host: process.env.VITE_DEV_SERVER_HOST || "0.0.0.0",
-      port: parseInt(process.env.PORT || "8443"),
-      strictPort: true,
-    },
-    preview: {
-      host: process.env.VITE_DEV_SERVER_HOST || "0.0.0.0",
-      port: parseInt(process.env.PORT || "8443"),
-    },
+    // server: {
+    //   host: process.env.VITE_DEV_SERVER_HOST || "0.0.0.0",
+    //   port: parseInt(process.env.PORT || "8443"),
+    //   strictPort: true,
+    // },
+    // preview: {
+    //   host: process.env.VITE_DEV_SERVER_HOST || "0.0.0.0",
+    //   port: parseInt(process.env.PORT || "8443"),
+    // },
   };
 });
