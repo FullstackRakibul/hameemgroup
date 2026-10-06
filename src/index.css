@@ -254,7 +254,7 @@ h1, h2, h3, p { margin: 0; }
 }
 
 /* ── Back to top ── */
-.back-to-top {
+/* .back-to-top {
   position: fixed;
   bottom: 32px;
   right: 32px;
@@ -282,8 +282,56 @@ h1, h2, h3, p { margin: 0; }
 .back-to-top:hover {
   background: #c1003a;
   transform: translateY(-2px);
+} */
+/* ── Back to top ── */
+.back-to-top {
+  position: fixed;
+  bottom: 100px;
+  /* Changed from 32px to sit above the AI launcher */
+  right: 32px;
+  z-index: 998;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(155, 0, 43, 0.35);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+  cursor: pointer;
 }
 
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: #c1003a;
+  transform: translateY(-2px);
+}
+
+/* Hide back-to-top when AI assistant is hovered OR when the chat panel is open */
+body:has(.hm-assist-launcher:hover) .back-to-top,
+body:has(.hm-assist-panel) .back-to-top {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Mobile adjustment */
+@media (max-width: 560px) {
+  .back-to-top {
+    bottom: 90px;
+    /* Adjusted for mobile AI launcher position */
+    right: 16px;
+  }
+}
 /* ── Buyer grid hover effects ── */
 .buyer-logo {
   filter: grayscale(1);
@@ -325,7 +373,8 @@ h1, h2, h3, p { margin: 0; }
 
 /* ── Step accordion transitions ── */
 .step-panel {
-  transition: flex 0.45s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+  transition: flex 0.45s cubic-bezier(0.4, 0, 0.2, 1), background-size 0.6s ease;
+    background-size: 100% 100%;
 }
 .step-panel:hover:not(.step-open) { flex: 0 0 15%; background-color: #1a1e24; }
 .step-panel:hover:not(.step-open) .step-num-text { opacity: 0.5; }
@@ -333,7 +382,9 @@ h1, h2, h3, p { margin: 0; }
   opacity: 0.7;
   transform: translateX(-50%) rotate(180deg) translateY(-8px);
 }
-
+.step-panel.step-open {
+  background-size: 110% 110%;
+}
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .wrap { width: calc(100% - 40px); }

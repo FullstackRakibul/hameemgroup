@@ -12,7 +12,7 @@ export default function Avatar({ size, shape = "circle", className = "" }: Avata
       style={{ width: size, height: size, fontSize: Math.round(size * 0.48) }}
       aria-hidden="true"
     >
-      H
+      HG
     </span>
   );
 }

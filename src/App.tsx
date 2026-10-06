@@ -611,15 +611,24 @@ export default function App() {
                 {stats.map((s) => (
                   <div
                     key={s.value}
-                    className="py-8 px-4 text-center border-r border-(--hair) last:border-r-0"
+                    className="group relative py-8 px-4 text-center border-r border-(--hair) last:border-r-0 transition-colors duration-300 ease-out hover:bg-(--mist) cursor-default"
                   >
-                    <b className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[52px] font-semibold block leading-none">
+                    {/* Red accent bar that slides in from center on hover */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute bottom-0 left-1/2 h-0.5 w-0 -translate-x-1/2 bg-(--red) transition-all duration-500 ease-out group-hover:w-3/4"
+                    />
+
+                    {/* Number: subtle scale + color transition */}
+                    <b className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[52px] font-semibold block leading-none text-(--ink) transition-all duration-300 ease-out group-hover:text-(--red) group-hover:scale-[1.08]">
                       {s.value}
                     </b>
-                    <span className="text-(--red) text-[10px] font-semibold tracking-[0.12em] block mt-3">
+
+                    <span className="text-(--red) text-[10px] font-semibold tracking-[0.12em] block mt-3 transition-opacity duration-300">
                       {s.label}
                     </span>
-                    <span className="text-(--mute) text-[13px] block mt-2 leading-snug">
+
+                    <span className="text-(--mute) text-[13px] block mt-2 leading-snug transition-colors duration-300 group-hover:text-(--ink)">
                       {s.sub}
                     </span>
                   </div>
@@ -634,7 +643,7 @@ export default function App() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
                   <Eyebrow>WHERE WE ARE</Eyebrow>
-                  <h2 className="font-['Fira_Sans_Condensed'] text-[48px] md:text-[58px] leading-[0.98] font-semibold mt-20">
+                  <h2 className="font-['Fira_Sans_Condensed'] text-[48px] md:text-[64px] leading-[0.98] font-semibold mt-20">
                     From Bangladesh
                     <br />
                     to the world.
@@ -657,15 +666,24 @@ export default function App() {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--red)">
-                    <span className="inline-block size-2 rounded-full bg-(--red)" aria-hidden="true" />
+                    <span
+                      className="inline-block size-2 rounded-full bg-(--red)"
+                      aria-hidden="true"
+                    />
                     BANGLADESH
                   </span>
                   <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
-                    <span className="inline-block size-2 rounded-full bg-(--navy)" aria-hidden="true" />
+                    <span
+                      className="inline-block size-2 rounded-full bg-(--navy)"
+                      aria-hidden="true"
+                    />
                     SOURCING OFFICES
                   </span>
                   <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
-                    <span className="inline-block size-2 rounded-full bg-[#8a8b90]" aria-hidden="true" />
+                    <span
+                      className="inline-block size-2 rounded-full bg-[#8a8b90]"
+                      aria-hidden="true"
+                    />
                     EXPORT MARKETS
                   </span>
                 </div>
@@ -679,7 +697,7 @@ export default function App() {
               {/* Header Update: constrained width and centered */}
               <div className="text-center flex flex-col items-center justify-center">
                 <Eyebrow>OUR BUYERS</Eyebrow>
-                <h3 className="font-['Fira_Sans_Condensed'] mx-auto mt-4 max-w-[22ch] text-[clamp(1.9rem,3vw,2.8rem)] font-bold leading-[1.02] text-balance">
+                <h3 className="font-['Fira_Sans_Condensed'] mx-auto mt-4 max-w-[22ch] text-[clamp(1.9rem,3vw,2.8rem)] font-black leading-[1.02] text-balance">
                   Retailers and brands we manufacture for.
                   <sup className="relative top-[-0.1em] ml-[0.08em] align-top text-[0.42em] leading-none text-(--color-red)">
                     *
@@ -688,7 +706,7 @@ export default function App() {
               </div>
 
               {/* Grid Update: gap-px for perfect 1px borders */}
-              <ul className="mx-auto mt-10 grid max-w-272 grid-cols-3 gap-px border border-[#e4e4e0] bg-[#e4e4e0] sm:grid-cols-6">
+              <ul className="mx-auto mt-10 grid max-w-400 grid-cols-3 gap-px border border-[#e4e4e0] bg-[#e4e4e0] sm:grid-cols-6">
                 {buyers.map((name) => (
                   <li
                     key={name}
@@ -727,7 +745,7 @@ export default function App() {
             </div>
             <div className="py-16 md:py-28 px-8 md:pl-24 md:pr-16">
               <Eyebrow>WHAT WE MAKE</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[58px] leading-[0.96] mt-7 mb-10">
+              <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[58px] leading-[0.96] mt-7 mb-10">
                 Bottoms, tops,
                 <br />
                 denim and sweaters.
@@ -775,43 +793,55 @@ export default function App() {
               {steps.map((item, i) => (
                 <button
                   key={item.title}
-                  className={`step-panel relative border-0 border-r-2 border-white text-white bg-(--ink) p-6 text-left bg-cover bg-center overflow-hidden cursor-pointer ${step === i ? "step-open flex-[1_1_50%]" : "flex-[0_0_10%]"}`}
-                  style={
-                    step === i
-                      ? {
-                          backgroundImage: `linear-gradient(90deg,rgba(95, 108, 124, 0.56),rgba(46, 54, 65, 0.57)),url("${media}${item.image}")`,
-                        }
-                      : undefined
-                  }
+                  className={`step-panel relative border-0 border-r-2 border-white text-white bg-transparent p-6 text-left bg-cover bg-center overflow-hidden cursor-pointer ${
+                    step === i ? "step-open flex-[1_1_50%]" : "flex-[0_0_10%]"
+                  }`}
+                  style={{
+                    backgroundImage: `url("${media}${item.image}")`,
+                  }}
                   onClick={() => setStep(i)}
                   onMouseEnter={() => setStep(i)}
                 >
-                  <span className="step-num-text absolute left-1/2 top-6 -translate-x-1/2 font-semibold transition-opacity duration-300">
-                    0{i + 1}
-                  </span>
-                  {step === i ? (
-                    <span className="step-body absolute left-10 right-12 bottom-10 flex flex-col">
-                      <em className="text-(--red) not-italic text-xs font-semibold tracking-widest">
-                        STEP {String(i + 1).padStart(2, "0")} OF 6
-                      </em>
-                      <strong className="font-['Fira_Sans_Condensed'] text-[32px] md:text-[40px] my-4">
+                  {/* Overlay: Light for active (image clear), Darker for collapsed (60% opacity) */}
+                  <span
+                    className={`absolute inset-0 transition-all duration-500 ${
+                      step === i
+                        ? "bg-linear-to-r from-[rgba(17,20,24,0.55)] to-[rgba(17,20,24,0.35)]"
+                        : "bg-[rgba(17,20,24,0.6)]"
+                    }`}
+                    aria-hidden="true"
+                  />
+
+                  {/* Content wrapper - z-10 to sit above the overlay */}
+                  <span className="relative z-10 block h-full">
+                    <span className="step-num-text absolute left-1/2 top-0 -translate-x-1/2 font-semibold transition-opacity duration-300">
+                      0{i + 1}
+                    </span>
+
+                    {step === i ? (
+                      <span className="step-body absolute left-10 right-12 bottom-4 flex flex-col">
+                        <em className="text-(--red) not-italic text-xs font-semibold tracking-widest">
+                          STEP {String(i + 1).padStart(2, "0")} OF 6
+                        </em>
+                        <strong className="font-['Fira_Sans_Condensed'] text-[32px] md:text-[40px] my-4">
+                          {item.title}
+                        </strong>
+                        <span className="max-w-117.5 text-(--hair) leading-relaxed">
+                          {item.text}
+                        </span>
+                        <b className="font-['Fira_Sans_Condensed'] text-[28px] mt-6">
+                          {item.stat}{" "}
+                          <small className="font-['Fira_Sans'] text-[10px] tracking-[0.15em] font-medium">
+                            {item.unit}
+                          </small>
+                        </b>
+                      </span>
+                    ) : (
+                      <strong className="step-vertical absolute bottom-10 left-1/2 [writing-mode:vertical-rl] -translate-x-1/2 rotate-180 font-['Fira_Sans_Condensed'] text-[19px] whitespace-nowrap transition-all duration-300">
                         {item.title}
                       </strong>
-                      <span className="max-w-117.5 text-(--hair) leading-relaxed">
-                        {item.text}
-                      </span>
-                      <b className="font-['Fira_Sans_Condensed'] text-[28px] mt-6">
-                        {item.stat}{" "}
-                        <small className="font-['Fira_Sans'] text-[10px] tracking-[0.15em] font-medium">
-                          {item.unit}
-                        </small>
-                      </b>
-                    </span>
-                  ) : (
-                    <strong className="step-vertical absolute bottom-10 left-1/2 [writing-mode:vertical-rl] -translate-x-1/2 rotate-180 font-['Fira_Sans_Condensed'] text-[19px] whitespace-nowrap transition-all duration-300">
-                      {item.title}
-                    </strong>
-                  )}
+                    )}
+                  </span>
                 </button>
               ))}
             </div>
@@ -1094,7 +1124,7 @@ export default function App() {
             <div className="absolute inset-0 bg-[rgba(10,14,18,0.88)]" />
             <div className="relative z-1 flex flex-col gap-8 text-center pt-28 md:pt-32 px-5">
               <Eyebrow className="text-white!">WORK WITH US</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] font-black text-[50px] md:text-[68px] leading-[0.84] mt-14 mb-4">
+              <h2 className="font-['Fira_Sans_Condensed'] tracking-widest font-black text-[50px] md:text-[72px] leading-[0.84] mt-14 mb-4">
                 Sourcing from
                 <br />
                 Bangladesh?
@@ -1106,7 +1136,7 @@ export default function App() {
               </p>
               <div className="flex gap-3 justify-center flex-wrap">
                 <a
-                  className="inline-block px-8 py-4 bg-white text-black border border-white rounded-full text-[11px] font-semibold tracking-widest hover:bg-transparent hover:text-white transition-colors duration-300"
+                  className="inline-block px-8 py-4 bg-white text-cyan-950 border border-white rounded-full text-[11px] font-semibold tracking-widest hover:bg-transparent hover:text-white transition-colors duration-300"
                   href="mailto:sales@hameemdenim.com"
                 >
                   TALK TO SALES
@@ -1159,14 +1189,13 @@ export default function App() {
             </div>
             <div className="border-t border-(--hair)">
               <div className="wrap flex flex-col md:flex-row items-start md:items-center justify-between py-6 gap-3 text-xs">
-                <span>
-                  © 2026 Ha-Meem Group. demo homepage
-                </span>
+                <span>© 2026 Ha-Meem Group. demo homepage</span>
                 <span>
                   Privacy notice　　Terms of use　　Supplier code of conduct
                 </span>
                 <span>
-                  <b className="text-(--red)">*</b>by Ha-Meem Group. [ IT Department ]
+                  <b className="text-(--red)">*</b>by Ha-Meem Group. [ IT
+                  Department ]
                 </span>
               </div>
             </div>

@@ -11,8 +11,11 @@
 }
 
 /* Keep back-to-top above the launcher, and out of the way while the panel is open. */
-body:has(.hm-assist-launcher) .back-to-top {
-  bottom: calc(24px + var(--hm-assist-launcher-h, 168px) + 16px);
+body:has(.hm-assist-panel) .back-to-top,
+body:has(.hm-assist-launcher:hover) .back-to-top {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(20px) !important;
 }
 body:has(.hm-assist-panel) .back-to-top {
   opacity: 0;
@@ -26,10 +29,11 @@ body:has(.hm-assist-panel) .back-to-top {
   padding: 0;
   border: 0;
   background: none;
+  /* <--- This is erasing your red background */
   color: inherit;
+  /* <--- This is erasing your white text */
   font: inherit;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 .hm-assist-root :focus-visible {
   outline: 2px solid var(--red);
@@ -476,7 +480,29 @@ body:has(.hm-assist-panel) .back-to-top {
   position: absolute;
   inset: -4px 0;
 }
+/* ── Denim Launcher Animation ── */
+@keyframes denim-bob {
 
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-denim-bob {
+  animation: denim-bob 3s ease-in-out infinite;
+}
+
+/* Ensure the animation stops when the user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-denim-bob {
+    animation: none;
+  }
+}
 /* ── Messages ── */
 .hm-assist-log {
   display: flex;
