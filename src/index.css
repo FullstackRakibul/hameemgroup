@@ -8,6 +8,7 @@
   --mist: #f6f6f4;
   --mute: #61646a;
   --hair: #d9d9d6;
+  --navy: #1f2352;
   font-family: "Fira Sans", sans-serif;
   color: var(--ink);
 }
@@ -103,6 +104,11 @@ h1, h2, h3, p { margin: 0; }
   opacity: 1;
   animation: kenBurns 10s ease-out forwards;
 }
+
+/* ── World routes map ── */
+.wr-place { cursor: pointer; outline: none; }
+.wr-place .wr-ring { opacity: 0; transition: opacity 0.2s ease; }
+.wr-place:focus-visible .wr-ring { opacity: 1; }
 
 /* ── Chain / steps accordion ── */
 .step-body { animation: chainFadeIn 0.4s ease both; }

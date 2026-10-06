@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Preloader from "./Preloader";
+import WorldRoutes from "./WorldRoutes";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -753,11 +754,7 @@ export default function App() {
                   Europe, Japan and India.
                 </p>
               </div>
-              <img
-                src={`${media}world-solid.svg`}
-                alt="World map showing Ha-Meem export markets"
-                className="w-full mt-16 opacity-95"
-              />
+              <WorldRoutes className="mt-16" />
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between mt-12 gap-8">
                 <p className="max-w-117.5 text-(--mute) text-sm leading-relaxed">
                   Today the group employs around 50,000 people and operates 26
@@ -766,14 +763,17 @@ export default function App() {
                   production is around four million metres monthly.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--red)">
-                    ● BANGLADESH
+                  <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--red)">
+                    <span className="inline-block size-2 rounded-full bg-(--red)" aria-hidden="true" />
+                    BANGLADESH
                   </span>
-                  <span className="px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
-                    ● SOURCING OFFICES
+                  <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
+                    <span className="inline-block size-2 rounded-full bg-(--navy)" aria-hidden="true" />
+                    SOURCING OFFICES
                   </span>
-                  <span className="px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
-                    ● EXPORT MARKETS
+                  <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
+                    <span className="inline-block size-2 rounded-full bg-[#8a8b90]" aria-hidden="true" />
+                    EXPORT MARKETS
                   </span>
                 </div>
               </div>
@@ -1155,7 +1155,7 @@ export default function App() {
             <div className="wrap flex flex-col md:flex-row items-start md:items-center justify-between py-16 md:py-20 gap-4">
               <div>
                 <Eyebrow>NEWSROOM</Eyebrow>
-                <h2 className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[54px] mt-5">
+                <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[54px] mt-5">
                   Latest from the group.
                 </h2>
               </div>
@@ -1177,7 +1177,7 @@ export default function App() {
                   <span className="relative z-1 text-[#ef7898] text-[11px] tracking-widest font-semibold">
                     {n.cat} · {n.date}
                   </span>
-                  <strong className="news-title relative z-1 font-['Fira_Sans_Condensed'] text-[22px] md:text-[26px] leading-[1.05] mt-3">
+                  <strong className="news-title relative z-1 font-['Fira_Sans_Condensed'] text-white text-[22px] md:text-[26px] leading-[1.05] mt-3">
                     {n.title}
                   </strong>
                   <span className="absolute bottom-8 right-8 z-1 text-white/70 text-xl group-hover:translate-x-1 transition-transform duration-300">
@@ -1219,7 +1219,7 @@ export default function App() {
                   TALK TO SALES
                 </a>
                 <a
-                  className="inline-block px-8 py-4 border border-white rounded-full text-[11px] font-semibold tracking-widest hover:bg-white hover:text-(--ink) transition-colors duration-300"
+                  className="inline-block px-8 py-4 bg-black text-white border border-white rounded-full text-[11px] font-semibold tracking-widest hover:bg-white hover:text-(--ink) transition-colors duration-300"
                   href="mailto:career@hameemgroup.com"
                 >
                   CAREERS
