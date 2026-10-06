@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Preloader from "./Preloader";
 import WorldRoutes from "./WorldRoutes";
 import SiteHeader from "./SiteHeader";
+import { AiAssistant } from "./features/ai-assistant";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -531,6 +532,7 @@ export default function App() {
       >
         ↑
       </button>
+      {!loading && <AiAssistant />}
 
       <main
         style={{
