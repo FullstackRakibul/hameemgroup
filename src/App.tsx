@@ -706,7 +706,7 @@ export default function App() {
           <section id="company" className="bg-white py-24 md:py-32">
             <div className="wrap text-center flex flex-col gap-3 justify-center items-center">
               <Eyebrow>FOUNDED IN 1984</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] subpixel-antialiased font-black text-[30px] md:text-[38px] leading-[1.18]  mt-16 max-w-300 mx-auto">
+              <h2 className="font-['Fira_Sans_Condensed'] text-justify subpixel-antialiased font-black text-[30px] md:text-[38px] leading-[1.18]  mt-16 max-w-300 mx-auto">
                 Ha-Meem Group is one of Bangladesh&apos;s largest vertically
                 integrated apparel manufacturers. From our own yarn and denim to
                 sewing, washing, trims and shipping, we make bottoms, tops,
