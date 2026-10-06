@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Preloader from "./Preloader";
+import WorldRoutes from "./WorldRoutes";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -753,11 +754,7 @@ export default function App() {
                   Europe, Japan and India.
                 </p>
               </div>
-              <img
-                src={`${media}world-solid.svg`}
-                alt="World map showing Ha-Meem export markets"
-                className="w-full mt-16 opacity-95"
-              />
+              <WorldRoutes className="mt-16" />
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between mt-12 gap-8">
                 <p className="max-w-117.5 text-(--mute) text-sm leading-relaxed">
                   Today the group employs around 50,000 people and operates 26
@@ -766,14 +763,17 @@ export default function App() {
                   production is around four million metres monthly.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--red)">
-                    ● BANGLADESH
+                  <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--red)">
+                    <span className="inline-block size-2 rounded-full bg-(--red)" aria-hidden="true" />
+                    BANGLADESH
                   </span>
-                  <span className="px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
-                    ● SOURCING OFFICES
+                  <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
+                    <span className="inline-block size-2 rounded-full bg-(--navy)" aria-hidden="true" />
+                    SOURCING OFFICES
                   </span>
-                  <span className="px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
-                    ● EXPORT MARKETS
+                  <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
+                    <span className="inline-block size-2 rounded-full bg-[#8a8b90]" aria-hidden="true" />
+                    EXPORT MARKETS
                   </span>
                 </div>
               </div>
