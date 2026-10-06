@@ -1,0 +1,2062 @@
+{
+  "url": "https://hameemgroup-demo.reliabuilds.com",
+  "measuredAt": "2026-10-06T07:27:47.657Z",
+  "widths": {
+    "375": {
+      "top": {
+        "height": 88,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "transform": "none",
+        "rowLeft": 20,
+        "navVisible": false,
+        "menuButtonVisible": true,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark-white.png&w=96&q=75"
+        }
+      },
+      "mobile-open": {
+        "layout": "full-screen dialog (fixed inset-0) with its own 88px top row",
+        "dialog": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "position": "fixed",
+          "zIndex": "80"
+        },
+        "closeButton": {
+          "label": "Close",
+          "ariaLabel": "Close menu",
+          "w": 71.453125,
+          "h": 18
+        },
+        "structure": [
+          "Sustainability",
+          "News",
+          "Careers",
+          "Businesses",
+          "Company",
+          "Products",
+          "For buyers",
+          "sales@hameemdenim.com"
+        ],
+        "accordion": false,
+        "topRow": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "30.4px",
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 64
+        },
+        "subRow": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "17.6px",
+          "fontWeight": "500",
+          "paddingTop": "12px",
+          "paddingBottom": "12px",
+          "height": 53.140625
+        },
+        "groupLabel": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "letterSpacing": "1.248px",
+          "fontWeight": "700"
+        }
+      },
+      "scrolled": {
+        "height": 88,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(17, 20, 24)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px",
+        "transform": "none",
+        "rowLeft": 20,
+        "navVisible": false,
+        "menuButtonVisible": true,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark.png&w=96&q=75"
+        }
+      }
+    },
+    "768": {
+      "top": {
+        "height": 88,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "transform": "none",
+        "rowLeft": 30.72,
+        "navVisible": false,
+        "menuButtonVisible": true,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark-white.png&w=96&q=75"
+        }
+      },
+      "mobile-open": {
+        "layout": "full-screen dialog (fixed inset-0) with its own 88px top row",
+        "dialog": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "position": "fixed",
+          "zIndex": "80"
+        },
+        "closeButton": {
+          "label": "Close",
+          "ariaLabel": "Close menu",
+          "w": 71.453125,
+          "h": 18
+        },
+        "structure": [
+          "Sustainability",
+          "News",
+          "Careers",
+          "Businesses",
+          "Company",
+          "Products",
+          "For buyers",
+          "sales@hameemdenim.com"
+        ],
+        "accordion": false,
+        "topRow": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "30.4px",
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 64
+        },
+        "subRow": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "17.6px",
+          "fontWeight": "500",
+          "paddingTop": "12px",
+          "paddingBottom": "12px",
+          "height": 53.140625
+        },
+        "groupLabel": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "letterSpacing": "1.248px",
+          "fontWeight": "700"
+        }
+      },
+      "scrolled": {
+        "height": 88,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(17, 20, 24)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px",
+        "transform": "none",
+        "rowLeft": 30.72,
+        "navVisible": false,
+        "menuButtonVisible": true,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark.png&w=96&q=75"
+        }
+      }
+    },
+    "1023": {
+      "top": {
+        "height": 88,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "transform": "none",
+        "rowLeft": 40.92,
+        "navVisible": false,
+        "menuButtonVisible": true,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark-white.png&w=96&q=75"
+        }
+      },
+      "mobile-open": {
+        "layout": "full-screen dialog (fixed inset-0) with its own 88px top row",
+        "dialog": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "position": "fixed",
+          "zIndex": "80"
+        },
+        "closeButton": {
+          "label": "Close",
+          "ariaLabel": "Close menu",
+          "w": 71.453125,
+          "h": 18
+        },
+        "structure": [
+          "Sustainability",
+          "News",
+          "Careers",
+          "Businesses",
+          "Company",
+          "Products",
+          "For buyers",
+          "sales@hameemdenim.com"
+        ],
+        "accordion": false,
+        "topRow": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "30.4px",
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 64
+        },
+        "subRow": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "17.6px",
+          "fontWeight": "500",
+          "paddingTop": "12px",
+          "paddingBottom": "12px",
+          "height": 53.140625
+        },
+        "groupLabel": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "letterSpacing": "1.248px",
+          "fontWeight": "700"
+        }
+      },
+      "scrolled": {
+        "height": 88,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(17, 20, 24)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px",
+        "transform": "none",
+        "rowLeft": 40.92,
+        "navVisible": false,
+        "menuButtonVisible": true,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark.png&w=96&q=75"
+        }
+      }
+    },
+    "1024": {
+      "top": {
+        "height": 88,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "transform": "none",
+        "rowLeft": 40.96,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark-white.png&w=96&q=75"
+        }
+      },
+      "nav": {
+        "gap": "36px",
+        "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+        "fontSize": "12.48px",
+        "fontWeight": "700",
+        "letterSpacing": "1.248px",
+        "textTransform": "uppercase",
+        "color": "rgb(255, 255, 255)",
+        "chevron": {
+          "w": "10",
+          "h": "6",
+          "strokeWidth": "1.4"
+        },
+        "lastItemRight": 983.046875
+      },
+      "mega-company": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 321.1875
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px",
+          "left": 0,
+          "right": 1024
+        },
+        "intro": {
+          "width": 205.515625
+        },
+        "eyebrow": {
+          "text": "Company",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "328.281px 328.297px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "mega-businesses": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 333.90625
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px",
+          "left": 0,
+          "right": 1024
+        },
+        "intro": {
+          "width": 205.515625
+        },
+        "eyebrow": {
+          "text": "Businesses",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "none",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "205.516px 205.531px 205.531px",
+          "columns": 3
+        },
+        "row": {
+          "paddingTop": "14px",
+          "paddingBottom": "14px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 73.96875,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "18.4px",
+          "fontWeight": "700",
+          "lineHeight": "23px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": null
+      },
+      "mega-products": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 241.125
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px 41.8281px",
+          "left": 0,
+          "right": 1024
+        },
+        "intro": {
+          "width": 205.515625
+        },
+        "eyebrow": {
+          "text": "Products",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "328.281px 328.297px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "afterClose": "rgba(0, 0, 0, 0)",
+      "scrolled": {
+        "height": 88,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(17, 20, 24)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px",
+        "transform": "none",
+        "rowLeft": 40.96,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark.png&w=96&q=75"
+        }
+      }
+    },
+    "1280": {
+      "top": {
+        "height": 88,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "transform": "none",
+        "rowLeft": 51.2,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark-white.png&w=96&q=75"
+        }
+      },
+      "nav": {
+        "gap": "36px",
+        "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+        "fontSize": "12.48px",
+        "fontWeight": "700",
+        "letterSpacing": "1.248px",
+        "textTransform": "uppercase",
+        "color": "rgb(255, 255, 255)",
+        "chevron": {
+          "w": "10",
+          "h": "6",
+          "strokeWidth": "1.4"
+        },
+        "lastItemRight": 1228.8125
+      },
+      "mega-company": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 321.1875
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px",
+          "left": 0,
+          "right": 1280
+        },
+        "intro": {
+          "width": 264.40625
+        },
+        "eyebrow": {
+          "text": "Company",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "416.609px 416.609px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "mega-businesses": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 310.90625
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px",
+          "left": 0,
+          "right": 1280
+        },
+        "intro": {
+          "width": 264.40625
+        },
+        "eyebrow": {
+          "text": "Businesses",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "none",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "264.406px 264.406px 264.406px",
+          "columns": 3
+        },
+        "row": {
+          "paddingTop": "14px",
+          "paddingBottom": "14px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 73.96875,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "18.4px",
+          "fontWeight": "700",
+          "lineHeight": "23px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": null
+      },
+      "mega-products": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 241.125
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px 61.4688px",
+          "left": 0,
+          "right": 1280
+        },
+        "intro": {
+          "width": 264.40625
+        },
+        "eyebrow": {
+          "text": "Products",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "416.609px 416.609px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "afterClose": "rgba(0, 0, 0, 0)",
+      "scrolled": {
+        "height": 88,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(17, 20, 24)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px",
+        "transform": "none",
+        "rowLeft": 51.2,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark.png&w=96&q=75"
+        }
+      }
+    },
+    "1440": {
+      "top": {
+        "height": 88,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "transform": "none",
+        "rowLeft": 104,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark-white.png&w=96&q=75"
+        }
+      },
+      "nav": {
+        "gap": "36px",
+        "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+        "fontSize": "12.48px",
+        "fontWeight": "700",
+        "letterSpacing": "1.248px",
+        "textTransform": "uppercase",
+        "color": "rgb(255, 255, 255)",
+        "chevron": {
+          "w": "10",
+          "h": "6",
+          "strokeWidth": "1.4"
+        },
+        "lastItemRight": 1336
+      },
+      "mega-company": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 321.1875
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 48,
+          "right": 1392
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Company",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "437px 437px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "mega-businesses": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 310.90625
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 48,
+          "right": 1392
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Businesses",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "none",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "278px 278px 278px",
+          "columns": 3
+        },
+        "row": {
+          "paddingTop": "14px",
+          "paddingBottom": "14px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 73.96875,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "18.4px",
+          "fontWeight": "700",
+          "lineHeight": "23px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": null
+      },
+      "mega-products": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 241.125
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 48,
+          "right": 1392
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Products",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "437px 437px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "afterClose": "rgba(0, 0, 0, 0)",
+      "scrolled": {
+        "height": 88,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(17, 20, 24)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px",
+        "transform": "none",
+        "rowLeft": 104,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark.png&w=96&q=75"
+        }
+      }
+    },
+    "1920": {
+      "top": {
+        "height": 88,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "transform": "none",
+        "rowLeft": 344,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark-white.png&w=96&q=75"
+        }
+      },
+      "nav": {
+        "gap": "36px",
+        "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+        "fontSize": "12.48px",
+        "fontWeight": "700",
+        "letterSpacing": "1.248px",
+        "textTransform": "uppercase",
+        "color": "rgb(255, 255, 255)",
+        "chevron": {
+          "w": "10",
+          "h": "6",
+          "strokeWidth": "1.4"
+        },
+        "lastItemRight": 1576
+      },
+      "mega-company": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 321.1875
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 288,
+          "right": 1632
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Company",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "437px 437px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "mega-businesses": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 310.90625
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 288,
+          "right": 1632
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Businesses",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "none",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "278px 278px 278px",
+          "columns": 3
+        },
+        "row": {
+          "paddingTop": "14px",
+          "paddingBottom": "14px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 73.96875,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "18.4px",
+          "fontWeight": "700",
+          "lineHeight": "23px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": null
+      },
+      "mega-products": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 241.125
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 288,
+          "right": 1632
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Products",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "437px 437px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "afterClose": "rgba(0, 0, 0, 0)",
+      "scrolled": {
+        "height": 88,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(17, 20, 24)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px",
+        "transform": "none",
+        "rowLeft": 344,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark.png&w=96&q=75"
+        }
+      }
+    },
+    "2560": {
+      "top": {
+        "height": 88,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "transform": "none",
+        "rowLeft": 664,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark-white.png&w=96&q=75"
+        }
+      },
+      "nav": {
+        "gap": "36px",
+        "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+        "fontSize": "12.48px",
+        "fontWeight": "700",
+        "letterSpacing": "1.248px",
+        "textTransform": "uppercase",
+        "color": "rgb(255, 255, 255)",
+        "chevron": {
+          "w": "10",
+          "h": "6",
+          "strokeWidth": "1.4"
+        },
+        "lastItemRight": 1896
+      },
+      "mega-company": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 321.1875
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 608,
+          "right": 1952
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Company",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "437px 437px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "mega-businesses": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 310.90625
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 608,
+          "right": 1952
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Businesses",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "none",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "278px 278px 278px",
+          "columns": 3
+        },
+        "row": {
+          "paddingTop": "14px",
+          "paddingBottom": "14px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 73.96875,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "18.4px",
+          "fontWeight": "700",
+          "lineHeight": "23px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": null
+      },
+      "mega-products": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 241.125
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 608,
+          "right": 1952
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Products",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "437px 437px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "afterClose": "rgba(0, 0, 0, 0)",
+      "scrolled": {
+        "height": 88,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(17, 20, 24)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px",
+        "transform": "none",
+        "rowLeft": 664,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark.png&w=96&q=75"
+        }
+      }
+    },
+    "3840": {
+      "top": {
+        "height": 88,
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "boxShadow": "none",
+        "transform": "none",
+        "rowLeft": 1304,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark-white.png&w=96&q=75"
+        }
+      },
+      "nav": {
+        "gap": "36px",
+        "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+        "fontSize": "12.48px",
+        "fontWeight": "700",
+        "letterSpacing": "1.248px",
+        "textTransform": "uppercase",
+        "color": "rgb(255, 255, 255)",
+        "chevron": {
+          "w": "10",
+          "h": "6",
+          "strokeWidth": "1.4"
+        },
+        "lastItemRight": 2536
+      },
+      "mega-company": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 321.1875
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 1248,
+          "right": 2592
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Company",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "437px 437px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "mega-businesses": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 310.90625
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 1248,
+          "right": 2592
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Businesses",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "none",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "278px 278px 278px",
+          "columns": 3
+        },
+        "row": {
+          "paddingTop": "14px",
+          "paddingBottom": "14px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 73.96875,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "18.4px",
+          "fontWeight": "700",
+          "lineHeight": "23px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": null
+      },
+      "mega-products": {
+        "header": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 20, 24)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px"
+        },
+        "headerRowBottom": 88,
+        "activeButton": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "0.6",
+          "ariaExpanded": "true",
+          "chevronTransform": "none"
+        },
+        "otherItem": {
+          "color": "rgb(17, 20, 24)",
+          "opacity": "1"
+        },
+        "panel": {
+          "borderTop": "1px solid rgb(228, 228, 224)",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "animationName": "navpop",
+          "animationDuration": "0.3s",
+          "top": 88,
+          "height": 241.125
+        },
+        "grid": {
+          "paddingTop": "40px",
+          "paddingBottom": "40px",
+          "columnGap": "40px",
+          "gridTemplateColumns": "66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px 66px",
+          "left": 1248,
+          "right": 2592
+        },
+        "intro": {
+          "width": 278
+        },
+        "eyebrow": {
+          "text": "Products",
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "12.48px",
+          "fontWeight": "700",
+          "letterSpacing": "1.248px",
+          "textTransform": "uppercase",
+          "color": "rgb(149, 20, 54)"
+        },
+        "headline": {
+          "fontFamily": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "33px",
+          "maxWidth": "209.664px",
+          "marginTop": "12px",
+          "letterSpacing": "-0.24px"
+        },
+        "list": {
+          "columnGap": "40px",
+          "gridTemplateColumns": "437px 437px",
+          "columns": 2
+        },
+        "row": {
+          "paddingTop": "16px",
+          "paddingBottom": "16px",
+          "paddingLeft": "0px",
+          "borderBottom": "1px solid rgb(228, 228, 224)",
+          "height": 80.0625,
+          "leftOffsetInColumn": 0
+        },
+        "title": {
+          "fontFamily": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+          "fontSize": "15.68px",
+          "fontWeight": "600",
+          "lineHeight": "25.088px",
+          "color": "rgb(17, 20, 24)"
+        },
+        "sub": {
+          "fontSize": "12.48px",
+          "color": "rgb(91, 98, 112)",
+          "marginTop": "2px",
+          "lineHeight": "19.968px"
+        },
+        "arrow": {
+          "fontSize": "16px",
+          "color": "rgb(91, 98, 112)"
+        }
+      },
+      "afterClose": "rgba(0, 0, 0, 0)",
+      "scrolled": {
+        "height": 88,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(17, 20, 24)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(228, 228, 224) 0px 1px 0px 0px, rgba(17, 20, 24, 0.06) 0px 8px 24px 0px",
+        "transform": "none",
+        "rowLeft": 1304,
+        "navVisible": true,
+        "menuButtonVisible": false,
+        "logo": {
+          "w": 24,
+          "h": 24,
+          "src": "https://hameemgroup-demo.reliabuilds.com/_next/image?url=%2Fmedia%2Fbrand%2Fmark.png&w=96&q=75"
+        }
+      }
+    }
+  },
+  "fonts": {
+    "brand": "Montserrat, \"Montserrat Fallback\", Montserrat, sans-serif",
+    "display": "\"Fira Sans Condensed\", \"Fira Sans Condensed Fallback\", \"Arial Narrow\", sans-serif",
+    "label": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif",
+    "body": "\"Fira Sans\", \"Fira Sans Fallback\", system-ui, sans-serif"
+  },
+  "wordmark": {
+    "line1": {
+      "fontSize": "16px",
+      "fontWeight": "800",
+      "letterSpacing": "0.64px"
+    },
+    "line2": {
+      "fontSize": "8.96px",
+      "fontWeight": "600",
+      "letterSpacing": "5.376px"
+    },
+    "mark": 24
+  }
+}

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&family=Fira+Sans:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&family=Fira+Sans:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 /* ── Brand tokens ── */
@@ -9,6 +9,7 @@
   --mute: #61646a;
   --hair: #d9d9d6;
   --navy: #1f2352;
+  --header-h: 88px;
   font-family: "Fira Sans", sans-serif;
   color: var(--ink);
 }
@@ -37,7 +38,11 @@ h1, h2, h3, p { margin: 0; }
 
 /* ── Keyframes (can't be inlined via Tailwind) ── */
 @keyframes megaFadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes chainFadeIn {
@@ -64,31 +69,146 @@ h1, h2, h3, p { margin: 0; }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Header wrapper (fixed, transparent → solid) ── */
+/* ── Site header (fixed; transparent over the hero, solid otherwise) ──
+   State classes come from SiteHeader: .is-solid (scrolled, mega or mobile menu
+   open), .is-mega-open, .is-mobile-open. */
 .header-wrapper {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
-  background: transparent;
-  transition: background 0.4s ease, box-shadow 0.4s ease;
+  color: #fff;
+  background-color: transparent;
+  box-shadow: none;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
-.header-wrapper.scrolled {
-  background: #ffffff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+.header-wrapper.is-solid {
+  color: var(--ink);
+  background-color: #fff;
+  box-shadow: 0 8px 24px rgba(17, 20, 24, 0.06);
 }
-.header-wrapper.scrolled .site-header nav a { color: var(--ink); }
-.header-wrapper.scrolled .site-header nav a.active { color: var(--red); }
-.header-wrapper.scrolled .brand-pill {
-  background: var(--mist);
+.header-bar {
+  height: var(--header-h);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s ease;
+}
+.is-solid .header-bar { border-bottom-color: var(--hair); }
+.site-header { height: 100%; }
+
+/* Opening a menu turns the header white in the same frame as the panel. */
+.header-wrapper.is-mega-open,
+.header-wrapper.is-mega-open .header-bar,
+.header-wrapper.is-mega-open .site-logo *,
+.header-wrapper.is-mobile-open,
+.header-wrapper.is-mobile-open .header-bar,
+.header-wrapper.is-mobile-open .site-logo * { transition-duration: 0s; }
+
+/* Logo pill: frosted glass over the hero, mist chip when solid */
+.logo-pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  padding-inline: 0.25rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+/* A light sheen that sweeps across the logo on hover */
+.logo-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.site-logo:hover .logo-pill,
+.site-logo:focus-visible .logo-pill {
+  transform: translateY(-1px);
+  background-color: #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+}
+.site-logo:hover .logo-pill::after {
+  transform: translateX(120%);
+  transition: transform 0.7s ease;
+}
+.is-solid .logo-pill {
+  background-color: var(--mist);
   border-color: transparent;
   box-shadow: none;
+  backdrop-filter: none;
 }
-.header-wrapper.scrolled .menu-btn { color: var(--ink); }
+.is-solid .site-logo:hover .logo-pill,
+.is-solid .site-logo:focus-visible .logo-pill {
+  background-color: #fff;
+  box-shadow: 0 0 0 1px var(--hair), 0 6px 16px rgba(17, 20, 24, 0.08);
+}
+.site-logo:focus-visible { outline: none; }
+.site-logo:focus-visible .logo-pill { outline: 2px solid var(--red); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .logo-pill::after { display: none; }
+  .site-logo:hover .logo-pill,
+  .site-logo:focus-visible .logo-pill { transform: none; }
+}
 
-/* ── Mega menu animation ── */
-.mega-menu { animation: megaFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+/* Nav labels */
+.nav-label,
+.nav-link {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.nav-link {
+  padding-block: 32px;
+  color: inherit;
+  background: none;
+  border: 0;
+  transition: opacity 0.2s ease;
+}
+.nav-link:hover,
+.nav-link.is-active { opacity: 0.6; }
+.nav-chevron { transition: transform 0.25s ease; }
+.nav-chevron.is-open { transform: rotate(180deg); }
+.menu-btn { color: inherit; background: none; border: 0; padding: 0; }
+
+/* Mega panel: sits under the header bar, whose hairline it shares */
+.mega-panel {
+  background: #fff;
+  color: var(--ink);
+  max-height: calc(100dvh - var(--header-h));
+  overflow-y: auto;
+  animation: megaFadeIn 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Mobile and tablet menu: fills the screen under the header */
+.mobile-menu {
+  position: fixed;
+  top: var(--header-h);
+  inset-inline: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #fff;
+  color: var(--ink);
+  animation: menuIn 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-panel,
+  .mobile-menu { animation-name: fadeIn; }
+  .nav-chevron { transition: none; }
+}
 
 /* ── Hero Ken Burns slider ── */
 .hero-slide {
@@ -217,7 +337,6 @@ h1, h2, h3, p { margin: 0; }
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .wrap { width: calc(100% - 40px); }
-  .mega-menu { display: none !important; }
   .stitch-track { display: none; }
 }
 

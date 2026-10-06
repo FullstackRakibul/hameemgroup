@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Preloader from "./Preloader";
 import WorldRoutes from "./WorldRoutes";
+import SiteHeader from "./SiteHeader";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -471,7 +472,6 @@ export default function App() {
   const [product, setProduct] = useState(0);
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [heroSlide, setHeroSlide] = useState(0);
@@ -484,15 +484,9 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Scroll handler: sticky header + back-to-top + scroll progress
+  // Scroll handler: back-to-top + scroll progress (header state lives in SiteHeader)
   useEffect(() => {
     const handleScroll = () => {
-      const wrapper = document.querySelector(".header-wrapper");
-      if (window.scrollY > 50) {
-        wrapper?.classList.add("scrolled");
-      } else {
-        wrapper?.classList.remove("scrolled");
-      }
       setShowBackToTop(window.scrollY > 500);
       const docHeight =
         document.documentElement.scrollHeight - window.innerHeight;
@@ -545,110 +539,7 @@ export default function App() {
         }}
       >
         {/* ═══ FIXED HEADER ═══ */}
-        <div
-          className="header-wrapper"
-          onMouseLeave={() => setActiveMenu(null)}
-        >
-          <header className="site-header flex items-center justify-between h-20 wrap relative z-2">
-            <Brand />
-            <nav className="hidden text-white md:flex gap-10 items-center">
-              {(["company", "businesses", "products"] as const).map((key) => (
-                <div
-                  key={key}
-                  className="flex text-white items-center gap-1.5 cursor-pointer group nav-item"
-                  onMouseEnter={() => setActiveMenu(key)}
-                >
-                  <a
-                    href={`#${key}`}
-                    className={`nav-link font-['Fira_Sans_Condensed'] text-white font-semibold text-[14px] tracking-widest transition-colors duration-300 group-hover:text-(--red) ${activeMenu === key ? "text-(--red) active" : "text-(--white)"}`}
-                  >
-                    {key.toUpperCase()}
-                  </a>
-                  <svg
-                    className={`w-3.5 h-3.5 transition-transform duration-300 ${activeMenu === key ? "rotate-180 text-(--red)" : "text-(--white)"}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-              ))}
-              {["sustainability", "news", "careers"].map((key) => (
-                <div
-                  key={key}
-                  className="flex items-center cursor-pointer group nav-item"
-                  onMouseEnter={() => setActiveMenu(null)}
-                >
-                  <a
-                    href={`#${key}`}
-                    className="nav-link font-['Fira_Sans_Condensed'] font-semibold text-[14px] tracking-widest text-white transition-colors duration-300 group-hover:text-(--red)"
-                  >
-                    {key.toUpperCase()}
-                  </a>
-                </div>
-              ))}
-            </nav>
-            <button
-              className="menu-btn md:hidden text-white bg-transparent border-0 text-xs tracking-widest"
-              aria-label="Open menu"
-            >
-              MENU
-            </button>
-          </header>
-
-          {/* Mega Menu */}
-          {activeMenu && (
-            <div className="mega-menu absolute top-20 left-0 w-full bg-white z-100 shadow-[0_20px_40px_rgba(0,0,0,0.08)] border-t border-(--hair)">
-              <div className="wrap grid grid-cols-[1fr_2.5fr] gap-20 py-16">
-                <div>
-                  <Eyebrow>{megaMenuData[activeMenu].eyebrow}</Eyebrow>
-                  <h2 className="font-['Fira_Sans_Condensed'] text-[32px] leading-[1.15] font-semibold mt-5 text-(--ink)">
-                    {megaMenuData[activeMenu].headline}
-                  </h2>
-                  {megaMenuData[activeMenu].cta && (
-                    <a
-                      href={megaMenuData[activeMenu].cta.href}
-                      className="inline-block mt-8 text-sm font-semibold text-(--red) tracking-wider hover:underline"
-                    >
-                      {megaMenuData[activeMenu].cta.text} →
-                    </a>
-                  )}
-                </div>
-                <div
-                  className={`grid gap-0 ${megaMenuData[activeMenu].gridCols === 3 ? "grid-cols-3" : "grid-cols-2"}`}
-                >
-                  {megaMenuData[activeMenu].links.map(
-                    (link: any, i: number) => (
-                      <a
-                        href={link.href}
-                        key={i}
-                        className="flex items-center justify-between px-6 py-5 border-b border-(--hair) transition-all duration-200 hover:bg-(--mist) hover:pl-8 group"
-                      >
-                        <div className="flex flex-col gap-1.5">
-                          <strong className="font-['Fira_Sans_Condensed'] text-lg font-semibold text-(--ink)">
-                            {link.title}
-                          </strong>
-                          <span className="text-[13px] text-(--mute)">
-                            {link.sub}
-                          </span>
-                        </div>
-                        <span className="text-lg text-(--mute) transition-all duration-200 group-hover:translate-x-1 group-hover:text-(--red)">
-                          →
-                        </span>
-                      </a>
-                    ),
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        <SiteHeader menus={megaMenuData} />
 
         {/* ═══ HERO with KEN BURNS SLIDER ═══ */}
         <section
@@ -805,7 +696,7 @@ export default function App() {
                       src={`${media}buyers/${name}.png`}
                       alt={name.replaceAll("-", " ")}
                       loading="lazy"
-                      className="w-auto max-w-full object-contain opacity-80 grayscale transition-[filter,opacity] duration-500 group-hover:opacity-100 group-hover:grayscale-0 max-h-9 sm:max-h-11 sm:max-w-30"
+                      className="w-auto max-w-full object-contain opacity-80 grayscale transition-[filter,opacity] duration-500 group-hover:opacity-100 group-hover:grayscale-0 max-h-9 sm:max-h-11 sm:max-w-[min(100%,7.5rem)]"
                     />
                   </li>
                 ))}
