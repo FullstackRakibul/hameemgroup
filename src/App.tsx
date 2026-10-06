@@ -979,7 +979,7 @@ export default function App() {
                       MWp
                     </span>
                   </div>
-                  <span className="text-[#c5c6c8] text-[13px] leading-relaxed mt-3 max-w-[200px]">
+                  <span className="text-[#c5c6c8] text-[13px] leading-relaxed mt-3 max-w-50">
                     Rooftop solar installed across factories
                   </span>
                 </div>
@@ -991,7 +991,7 @@ export default function App() {
                       100%
                     </span>
                   </div>
-                  <span className="text-[#c5c6c8] text-[13px] leading-relaxed mt-3 max-w-[200px]">
+                  <span className="text-[#c5c6c8] text-[13px] leading-relaxed mt-3 max-w-50">
                     Of process water recycled
                   </span>
                 </div>
@@ -1003,7 +1003,7 @@ export default function App() {
                       60–80%
                     </span>
                   </div>
-                  <span className="text-[#c5c6c8] text-[13px] leading-relaxed mt-3 max-w-[200px]">
+                  <span className="text-[#c5c6c8] text-[13px] leading-relaxed mt-3 max-w-50">
                     Caustic soda recovered and reused in fabric processing
                   </span>
                 </div>
@@ -1039,7 +1039,7 @@ export default function App() {
             <img
               src={`${media}people-knit.jpg`}
               alt="A knitting technician programming a Stoll machine"
-              className="w-full h-[400px] md:h-full object-cover"
+              className="w-full h-100 md:h-full object-cover"
             />
           </section>
 
@@ -1160,15 +1160,13 @@ export default function App() {
             <div className="border-t border-(--hair)">
               <div className="wrap flex flex-col md:flex-row items-start md:items-center justify-between py-6 gap-3 text-xs">
                 <span>
-                  © 2026 Ha-Meem Group. Concept homepage — not the official
-                  site.
+                  © 2026 Ha-Meem Group. demo homepage
                 </span>
                 <span>
                   Privacy notice　　Terms of use　　Supplier code of conduct
                 </span>
                 <span>
-                  <b className="text-(--red)">*</b> Figure from public sources,
-                  pending confirmation by Ha-Meem Group.
+                  <b className="text-(--red)">*</b>by Ha-Meem Group. [ IT Department ]
                 </span>
               </div>
             </div>

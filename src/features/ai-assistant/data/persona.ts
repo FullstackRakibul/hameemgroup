@@ -2,8 +2,8 @@ export const persona = {
   name: "Shuvo",
   role: "Ha-Meem Assist",
   id: "#HM-6821",
-  launcherTitle: "Need help?",
-  launcherSubtitle: "Shuvo · Ha-Meem Assist · AI + human team",
+  launcherTitle: "Hello, How can i assist?",
+  launcherSubtitle: "Shuvo · Ha-Meem AI Assist",
   mobileLauncherLabel: "Ask Shuvo",
   greeting:
     "Hi, I'm Shuvo, Ha-Meem's sourcing assistant. I can help with products, capacity, sustainability, factory visits and careers. Pick a topic below, or just ask.",
