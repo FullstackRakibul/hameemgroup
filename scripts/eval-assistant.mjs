@@ -1,4 +1,4 @@
-// Ayesha · Ha-Meem Assist evaluation.
+// Shuvo · Ha-Meem Assist evaluation.
 //
 //   node scripts/eval-assistant.mjs [baseUrl] [--skip-build]
 //
@@ -265,7 +265,7 @@ async function walk(browser, w, h) {
   overlapChecks(g, `${tag} panel`);
   touchCheck(await touchTargets(page), `${tag} welcome`);
   await contrastCheck(page, `${tag} welcome`);
-  check(18, (await page.getByRole("dialog", { name: "Ayesha" }).count()) === 1, `${tag} dialog name`);
+  check(18, (await page.getByRole("dialog", { name: "Shuvo" }).count()) === 1, `${tag} dialog name`);
   if (mobile) {
     const m = await page.evaluate(() => ({
       panel: document.querySelector(".hm-assist-panel").getBoundingClientRect().toJSON(),
@@ -319,7 +319,7 @@ async function walk(browser, w, h) {
     return { present: !!t, inLog: !!(log && t && log.contains(t)), sr: t?.querySelector(".hm-assist-sr")?.textContent };
   });
   check(12, typing.present, `${tag} at 200ms`);
-  check(19, typing.inLog && typing.sr === "Ayesha is typing", `${tag} typing`, JSON.stringify(typing));
+  check(19, typing.inLog && typing.sr === "Shuvo is typing", `${tag} typing`, JSON.stringify(typing));
   // 13: Enter during typing adds nothing
   const users = await page.locator(".hm-assist-msg--user").count();
   await page.locator(".hm-assist-textarea").fill("hello");

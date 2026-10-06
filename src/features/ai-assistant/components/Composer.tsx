@@ -55,7 +55,7 @@ export default function Composer({ textareaRef, isTyping, onSend, onMic }: Compo
           rows={1}
           value={value}
           placeholder={persona.placeholder}
-          aria-label="Message Ayesha"
+          aria-label="Message Shuvo"
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onKeyDown}
         />

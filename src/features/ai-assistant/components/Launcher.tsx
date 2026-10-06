@@ -101,7 +101,7 @@ export default function Launcher({ onOpen, onCall, restoreFocus, toastMessage }:
             ref={refs.expand}
             type="button"
             className="hm-assist-expand"
-            aria-label="Open chat with Ayesha"
+            aria-label="Open chat with Shuvo"
             onClick={() => onOpen("expand")}
           >
             <ExpandIcon size={18} />

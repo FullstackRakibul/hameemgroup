@@ -11,7 +11,7 @@ import type { View } from "./types";
 
 const TOAST_MS = 2500;
 
-/** Ayesha · Ha-Meem Assist. UI only: canned replies, no network, no audio. */
+/** Shuvo · Ha-Meem Assist. UI only: canned replies, no network, no audio. */
 export function AiAssistant() {
   const [view, setView] = useState<View>("launcher");
   const [opener, setOpener] = useState<Opener | null>(null);

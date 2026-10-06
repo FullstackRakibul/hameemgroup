@@ -1,9 +1,9 @@
-/* ── Ayesha · Ha-Meem Assist ──
+/* ── Shuvo · Ha-Meem Assist ──
    Every class is prefixed hm-assist-. Brand colours come from the site tokens
    (--ink, --red, --mist, --mute, --hair); the two below are the only additions. */
 .hm-assist-root {
   --assist-online: #16a34a;
-  --assist-red-hover: #c1003a;
+  --assist-red-hover: #264156;
   --assist-condensed: "Fira Sans Condensed", "Fira Sans", sans-serif;
   --assist-sans: "Fira Sans", sans-serif;
   font-family: var(--assist-sans);

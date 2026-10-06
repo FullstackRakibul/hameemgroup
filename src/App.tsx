@@ -1048,7 +1048,7 @@ export default function App() {
             <div className="wrap flex flex-col md:flex-row items-start md:items-center justify-between py-16 md:py-20 gap-4">
               <div>
                 <Eyebrow>NEWSROOM</Eyebrow>
-                <h2 className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[54px] mt-5">
+                <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[54px] mt-5">
                   Latest from the group.
                 </h2>
               </div>
@@ -1092,9 +1092,9 @@ export default function App() {
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-[rgba(10,14,18,0.88)]" />
-            <div className="relative z-1 text-center pt-28 md:pt-32 px-5">
-              <Eyebrow className="!text-white">WORK WITH US</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] text-[50px] md:text-[68px] leading-[0.84] mt-14 mb-4">
+            <div className="relative z-1 flex flex-col gap-8 text-center pt-28 md:pt-32 px-5">
+              <Eyebrow className="text-white!">WORK WITH US</Eyebrow>
+              <h2 className="font-['Fira_Sans_Condensed'] font-black text-[50px] md:text-[68px] leading-[0.84] mt-14 mb-4">
                 Sourcing from
                 <br />
                 Bangladesh?
@@ -1106,7 +1106,7 @@ export default function App() {
               </p>
               <div className="flex gap-3 justify-center flex-wrap">
                 <a
-                  className="inline-block px-8 py-4 bg-white text-(--ink) border border-white rounded-full text-[11px] font-semibold tracking-widest hover:bg-transparent hover:text-white transition-colors duration-300"
+                  className="inline-block px-8 py-4 bg-white text-black border border-white rounded-full text-[11px] font-semibold tracking-widest hover:bg-transparent hover:text-white transition-colors duration-300"
                   href="mailto:sales@hameemdenim.com"
                 >
                   TALK TO SALES
