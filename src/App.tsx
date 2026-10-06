@@ -608,9 +608,10 @@ export default function App() {
               </h2>
               {/* Stats grid */}
               <div className="mt-16 pt-10 border-t border-(--hair) grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-0">
-                {stats.map((s) => (
+                {stats.map((s,i) => (
                   <div
                     key={s.value}
+                     style={{ animationDelay: `${i * 80}ms` }}
                     className="group relative py-8 px-4 text-center border-r border-(--hair) last:border-r-0 transition-colors duration-300 ease-out hover:bg-(--mist) cursor-default"
                   >
                     {/* Red accent bar that slides in from center on hover */}
