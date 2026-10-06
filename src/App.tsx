@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const media = "../public/media/";
+const media = "../media/";
 
 const buyers = [
   "gap", "hm", "zara", "pvh", "kohls", "jcpenney", "next", "mango",
