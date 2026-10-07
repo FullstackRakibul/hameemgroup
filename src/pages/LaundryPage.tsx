@@ -80,7 +80,6 @@ export default function LaundryPage() {
         <Gallery
           label="Washing and finishing photos"
           images={[
-            { src: "chain-wash.jpg", alt: "Washing machines along a plant aisle" },
             { src: "cine/laser.jpg", alt: "A laser finishing denim" },
             { src: "products/jeans.jpg", alt: "Washed denim jeans on a rail" },
           ]}

@@ -85,9 +85,7 @@ export default function DenimMillPage() {
         <Gallery
           label="Denim mill photos"
           images={[
-            { src: "cine/looms.jpg", alt: "Looms weaving indigo denim" },
-            { src: "cine/fabric.jpg", alt: "Indigo denim fabric on a finishing frame" },
-            { src: "chain-fabric.jpg", alt: "A batch of finished denim beside the machines" },
+            { src: "chain-fabric.jpg", alt: "Indigo denim coming off a finishing range into a trolley" },
             { src: "products/fabric.jpg", alt: "Folded denim and coloured fabric swatches" },
             { src: "chain-spinning.jpg", alt: "Yarn winding frames in the spinning mill" },
           ]}

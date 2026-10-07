@@ -75,7 +75,6 @@ export default function WovenPage() {
           label="Woven garments photos"
           images={[
             { src: "chain-sewing.jpg", alt: "Operators at sewing machines on a garment floor" },
-            { src: "cine/sewing.jpg", alt: "Sewing lines with operators in red uniforms" },
             { src: "products/bottoms.jpg", alt: "Stacks of coloured trousers" },
             { src: "products/shirts.jpg", alt: "A hand turning the cuff of a blue shirt" },
           ]}

@@ -38,7 +38,6 @@ export default function AncillaryPage() {
         <Gallery
           label="Ancillary industries photos"
           images={[
-            { src: "biz/packaging.jpg", alt: "Carton board being cut in the packaging factory" },
             { src: "biz/label.jpg", alt: "Folded fabrics and a woven label" },
             { src: "chain-trims.jpg", alt: "Embroidery machines and operators" },
           ]}
