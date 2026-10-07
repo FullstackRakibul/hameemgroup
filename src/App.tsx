@@ -5,6 +5,7 @@ import SiteHeader from "./SiteHeader";
 import { AiAssistant } from "./features/ai-assistant";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Productcarousel from "./components/Productcarousel ";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -468,6 +469,14 @@ function StitchScrollbar({ progress }: { progress: number }) {
   );
 }
 
+
+// Built once, outside the component, so the carousel is not re-rendered on scroll.
+const productSlides = products.map(([title, text, image]) => ({
+  title,
+  text,
+  image: `${media}products/${image}`,
+}));
+
 /* ── Main App ── */
 export default function App() {
   const [product, setProduct] = useState(0);
@@ -725,54 +734,27 @@ export default function App() {
             </div>
           </section>
 
-          {/* ── PRODUCTS (hover to switch) ── */}
+          {/* ── PRODUCTS (3D carousel) ── */}
           <section
             id="products"
-            className="grid md:grid-cols-2 min-h-175 md:h-221.75"
+            className="bg-(--mist) pt-24 md:pt-28 pb-16 md:pb-20"
           >
-            <div className="product-image-wrap bg-(--mist) overflow-hidden relative h-100 md:h-full">
-              {products.map((item, i) => (
-                <img
-                  key={item[0]}
-                  src={`${media}products/${item[2]}`}
-                  alt={item[0]}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  style={{
-                    opacity: product === i ? 1 : 0,
-                    transform: product === i ? "scale(1)" : "scale(1.04)",
-                  }}
-                />
-              ))}
-            </div>
-            <div className="py-16 md:py-28 px-8 md:pl-24 md:pr-16">
-              <Eyebrow>WHAT WE MAKE</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[58px] leading-[0.96] mt-7 mb-10">
-                Bottoms, tops,
-                <br />
-                denim and sweaters.
-              </h2>
-              <p className="text-(--mute) text-base leading-relaxed pb-9 border-b border-(--hair)">
+            <div className="wrap flex flex-col md:flex-row justify-between md:items-end gap-8 pb-6 md:pb-8">
+              <div>
+                <Eyebrow>WHAT WE MAKE</Eyebrow>
+                <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[58px] leading-[0.96] mt-7">
+                  Bottoms, tops,
+                  <br />
+                  denim and sweaters.
+                </h2>
+              </div>
+              <p className="max-w-107.5 text-(--mute) text-base leading-relaxed">
                 From fashionable denim fabrics to wholesale apparel, Ha-Meem
                 makes bottoms, tops and sweaters for global fashion brands, with
                 products ranging from infant to adult sizes.
               </p>
-              <div>
-                {products.map((item, i) => (
-                  <button
-                    key={item[0]}
-                    className={`product-btn block w-full text-left bg-transparent border-0 border-b border-(--hair) py-5 text-(--mute) ${product === i ? "active" : ""}`}
-                    onMouseEnter={() => setProduct(i)}
-                  >
-                    <b className="tracking-widest text-[13px]">{item[0]}</b>
-                    {product === i && item[1] && (
-                      <span className="block pt-2 leading-relaxed text-sm">
-                        {item[1]}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
             </div>
+            <Productcarousel items={productSlides} label="What we make" />
           </section>
 
           {/* ── VERTICAL INTEGRATION (Steps accordion) ── */}
