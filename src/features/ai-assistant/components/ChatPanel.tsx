@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import gsap from "gsap";
+import { useNavigate } from "react-router-dom";
 import { useFocusTrap } from "../hooks/useFocusTrap";
 import { MOBILE_QUERY, REDUCED_MOTION_QUERY } from "../hooks/useMediaQuery";
 import type { Message } from "../types";
@@ -144,13 +145,13 @@ export default function ChatPanel(props: ChatPanelProps) {
     if (stickRef.current) setShowNewPill(false);
   };
 
-  /* ── Links: anchors scroll the page (closing the sheet first on mobile) ── */
+  /* ── Links: site paths ("/contact", "/#chain") navigate inside the app from
+     any page, closing the sheet first on mobile; mailto: links work as usual ── */
+  const navigate = useNavigate();
   const onLink = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (!href.startsWith("#")) return;
-    const target = document.querySelector(href);
-    if (!target) return;
+    if (!href.startsWith("/")) return;
     e.preventDefault();
-    const go = () => target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+    const go = () => navigate(href);
     if (isMobile) close(() => requestAnimationFrame(go));
     else go();
   };

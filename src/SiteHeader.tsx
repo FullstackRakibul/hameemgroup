@@ -1,38 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent } from "react";
+import { Link, useLocation } from "react-router-dom";
+import SmartLink from "./components/SmartLink";
+import { BUSINESS_PAGES, PLAIN_LINKS } from "./data/navigation";
+import type { MegaMenu, MenuKey } from "./data/navigation";
 
 /* ── Fixed site header: logo, desktop nav + mega menus, mobile menu ──
    Matches https://hameemgroup-demo.reliabuilds.com (measured values in
    screenshots/demo-measurements.json). One breakpoint (1024px) swaps the
-   desktop nav for the Menu button. */
-
-type MegaLink = { title: string; sub: string; href: string };
-type MegaMenu = {
-  eyebrow: string;
-  headline: string;
-  cta?: { text: string; href: string };
-  gridCols: number;
-  links: MegaLink[];
-};
-type MenuKey = "company" | "businesses" | "products";
+   desktop nav for the Menu button. Links are router links: choosing one
+   closes the menu, and the shell scrolls to the page top or the #section. */
 
 const MENU_KEYS: MenuKey[] = ["company", "businesses", "products"];
-const PLAIN_LINKS = ["sustainability", "news", "careers"];
 const DESKTOP_QUERY = "(min-width: 1024px)";
 const label = (key: string) => key.charAt(0).toUpperCase() + key.slice(1);
-
-// Close the mobile menu first, then scroll, so the scroll lock is gone.
-function scrollToHash(href: string) {
-  requestAnimationFrame(() => {
-    const target = href.startsWith("#") ? document.querySelector(href) : null;
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-      history.pushState(null, "", href);
-    } else {
-      window.location.href = href;
-    }
-  });
-}
 
 function Chevron({ open }: { open: boolean }) {
   return (
@@ -52,7 +33,7 @@ function Chevron({ open }: { open: boolean }) {
 // header turns solid, with a lift and a light sheen on hover.
 function Logo() {
   return (
-    <a href="#top" className="site-logo flex shrink-0 items-center" aria-label="Ha-Meem Group — home">
+    <Link to="/" className="site-logo flex shrink-0 items-center" aria-label="Ha-Meem Group — home">
       <span className="logo-pill">
         <img
           src="/group-logo.png"
@@ -61,11 +42,12 @@ function Logo() {
           draggable={false}
         />
       </span>
-    </a>
+    </Link>
   );
 }
 
-export default function SiteHeader({ menus }: { menus: Record<string, MegaMenu> }) {
+export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu> }) {
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -84,6 +66,12 @@ export default function SiteHeader({ menus }: { menus: Record<string, MegaMenu> 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Any navigation (link, Back, Forward) closes both menus.
+  useEffect(() => {
+    setActiveMenu(null);
+    setMobileOpen(false);
+  }, [location.key]);
 
   // Crossing the breakpoint closes whichever menu belongs to the other layout.
   useEffect(() => {
@@ -148,14 +136,21 @@ export default function SiteHeader({ menus }: { menus: Record<string, MegaMenu> 
     setActiveMenu((cur) => (toggles && cur === key ? null : key));
   };
 
-  const onMobileLink = (href: string) => (e: ReactMouseEvent) => {
-    e.preventDefault();
+  const closeMenus = () => {
+    setActiveMenu(null);
     setMobileOpen(false);
-    scrollToHash(href);
   };
 
   const menu = activeMenu ? menus[activeMenu] : null;
   const gridMenu = menu?.gridCols === 3;
+
+  // The mobile menu lists the business pages once, under Businesses.
+  const businessHrefs = new Set(BUSINESS_PAGES.map((p) => p.href));
+  const mobileGroups = [
+    { key: "company", links: menus.company.links },
+    { key: "businesses", links: BUSINESS_PAGES },
+    { key: "products", links: menus.products.links.filter((l) => !businessHrefs.has(l.href)) },
+  ];
 
   return (
     <div
@@ -193,16 +188,16 @@ export default function SiteHeader({ menus }: { menus: Record<string, MegaMenu> 
                 <Chevron open={activeMenu === key} />
               </button>
             ))}
-            {PLAIN_LINKS.map((key) => (
-              <a
-                key={key}
-                href={`#${key}`}
+            {PLAIN_LINKS.map((link) => (
+              <SmartLink
+                key={link.href}
+                href={link.href}
                 className="nav-link"
                 onPointerEnter={() => setActiveMenu(null)}
                 onFocus={() => setActiveMenu(null)}
               >
-                {label(key)}
-              </a>
+                {link.title}
+              </SmartLink>
             ))}
           </nav>
 
@@ -245,11 +240,11 @@ export default function SiteHeader({ menus }: { menus: Record<string, MegaMenu> 
                 {menu.headline}
               </div>
               {menu.cta && (
-                <a href={menu.cta.href} className="group mt-4 inline-block">
+                <SmartLink href={menu.cta.href} className="group mt-4 inline-block" onClick={closeMenus}>
                   <span className="text-[0.85rem] font-medium text-(--mute) transition-colors group-hover:text-(--red)">
                     {menu.cta.text} →
                   </span>
-                </a>
+                </SmartLink>
               )}
             </div>
             <ul
@@ -258,22 +253,24 @@ export default function SiteHeader({ menus }: { menus: Record<string, MegaMenu> 
               {menu.links.map((link) => (
                 <li key={link.title}>
                   {gridMenu ? (
-                    <a
+                    <SmartLink
                       href={link.href}
+                      onClick={closeMenus}
                       className="mega-row group flex h-full flex-col justify-center border-b border-(--hair) py-3.5"
                     >
-                      <span className="font-['Fira_Sans_Condensed'] text-[1.15rem] font-bold leading-tight text-(--ink) transition-colors group-hover:text-(--red)">
+                      <span className="font-['Fira_Sans_Condensed'] text-[1.15rem] font-bold leading-tight text-(--ink) transition-colors group-hover:text-(--red) group-aria-[current=page]:text-(--red)">
                         {link.title}
                       </span>
                       <span className="mt-0.5 text-[0.78rem] leading-relaxed text-(--mute)">{link.sub}</span>
-                    </a>
+                    </SmartLink>
                   ) : (
-                    <a
+                    <SmartLink
                       href={link.href}
+                      onClick={closeMenus}
                       className="mega-row group flex items-center justify-between gap-6 border-b border-(--hair) py-4"
                     >
                       <span>
-                        <span className="block text-[0.98rem] font-semibold leading-relaxed text-(--ink) transition-colors group-hover:text-(--red)">
+                        <span className="block text-[0.98rem] font-semibold leading-relaxed text-(--ink) transition-colors group-hover:text-(--red) group-aria-[current=page]:text-(--red)">
                           {link.title}
                         </span>
                         <span className="mt-0.5 block text-[0.78rem] leading-relaxed text-(--mute)">{link.sub}</span>
@@ -284,7 +281,7 @@ export default function SiteHeader({ menus }: { menus: Record<string, MegaMenu> 
                       >
                         →
                       </span>
-                    </a>
+                    </SmartLink>
                   )}
                 </li>
               ))}
@@ -297,37 +294,39 @@ export default function SiteHeader({ menus }: { menus: Record<string, MegaMenu> 
       {mobileOpen && (
         <div id="mobile-menu" ref={mobilePanelRef} className="mobile-menu lg:hidden">
           <nav aria-label="Mobile" className="wrap pt-6 pb-16">
-            {[...PLAIN_LINKS, "businesses"].map((key) => (
-              <a
-                key={key}
-                href={`#${key}`}
-                onClick={onMobileLink(`#${key}`)}
+            {[...PLAIN_LINKS, { title: "Businesses", href: "/#businesses" }].map((link) => (
+              <SmartLink
+                key={link.href}
+                href={link.href}
+                onClick={closeMenus}
                 className="flex items-center justify-between border-b border-(--hair) py-4"
               >
                 <span className="font-['Fira_Sans_Condensed'] text-[1.9rem] font-bold leading-[1.05] text-(--ink)">
-                  {label(key)}
+                  {link.title}
                 </span>
                 <span aria-hidden="true" className="text-xl text-(--mute)">
                   →
                 </span>
-              </a>
+              </SmartLink>
             ))}
-            {(["company", "products"] as const).map((key) => (
-              <div key={key} className="mt-8">
-                <p className="nav-label text-(--mute)">{label(key)}</p>
+            {mobileGroups.map((group) => (
+              <div key={group.key} className="mt-8">
+                <p className="nav-label text-(--mute)">{label(group.key)}</p>
                 <div className="mt-1">
-                  {menus[key].links.map((link) => (
-                    <a
+                  {group.links.map((link) => (
+                    <SmartLink
                       key={link.title}
                       href={link.href}
-                      onClick={onMobileLink(link.href)}
-                      className="flex items-center justify-between border-b border-(--hair) py-3"
+                      onClick={closeMenus}
+                      className="group flex items-center justify-between border-b border-(--hair) py-3"
                     >
-                      <span className="text-[1.1rem] font-medium leading-[1.6] text-(--ink)">{link.title}</span>
+                      <span className="text-[1.1rem] font-medium leading-[1.6] text-(--ink) group-aria-[current=page]:text-(--red)">
+                        {link.title}
+                      </span>
                       <span aria-hidden="true" className="text-base text-(--mute)">
                         →
                       </span>
-                    </a>
+                    </SmartLink>
                   ))}
                 </div>
               </div>

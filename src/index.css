@@ -410,3 +410,18 @@ body:has(.hm-assist-panel) .back-to-top {
 @media (max-width: 560px) {
   .hero-caption-text, .hero-controls-wrap { display: none; }
 }
+
+/* ── Routing: in-page targets clear the fixed header; programmatic focus
+   (a new page's h1, a #section) shows no ring ── */
+section[id],
+footer[id] { scroll-margin-top: var(--header-h); }
+[tabindex="-1"]:focus { outline: none; }
+
+/* ── Reduced motion: no smooth scroll, hover zoom or Ken Burns ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-slide.active { animation: none; }
+  .biz-card:hover { transform: none; }
+  .biz-card:hover .biz-img,
+  .news-card:hover .news-img { transform: none; }
+}
