@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import type { ChipTopicId } from "../types";
 
 type IconProps = { size?: number; className?: string };
 
@@ -36,15 +35,15 @@ export const PhoneIcon = (p: IconProps) => (
   </Svg>
 );
 
-export const ExpandIcon = (p: IconProps) => (
-  <Svg {...p}>
-    <path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" />
-  </Svg>
-);
-
 export const CloseIcon = (p: IconProps) => (
   <Svg {...p}>
     <path d="M6 6l12 12M18 6 6 18" />
+  </Svg>
+);
+
+export const ChevronLeftIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="m15 5-7 7 7 7" />
   </Svg>
 );
 
@@ -55,9 +54,11 @@ export const MicIcon = (p: IconProps) => (
   </Svg>
 );
 
-export const ArrowUpIcon = (p: IconProps) => (
+/** Paper plane, outline. */
+export const SendIcon = (p: IconProps) => (
   <Svg {...p}>
-    <path d="M12 19V5M6 11l6-6 6 6" />
+    <path d="M21 3 10.5 13.5" />
+    <path d="M21 3 14.5 21l-4-7.5L3 9.5Z" />
   </Svg>
 );
 
@@ -68,66 +69,21 @@ export const SpeakerIcon = (p: IconProps) => (
   </Svg>
 );
 
-export const ShieldIcon = (p: IconProps) => (
-  <Svg {...p}>
-    <path d="M12 3 5 6v5.5c0 4.4 3 8 7 9.5 4-1.5 7-5.1 7-9.5V6z" />
-    <path d="m9 12 2 2 4-4" />
-  </Svg>
-);
-
 export const ArrowDownIcon = (p: IconProps) => (
   <Svg {...p}>
     <path d="M12 5v14M6 13l6 6 6-6" />
   </Svg>
 );
 
-/* ── Chip icons ── */
-const ShirtIcon = (p: IconProps) => (
+export const ArrowRightIcon = (p: IconProps) => (
   <Svg {...p}>
-    <path d="M9 3.5 4 6l-1.5 4.5 3 1.5V20h13v-8l3-1.5L20 6l-5-2.5a3 3 0 0 1-6 0Z" />
+    <path d="M5 12h14M13 6l6 6-6 6" />
   </Svg>
 );
 
-const FactoryIcon = (p: IconProps) => (
-  <Svg {...p}>
-    <path d="M3 20.5V10l5.5 3.5V10l5.5 3.5V5h4l1 15.5Z" />
-    <path d="M7 17h2M12 17h2M3 20.5h18" />
-  </Svg>
-);
-
-const LeafIcon = (p: IconProps) => (
-  <Svg {...p}>
-    <path d="M5 19c0-8 5-13.5 15-14-.4 10-6 15-14 15" />
-    <path d="M5 19c3-4 6-6.5 10-8.5" />
-  </Svg>
-);
-
-const MapPinIcon = (p: IconProps) => (
-  <Svg {...p}>
-    <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" />
-    <circle cx="12" cy="10" r="2.5" />
-  </Svg>
-);
-
-const BriefcaseIcon = (p: IconProps) => (
-  <Svg {...p}>
-    <rect x="3" y="7" width="18" height="13" rx="2" />
-    <path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3 12.5h18" />
-  </Svg>
-);
-
-const MailIcon = (p: IconProps) => (
+export const MailIcon = (p: IconProps) => (
   <Svg {...p}>
     <rect x="3" y="5" width="18" height="14" rx="2" />
     <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
   </Svg>
 );
-
-export const chipIcons: Record<ChipTopicId, (p: IconProps) => ReactNode> = {
-  products: ShirtIcon,
-  capacity: FactoryIcon,
-  sustainability: LeafIcon,
-  visit: MapPinIcon,
-  careers: BriefcaseIcon,
-  contact: MailIcon,
-};

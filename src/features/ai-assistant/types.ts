@@ -1,5 +1,3 @@
-export type View = "launcher" | "panel";
-
 export type TopicId =
   | "products"
   | "capacity"
@@ -10,9 +8,6 @@ export type TopicId =
   | "about"
   | "greeting"
   | "fallback";
-
-/** Topics that appear as welcome chips and therefore need an icon. */
-export type ChipTopicId = "products" | "capacity" | "sustainability" | "visit" | "careers" | "contact";
 
 export type AssistLink = { label: string; href: string };
 

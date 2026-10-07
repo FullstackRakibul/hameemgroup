@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from "react";
 import type { FormEvent, KeyboardEvent, RefObject } from "react";
 import { persona } from "../data/persona";
-import { ArrowUpIcon, MicIcon, ShieldIcon } from "./icons";
+import { MicIcon, SendIcon } from "./icons";
 
 type ComposerProps = {
   textareaRef: RefObject<HTMLTextAreaElement | null>;
@@ -17,13 +17,17 @@ export default function Composer({ textareaRef, isTyping, onSend, onMic }: Compo
   const [value, setValue] = useState("");
   const canSend = value.trim().length > 0 && !isTyping;
 
-  // Grow from 1 to 4 lines, then scroll.
+  // Grow from 1 to 4 lines, then scroll. Empty, it stays one line even when
+  // the placeholder would wrap.
   useLayoutEffect(() => {
     const el = textareaRef.current;
     if (!el) return;
     el.style.height = "auto";
-    const padding = parseFloat(getComputedStyle(el).paddingTop) * 2;
-    el.style.height = `${Math.min(el.scrollHeight, LINE * MAX_LINES + padding)}px`;
+    const s = getComputedStyle(el);
+    const padding = parseFloat(s.paddingTop) + parseFloat(s.paddingBottom);
+    const border = parseFloat(s.borderTopWidth) * 2;
+    const content = value ? el.scrollHeight - padding : LINE;
+    el.style.height = `${Math.min(content, LINE * MAX_LINES) + padding + border}px`;
   }, [value, textareaRef]);
 
   const submit = () => {
@@ -47,7 +51,7 @@ export default function Composer({ textareaRef, isTyping, onSend, onMic }: Compo
     <>
       <form className="hm-assist-composer" onSubmit={onSubmit}>
         <button type="button" className="hm-assist-mic" aria-label="Voice input (coming soon)" onClick={onMic}>
-          <MicIcon size={20} />
+          <MicIcon size={22} />
         </button>
         <textarea
           ref={textareaRef}
@@ -60,15 +64,10 @@ export default function Composer({ textareaRef, isTyping, onSend, onMic }: Compo
           onKeyDown={onKeyDown}
         />
         <button type="submit" className="hm-assist-send" aria-label="Send message" aria-disabled={!canSend}>
-          <span className="hm-assist-send-circle">
-            <ArrowUpIcon size={20} />
-          </span>
+          <SendIcon size={22} />
         </button>
       </form>
-      <p className="hm-assist-footnote">
-        <ShieldIcon size={12} />
-        <span>{persona.footer}</span>
-      </p>
+      <p className="hm-assist-footnote">{persona.footer}</p>
     </>
   );
 }

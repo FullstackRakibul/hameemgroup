@@ -1,15 +1,11 @@
 export const persona = {
   name: "Shuvo",
   role: "Ha-Meem Assist",
-  id: "#HM-6821",
-  launcherTitle: "Hello, How can i assist?",
-  launcherSubtitle: "Shuvo · Ha-Meem AI Assist",
-  mobileLauncherLabel: "Ask Shuvo",
+  launcherTitle: "Hello, how can I help?",
   greeting:
     "Hi, I'm Shuvo, Ha-Meem's sourcing assistant. I can help with products, capacity, sustainability, factory visits and careers. Pick a topic below, or just ask.",
-  welcomeHello: "Hi there,",
   welcomeTitle: "How can I help you today?",
-  welcomeIntro: "I'm Shuvo, Ha-Meem's sourcing assistant. Choose a topic below or just ask.",
+  headerNote: "Shuvo is an AI assistant. Answers are instant.",
   footer: "Ha-Meem Assist · instant AI answers · human escalation anytime",
   placeholder: "Ask about products, capacity, visits…",
 };

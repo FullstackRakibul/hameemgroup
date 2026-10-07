@@ -3,10 +3,11 @@
 //   node scripts/eval-assistant.mjs [baseUrl] [--skip-build]
 //
 // Walks every viewport × state against the running dev server, saves
-// screenshots/assistant/after/{w}x{h}-{state}.png, runs the automatable rows
-// of the checklist and prints a PASS/FAIL table (exit 1 on any FAIL). Builds
-// screenshots/assistant/compare/ when the design references exist in
-// design/ai-assistant/. Uses the system Edge/Chrome (set PW_BROWSER to override).
+// screenshots/assistant/after/{w}x{h}-{state}.png, runs the checklist and prints
+// a PASS/FAIL table (exit 1 on any FAIL). Rows 3–5 measure the layout against
+// the reference design and write side-by-side images of the reference
+// (design/ai-assistant/reference.png) and ours to screenshots/assistant/compare/.
+// Uses the system Edge/Chrome (set PW_BROWSER to override).
 import { chromium } from "playwright";
 import { existsSync } from "node:fs";
 import { mkdir, readFile } from "node:fs/promises";
@@ -17,15 +18,22 @@ const BASE = args.find((a) => !a.startsWith("--")) || "http://localhost:5199/";
 const SKIP_BUILD = args.includes("--skip-build");
 const OUT = "screenshots/assistant/after";
 const CMP = "screenshots/assistant/compare";
-const REF = "design/ai-assistant";
+const REF = "design/ai-assistant/reference.png";
 const VIEWPORTS = [
   [360, 740], [375, 812], [414, 896], [768, 1024], [1024, 768],
   [1280, 720], [1280, 800], [1440, 900], [1920, 1080],
 ];
-const { topics } = await import("../src/features/ai-assistant/data/topics.ts");
-const { toasts } = await import("../src/features/ai-assistant/data/persona.ts");
+// Load the assistant's data through Vite: topics.ts imports src/data/facts.ts
+// with bundler-style (extensionless) paths that plain Node cannot resolve.
+const { createServer } = await import("vite");
+const loader = await createServer({ server: { middlewareMode: true }, appType: "custom", logLevel: "silent" });
+const { topics } = await loader.ssrLoadModule("/src/features/ai-assistant/data/topics.ts");
+const { toasts } = await loader.ssrLoadModule("/src/features/ai-assistant/data/persona.ts");
+await loader.close();
 const topic = (id) => topics.find((t) => t.id === id);
 const expectedDelay = (t) => Math.min(1600, Math.max(700, 600 + t.reply.join(" ").length * 4));
+const PRIMARY = "rgb(39, 66, 87)";
+const WHITE = "rgb(255, 255, 255)";
 
 function browserPath() {
   return [
@@ -46,7 +54,7 @@ const ROWS = {
   8: "Launcher opens panel", 9: "Close paths", 10: "State persists", 11: "Chip → canned reply",
   12: "Typing indicator", 13: "Send disabled while typing", 14: "Free-text routing", 15: "Composer keys",
   16: "Tab order", 17: "Focus visible", 18: "Roles and names", 19: "Live announcements", 20: "Contrast",
-  21: "Touch targets", 22: "Mobile full-screen sheet", 23: "Mobile compact launcher", 24: "No overlap",
+  21: "Touch targets", 22: "Mobile full-screen sheet", 23: "Mobile launcher", 24: "No overlap",
   25: "Short laptop", 26: "No network / devices", 27: "Figures sourced", 28: "Reduced motion",
   29: "No stacked tweens", 30: "Preloader respected", 31: "Types and build", 32: "Clean console",
 };
@@ -108,17 +116,17 @@ async function load(page, w, h) {
   await wait(Math.max(0, 1000 - (Date.now() - t0)));
   const during = await page.locator(".hm-assist-launcher").count();
   check(30, during === 0, `${w}x${h} at 1s`, `${during} launcher(s) during preloader`);
-  await page.locator(".hm-assist-launcher").waitFor({ state: "visible", timeout: 15000 });
+  await page.locator(".hm-assist-fab").waitFor({ state: "visible", timeout: 15000 });
   await page.waitForLoadState("networkidle");
-  await wait(500);
+  await wait(1300); // the teaser appears ~1 s after the launcher
 }
 
 const shot = (page, w, h, state) => page.screenshot({ path: `${OUT}/${w}x${h}-${state}.png` });
 const isMobileW = (w) => w < 640;
-const opener = (page, w) => page.locator(isMobileW(w) ? ".hm-assist-pill-open" : ".hm-assist-ask");
+const fab = (page) => page.locator(".hm-assist-fab");
 
-async function openPanel(page, w) {
-  await opener(page, w).click();
+async function openPanel(page) {
+  await fab(page).click();
   await page.locator(".hm-assist-panel").waitFor({ state: "visible" });
   await wait(450);
 }
@@ -129,6 +137,7 @@ async function waitReply(page, since = Date.now()) {
   await wait(350);
   return elapsed;
 }
+const focusIsFab = (page) => page.evaluate(() => document.activeElement?.classList.contains("hm-assist-fab"));
 
 /* ── In-page measurements ── */
 const geometry = (page) =>
@@ -141,7 +150,8 @@ const geometry = (page) =>
       return r.width && r.height ? r.toJSON() : null;
     };
     return {
-      launcher: vis(document.querySelector(".hm-assist-card, .hm-assist-pill")),
+      launcher: vis(document.querySelector(".hm-assist-fab")),
+      teaser: vis(document.querySelector(".hm-assist-teaser")),
       panel: vis(document.querySelector(".hm-assist-panel")),
       btt: vis(document.querySelector(".back-to-top")),
       stitch: vis(document.querySelector(".stitch-track")),
@@ -153,7 +163,7 @@ const geometry = (page) =>
 const intersects = (a, b) => !!a && !!b && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
 
 function overlapChecks(g, where) {
-  for (const box of ["launcher", "panel"]) {
+  for (const box of ["launcher", "teaser", "panel"]) {
     if (!g[box]) continue;
     check(24, !intersects(g[box], g.btt), `${where} ${box}×back-to-top`, JSON.stringify([g[box], g.btt]));
     check(24, !intersects(g[box], g.stitch), `${where} ${box}×stitch`);
@@ -177,54 +187,179 @@ function touchCheck(list, where) {
   check(21, bad.length === 0, where, bad.map((b) => `${b.name} ${b.w.toFixed(0)}×${b.h.toFixed(0)} hit ${b.hitH}`).join(", "));
 }
 
+// Text colour is blended over its background when it has alpha.
 const contrast = (page) =>
   page.evaluate(() => {
-    const rgb = (c) => c.match(/[\d.]+/g).map(Number);
-    const lum = (c) => {
-      const [r, g, b] = rgb(c).slice(0, 3).map((v) => {
+    // "rgb(…)" / "rgba(…)" use 0–255; color-mix() results come back as "color(srgb r g b / a)" in 0–1.
+    const rgba = (c) => {
+      const v = c.match(/[\d.]+/g).map(Number);
+      const rgb = c.startsWith("color(srgb") ? v.slice(0, 3).map((x) => x * 255) : v.slice(0, 3);
+      return [...rgb, v[3] ?? 1];
+    };
+    const lum = ([r, g, b]) => {
+      const f = (v) => {
         v /= 255;
         return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-      });
-      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
     };
     const bgOf = (el) => {
       for (let e = el; e; e = e.parentElement) {
-        const c = getComputedStyle(e).backgroundColor;
-        const v = rgb(c);
-        if (v.length < 4 || v[3] > 0.5) return c;
+        const v = rgba(getComputedStyle(e).backgroundColor);
+        if (v[3] > 0.5) return v;
       }
-      return "rgb(255, 255, 255)";
+      return [255, 255, 255, 1];
+    };
+    const ratio = (fgC, bg) => {
+      const [r, g, b, a] = rgba(fgC);
+      const fg = [r * a + bg[0] * (1 - a), g * a + bg[1] * (1 - a), b * a + bg[2] * (1 - a)];
+      const [l1, l2] = [lum(fg), lum(bg)].sort((x, y) => y - x);
+      return (l1 + 0.05) / (l2 + 0.05);
     };
     const sels = [
-      ".hm-assist-launcher-title", ".hm-assist-launcher-sub", ".hm-assist-ask span", ".hm-assist-pill-open > span:last-child",
-      ".hm-assist-name", ".hm-assist-meta span:last-child", ".hm-assist-welcome-hello", ".hm-assist-welcome-title",
-      ".hm-assist-welcome-intro", ".hm-assist-chip span", ".hm-assist-msg-label span", ".hm-assist-msg-text p",
-      ".hm-assist-msg--user p", ".hm-assist-link", ".hm-assist-footnote span", ".hm-assist-toast", ".hm-assist-newpill",
+      ".hm-assist-teaser-open", ".hm-assist-title", ".hm-assist-headline", ".hm-assist-note", ".hm-assist-name",
+      ".hm-assist-meta", ".hm-assist-date", ".hm-assist-msg-text p", ".hm-assist-msg--user p", ".hm-assist-chip",
+      ".hm-assist-link span", ".hm-assist-footnote", ".hm-assist-toast", ".hm-assist-newpill", ".hm-assist-avatar",
     ];
     const out = [];
     for (const sel of sels) {
       const el = document.querySelector(sel);
       if (!el || !el.getBoundingClientRect().width) continue;
       const s = getComputedStyle(el);
-      const fg = s.color;
-      const bg = bgOf(el);
-      const [l1, l2] = [lum(fg), lum(bg)].sort((a, b) => b - a);
-      const ratio = (l1 + 0.05) / (l2 + 0.05);
       const size = parseFloat(s.fontSize);
       const large = size >= 24 || (size >= 18.66 && parseInt(s.fontWeight) >= 700);
-      out.push({ sel, ratio: +ratio.toFixed(2), min: large ? 3 : 4.5 });
+      // The avatar is split: check its letters against both halves.
+      const bgs = sel === ".hm-assist-avatar" ? [[93, 46, 36, 1], [39, 66, 87, 1]] : [bgOf(el)];
+      for (const bg of bgs) out.push({ sel, ratio: +ratio(s.color, bg).toFixed(2), min: large ? 3 : 4.5 });
     }
     const ta = document.querySelector(".hm-assist-textarea");
-    if (ta) {
-      const ph = getComputedStyle(ta, "::placeholder").color;
-      const [l1, l2] = [lum(ph), lum(bgOf(ta))].sort((a, b) => b - a);
-      out.push({ sel: "placeholder", ratio: +((l1 + 0.05) / (l2 + 0.05)).toFixed(2), min: 4.5 });
-    }
+    if (ta) out.push({ sel: "placeholder", ratio: +ratio(getComputedStyle(ta, "::placeholder").color, bgOf(ta)).toFixed(2), min: 4.5 });
     return out;
   });
 async function contrastCheck(page, where) {
   const bad = (await contrast(page)).filter((c) => c.ratio < c.min);
   check(20, bad.length === 0, where, bad.map((c) => `${c.sel} ${c.ratio}`).join(", "));
+}
+
+/* ── Rows 3–5: the layout measured against the reference design ── */
+const launcherLayout = (page) =>
+  page.evaluate(() => {
+    const r = (el) => el?.getBoundingClientRect().toJSON();
+    const fabEl = document.querySelector(".hm-assist-fab");
+    const s = getComputedStyle(fabEl);
+    const op = (sel) => getComputedStyle(fabEl.querySelector(sel)).opacity;
+    return {
+      fab: r(fabEl), radius: s.borderRadius, bg: s.backgroundColor, bgImage: s.backgroundImage,
+      chat: op(".hm-assist-fab-icon--chat"), close: op(".hm-assist-fab-icon--close"),
+      teaser: r(document.querySelector(".hm-assist-teaser-open")),
+      chip: r(document.querySelector(".hm-assist-teaser-chip")),
+      panel: r(document.querySelector(".hm-assist-panel")),
+    };
+  });
+
+const panelLayout = (page) =>
+  page.evaluate(() => {
+    const q = (sel) => document.querySelector(sel);
+    const r = (el) => el?.getBoundingClientRect().toJSON();
+    const panel = q(".hm-assist-panel");
+    const ps = getComputedStyle(panel);
+    const header = q(".hm-assist-header");
+    const hs = getComputedStyle(header);
+    const bubble = q(".hm-assist-msg--assistant .hm-assist-bubble");
+    const bs = getComputedStyle(bubble);
+    const avatar = q(".hm-assist-msg--assistant .hm-assist-avatar");
+    const chips = [...document.querySelectorAll(".hm-assist-chip")];
+    const cs = chips[0] && getComputedStyle(chips[0]);
+    const ta = q(".hm-assist-textarea");
+    const ts = getComputedStyle(ta);
+    const send = q(".hm-assist-send");
+    const date = q(".hm-assist-date");
+    return {
+      panel: r(panel), radius: ps.borderTopLeftRadius, border: ps.borderTopWidth,
+      header: r(header), headerBottomRadius: hs.borderBottomLeftRadius,
+      back: r(q(".hm-assist-header .hm-assist-hbtn")),
+      title: r(q(".hm-assist-title")), headerAvatar: r(q(".hm-assist-header-avatar .hm-assist-avatar")),
+      headline: r(q(".hm-assist-headline")), note: r(q(".hm-assist-note")),
+      date: r(date), bubble: r(bubble), avatar: r(avatar),
+      bubbleBg: bs.backgroundColor, bubbleBorder: bs.borderTopWidth, bubbleRadius: bs.borderTopLeftRadius,
+      chips: chips.map(r), chipBg: cs?.backgroundColor, chipBorder: cs?.borderTopWidth, chipSvgs: chips.filter((c) => c.querySelector("svg")).length,
+      scroll: r(q(".hm-assist-scroll")),
+      ta: r(ta), taBorder: ts.borderTopWidth, taRadius: ts.borderTopLeftRadius,
+      send: r(send), sendBg: getComputedStyle(send).backgroundColor, sendInnerFilled: !!send.querySelector("[class*=circle]"),
+      mic: r(q(".hm-assist-mic")),
+    };
+  });
+
+async function referenceRows(browser) {
+  const { page, context } = await newPage(browser, 1440, 900);
+  await load(page, 1440, 900);
+
+  // Row 3 — closed (V8)
+  let L = await launcherLayout(page);
+  check(3, near(L.fab.width, 56) && near(L.fab.height, 56) && L.radius === "50%" && L.bg === PRIMARY && L.bgImage === "none", "V8 circle", JSON.stringify(L.fab));
+  check(3, L.chat === "1" && L.close === "0", "V8 chat icon", `${L.chat}/${L.close}`);
+  check(3, !!L.teaser && L.teaser.right <= L.fab.left && L.teaser.width <= 261 && L.teaser.bottom <= L.fab.bottom + 1, "V8 teaser left of circle", JSON.stringify(L.teaser));
+  check(3, !!L.chip && near(L.chip.left + L.chip.width / 2, L.teaser.left, 2) && near(L.chip.top + L.chip.height / 2, L.teaser.top, 2) && near(L.chip.width, 22), "V8 dismiss on top-left corner", JSON.stringify(L.chip));
+  await page.screenshot({ path: `${OUT}/1440x900-closed-crop.png`, clip: { x: L.teaser.left - 40, y: L.teaser.top - 40, width: L.fab.right - L.teaser.left + 64, height: L.fab.bottom - L.teaser.top + 64 } });
+
+  // Row 3 — under the panel (V7)
+  await openPanel(page);
+  L = await launcherLayout(page);
+  check(3, L.close === "1" && L.chat === "0" && near(L.fab.top - L.panel.bottom, 12) && near(L.fab.right, L.panel.right), "V7 close icon under panel", JSON.stringify({ gap: L.fab.top - L.panel.bottom, fab: L.fab.right, panel: L.panel.right }));
+
+  // Rows 4 + 5 — welcome
+  const P = await panelLayout(page);
+  check(4, near(P.panel.width, 400) && P.radius === "18px" && P.border === "0px", "V1 panel", JSON.stringify({ w: P.panel.width, r: P.radius, b: P.border }));
+  check(4, near(P.header.left, P.panel.left) && near(P.header.width, P.panel.width) && P.headerBottomRadius === "0px", "V1 header full width, square bottom");
+  check(4, P.bubbleBg === WHITE && P.bubbleBorder === "1px" && P.bubbleRadius === "12px", "V4 bubble", JSON.stringify([P.bubbleBg, P.bubbleBorder, P.bubbleRadius]));
+  check(4, near(P.avatar.width, 32) && P.avatar.right <= P.bubble.left && near(P.avatar.bottom, P.bubble.bottom, 1), "V4 avatar outside, bottom left", JSON.stringify([P.avatar, P.bubble]));
+  check(4, P.taBorder === "1px" && P.taRadius === "22px" && P.mic.right <= P.ta.left && P.send.left >= P.ta.right && P.sendBg === "rgba(0, 0, 0, 0)" && !P.sendInnerFilled, "V6 composer", JSON.stringify([P.taBorder, P.taRadius, P.sendBg]));
+  const cx = P.panel.left + P.panel.width / 2;
+  check(5, P.header.height >= 200 && P.header.height <= 216, "V2 header height", `${P.header.height}`);
+  check(5, P.back.left - P.panel.left < 24 && P.back.top - P.panel.top < 24, "V2 chevron top left", JSON.stringify(P.back));
+  for (const [k, box] of [["title", P.title], ["avatar", P.headerAvatar], ["headline", P.headline], ["note", P.note]]) {
+    check(5, !!box && near(box.left + box.width / 2, cx, 2), `V2 ${k} centred`, JSON.stringify(box));
+  }
+  check(5, near(P.headerAvatar.width, 56) && P.headerAvatar.top > P.title.bottom && P.headline.top > P.headerAvatar.bottom && P.note.top > P.headline.bottom, "V2 order");
+  check(5, P.date.bottom <= P.bubble.top && P.bubble.bottom <= P.chips[0].top, "V3 date, greeting, chips", JSON.stringify([P.date.bottom, P.bubble.top, P.bubble.bottom, P.chips[0].top]));
+  const rightEdge = Math.max(...P.chips.map((c) => c.right));
+  const rows = new Set(P.chips.map((c) => Math.round(c.top))).size;
+  const rowEnds = [...new Set(P.chips.map((c) => Math.round(c.top)))].map((t) => Math.max(...P.chips.filter((c) => Math.round(c.top) === t).map((c) => c.right)));
+  check(5, P.chips.length === 6 && P.chipBg === WHITE && P.chipBorder === "1px" && P.chipSvgs === 0 && rows > 1 && rowEnds.every((e) => near(e, rightEdge)) && near(rightEdge, P.scroll.right - 20, 2), "V5 quick replies", JSON.stringify({ n: P.chips.length, rows, rightEdge, scrollRight: P.scroll.right }));
+  await page.screenshot({ path: `${OUT}/1440x900-welcome-crop.png`, clip: { x: P.panel.left - 24, y: P.panel.top - 24, width: P.panel.width + 48, height: L.fab.bottom - P.panel.top + 48 } });
+
+  // Conversation crop
+  await page.locator(".hm-assist-chip", { hasText: "Talk to sales" }).click();
+  await waitReply(page);
+  await page.screenshot({ path: `${OUT}/1440x900-conversation-crop.png`, clip: { x: P.panel.left - 24, y: P.panel.top - 24, width: P.panel.width + 48, height: L.fab.bottom - P.panel.top + 48 } });
+  await context.close();
+
+  // Phone sheet
+  const m = await newPage(browser, 375, 812);
+  await load(m.page, 375, 812);
+  await openPanel(m.page);
+  await m.page.screenshot({ path: `${OUT}/375x812-sheet-crop.png` });
+  await m.context.close();
+}
+
+async function compareSheets(browser) {
+  if (!existsSync(REF)) return `reference missing: ${REF}`;
+  await mkdir(CMP, { recursive: true });
+  const b64 = async (f) => (await readFile(f)).toString("base64");
+  const ref = await b64(REF);
+  const sheet = await browser.newPage();
+  for (const ours of ["1440x900-closed-crop.png", "1440x900-welcome-crop.png", "1440x900-conversation-crop.png", "375x812-sheet-crop.png"]) {
+    // Both at 1 CSS px per image px: the reference is drawn at 1×.
+    await sheet.setViewportSize({ width: 1800, height: 900 });
+    await sheet.setContent(`<body style="margin:0;background:#888;font:600 14px system-ui;color:white">
+      <div style="display:flex;gap:24px;align-items:flex-start;padding:12px">
+        <figure style="margin:0"><figcaption>REFERENCE (1×)</figcaption><img style="display:block" src="data:image/png;base64,${ref}"></figure>
+        <figure style="margin:0"><figcaption>OURS ${ours} (1×)</figcaption><img style="display:block" src="data:image/png;base64,${await b64(`${OUT}/${ours}`)}"></figure>
+      </div></body>`);
+    await sheet.screenshot({ path: `${CMP}/${ours.replace("-crop", "")}`, fullPage: true });
+  }
+  await sheet.close();
+  return null;
 }
 
 /* ── Full walk for one viewport ── */
@@ -234,15 +369,17 @@ async function walk(browser, w, h) {
   const { page, context } = await newPage(browser, w, h);
   await load(page, w, h);
 
-  // launcher @ 0 and @ 1200
+  // launcher (+ teaser on wide screens) @ 0 and @ 1200
   await shot(page, w, h, "launcher");
   let g = await geometry(page);
+  check(24, mobile ? !g.teaser : !!g.teaser, `${tag} teaser ${mobile ? "hidden" : "shown"}`);
   overlapChecks(g, `${tag} launcher@0`);
   touchCheck(await touchTargets(page), `${tag} launcher`);
   await contrastCheck(page, `${tag} launcher`);
   if (mobile) {
     const r = g.launcher;
-    check(23, r.height <= 56 && r.width < g.vw - 32 && r.right <= g.vw - 15 && r.bottom <= g.vh - 15, tag, JSON.stringify(r));
+    const radius = await fab(page).evaluate((el) => getComputedStyle(el).borderRadius);
+    check(23, near(r.width, 56) && near(r.height, 56) && radius === "50%" && near(r.right, g.vw - 16) && near(r.bottom, g.vh - 16), tag, JSON.stringify(r));
   }
   await page.evaluate(() => window.scrollTo(0, 1200));
   await wait(800);
@@ -254,48 +391,62 @@ async function walk(browser, w, h) {
   await wait(400);
 
   // welcome
-  await openPanel(page, w);
+  await openPanel(page);
   await shot(page, w, h, "welcome");
-  const opened = await page.evaluate(() => ({
-    launcher: !!document.querySelector(".hm-assist-launcher"),
-    focused: document.activeElement?.classList.contains("hm-assist-textarea"),
-  }));
-  check(8, !opened.launcher && opened.focused, `${tag} open`, JSON.stringify(opened));
+  const opened = await page.evaluate(() => {
+    const f = document.querySelector(".hm-assist-fab");
+    return {
+      launcher: !!f,
+      expanded: f?.getAttribute("aria-expanded"),
+      closeIcon: f ? getComputedStyle(f.querySelector(".hm-assist-fab-icon--close")).opacity : null,
+      focused: document.activeElement?.classList.contains("hm-assist-textarea"),
+    };
+  });
+  const launcherOk = mobile ? !opened.launcher : opened.launcher && opened.expanded === "true" && opened.closeIcon === "1";
+  check(8, launcherOk && opened.focused, `${tag} open`, JSON.stringify(opened));
   g = await geometry(page);
   overlapChecks(g, `${tag} panel`);
+  if (!mobile) {
+    const fits = [g.panel, g.launcher].every((r) => r.top >= 16 && r.left >= 16 && r.right <= g.vw - 16 && r.bottom <= g.vh - 16);
+    check(24, fits, `${tag} panel+launcher inside viewport with 16px`, JSON.stringify([g.panel, g.launcher]));
+  }
   touchCheck(await touchTargets(page), `${tag} welcome`);
   await contrastCheck(page, `${tag} welcome`);
-  check(18, (await page.getByRole("dialog", { name: "Shuvo" }).count()) === 1, `${tag} dialog name`);
+  check(18, (await page.getByRole("dialog", { name: "Ha-Meem Assist", exact: true }).count()) === 1, `${tag} dialog name`);
   if (mobile) {
     const m = await page.evaluate(() => ({
       panel: document.querySelector(".hm-assist-panel").getBoundingClientRect().toJSON(),
       bottom: document.querySelector(".hm-assist-bottom").getBoundingClientRect().bottom,
       overflow: document.body.style.overflow,
       modal: document.querySelector(".hm-assist-panel").getAttribute("aria-modal"),
+      launcher: document.querySelectorAll(".hm-assist-fab").length,
     }));
-    check(22, near(m.panel.left, 0) && near(m.panel.top, 0) && near(m.panel.width, w) && near(m.panel.height, h) && m.overflow === "hidden" && near(m.bottom, h) && m.modal === "true", tag, JSON.stringify(m));
+    check(22, near(m.panel.left, 0) && near(m.panel.top, 0) && near(m.panel.width, w) && near(m.panel.height, h) && m.overflow === "hidden" && near(m.bottom, h) && m.modal === "true" && m.launcher === 0, tag, JSON.stringify(m));
   }
-  if (w === 1280 && h === 720) {
+  if ((w === 1280 && h === 720) || (w === 1024 && h === 768)) {
     const s = await page.evaluate(() => {
       const scroll = document.querySelector(".hm-assist-scroll").getBoundingClientRect();
-      const chips = [...document.querySelectorAll(".hm-assist-welcome .hm-assist-chip")].map((c) => c.getBoundingClientRect());
+      const inside = (r) => r.top >= scroll.top && r.bottom <= scroll.bottom;
+      const chips = [...document.querySelectorAll(".hm-assist-chip")].map((c) => c.getBoundingClientRect());
+      const greeting = document.querySelector(".hm-assist-msg--assistant .hm-assist-bubble").getBoundingClientRect();
       const panel = document.querySelector(".hm-assist-panel").getBoundingClientRect();
       return {
         inViewport: panel.top >= 0 && panel.bottom <= innerHeight && panel.left >= 0 && panel.right <= innerWidth,
         chips: chips.length,
-        chipsVisible: chips.every((c) => c.top >= scroll.top && c.bottom <= scroll.bottom),
+        chipsVisible: chips.every(inside),
+        greetingVisible: inside(greeting),
       };
     });
-    check(25, s.inViewport && s.chips === 6 && s.chipsVisible, tag, JSON.stringify(s));
+    check(25, s.inViewport && s.chips === 6 && s.chipsVisible && s.greetingVisible, tag, JSON.stringify(s));
   }
   if (w === 1440) {
     // 7: fonts
     const fonts = await page.evaluate(() => {
       const ff = (sel) => getComputedStyle(document.querySelector(sel)).fontFamily;
-      return { name: ff(".hm-assist-name"), chip: ff(".hm-assist-chip"), textarea: ff(".hm-assist-textarea") };
+      return { title: ff(".hm-assist-title"), chip: ff(".hm-assist-chip"), textarea: ff(".hm-assist-textarea"), bubble: ff(".hm-assist-msg-text p") };
     });
-    check(7, fonts.name.startsWith('"Fira Sans Condensed"') && fonts.chip.startsWith('"Fira Sans Condensed"'), "1440 name/chip", JSON.stringify(fonts));
-    check(7, /^"Fira Sans"/.test(fonts.textarea), "1440 textarea", fonts.textarea);
+    check(7, fonts.title.startsWith('"Fira Sans Condensed"') && fonts.chip.startsWith('"Fira Sans Condensed"'), "1440 title/chip", JSON.stringify(fonts));
+    check(7, /^"Fira Sans"/.test(fonts.textarea) && /^"Fira Sans"/.test(fonts.bubble), "1440 textarea/bubble", JSON.stringify(fonts));
   }
 
   // typing
@@ -335,7 +486,7 @@ async function walk(browser, w, h) {
   const live = await page.evaluate(() => {
     const log = document.querySelector('[role="log"][aria-live="polite"][aria-relevant="additions"]');
     const all = document.querySelectorAll(".hm-assist-msg--assistant");
-    return !!log && log.contains(all[all.length - 1]);
+    return !!log && log.contains(all[all.length - 1]) && !!all[all.length - 1].querySelector(".hm-assist-sr");
   });
   check(19, live, `${tag} reply in log`);
   check(18, (await page.locator('[role="log"]').count()) === 1, `${tag} log role`);
@@ -355,30 +506,40 @@ async function walk(browser, w, h) {
   overlapChecks(g, `${tag} conversation`);
 
   // toast
-  await page.locator(".hm-assist-header .hm-assist-round--outline").click();
+  await page.getByRole("button", { name: "Call Ha-Meem (coming soon)" }).click();
   await wait(250);
   await shot(page, w, h, "toast");
   check(26, (await page.locator(".hm-assist-toast").textContent()) === toasts.call, `${tag} call toast`);
   await contrastCheck(page, `${tag} toast`);
 
-  // 9 + 10: close with X, focus back on opener, reopen keeps the conversation
+  // 9 + 10: close with the chevron, focus back on the launcher, reopen keeps the conversation
   const usersBefore = await page.locator(".hm-assist-msg--user").count();
   await page.getByRole("button", { name: "Close chat" }).click();
-  await page.locator(".hm-assist-launcher").waitFor({ state: "visible" });
+  await page.locator(".hm-assist-panel").waitFor({ state: "detached" });
   await wait(150);
-  const focusX = await page.evaluate((cls) => document.activeElement?.classList.contains(cls), mobile ? "hm-assist-pill-open" : "hm-assist-ask");
-  check(9, (await page.locator(".hm-assist-panel").count()) === 0 && focusX, `${tag} X`, `focus ok ${focusX}`);
+  const focusX = await focusIsFab(page);
+  check(9, (await page.locator(".hm-assist-panel").count()) === 0 && focusX, `${tag} chevron`, `focus ok ${focusX}`);
   check(9, !mobile || (await page.evaluate(() => document.body.style.overflow)) === "", `${tag} scroll unlocked`);
-  if (mobile) await opener(page, w).click();
-  else await page.locator(".hm-assist-expand").click();
-  await page.locator(".hm-assist-panel").waitFor({ state: "visible" });
-  await wait(450);
-  check(10, (await page.locator(".hm-assist-msg--user").count()) === usersBefore, tag);
+  await openPanel(page);
+  const reopen = await page.evaluate(() => {
+    const s = document.querySelector(".hm-assist-scroll");
+    return { compact: !!document.querySelector(".hm-assist-header--compact"), atBottom: s.scrollHeight - s.scrollTop - s.clientHeight < 4 };
+  });
+  check(10, (await page.locator(".hm-assist-msg--user").count()) === usersBefore && reopen.compact && reopen.atBottom, tag, JSON.stringify(reopen));
   await page.keyboard.press("Escape");
-  await page.locator(".hm-assist-launcher").waitFor({ state: "visible" });
+  await page.locator(".hm-assist-panel").waitFor({ state: "detached" });
   await wait(150);
-  const focusEsc = await page.evaluate((cls) => document.activeElement?.classList.contains(cls), mobile ? "hm-assist-pill-open" : "hm-assist-expand");
+  const focusEsc = await focusIsFab(page);
   check(9, (await page.locator(".hm-assist-panel").count()) === 0 && focusEsc, `${tag} Escape`, `focus ok ${focusEsc}`);
+  if (!mobile) {
+    await openPanel(page);
+    await fab(page).click();
+    await page.locator(".hm-assist-panel").waitFor({ state: "detached" });
+    await wait(150);
+    const focusFab = await focusIsFab(page);
+    const expanded = await fab(page).getAttribute("aria-expanded");
+    check(9, focusFab && expanded === "false", `${tag} launcher closes`, `focus ok ${focusFab}, expanded ${expanded}`);
+  }
 
   const devices = await page.evaluate(() => window.__deviceCalls);
   check(26, devices.length === 0, `${tag} device calls`, devices.join(","));
@@ -388,11 +549,11 @@ async function walk(browser, w, h) {
 /* ── Content and keyboard rows (desktop 1440×900) ── */
 async function contentRows(browser) {
   const w = 1440, h = 900;
-  // 11: each chip, fresh page
+  // 11: each quick reply, fresh page
   for (const t of topics.filter((x) => x.welcome)) {
     const { page, context } = await newPage(browser, w, h);
     await load(page, w, h);
-    await openPanel(page, w);
+    await openPanel(page);
     await page.locator(".hm-assist-chip", { hasText: t.label }).click();
     await waitReply(page);
     const got = await page.evaluate(() => {
@@ -406,7 +567,7 @@ async function contentRows(browser) {
 
   const { page, context } = await newPage(browser, w, h);
   await load(page, w, h);
-  await openPanel(page, w);
+  await openPanel(page);
   const ta = page.locator(".hm-assist-textarea");
 
   // 15: composer keys
@@ -418,6 +579,15 @@ async function contentRows(browser) {
   await ta.press("Shift+Enter");
   const v = await ta.inputValue();
   check(15, v === "first line\n" && (await page.locator(".hm-assist-msg--user").count()) === users, "Shift+Enter", JSON.stringify(v));
+  // grows to four lines, then scrolls
+  const heights = [];
+  for (const text of ["a", "a\nb", "a\nb\nc", "a\nb\nc\nd", "a\nb\nc\nd\ne\nf"]) {
+    await ta.fill(text);
+    heights.push(await ta.evaluate((el) => ({ h: Math.round(el.getBoundingClientRect().height), scrolls: el.scrollHeight > el.clientHeight })));
+  }
+  const grows = heights[0].h < heights[1].h && heights[1].h < heights[2].h && heights[2].h < heights[3].h && heights[3].h === heights[4].h && heights[4].scrolls;
+  check(15, grows, "1 → 4 lines, then scroll", JSON.stringify(heights));
+  await ta.fill("");
 
   // 14: free-text routing (Enter sends)
   const routes = [
@@ -451,56 +621,61 @@ async function contentRows(browser) {
   await wait(150);
   check(26, (await page.locator(".hm-assist-toast").textContent()) === toasts.mic, "mic toast");
 
-  // 16: Shift+Tab from the textarea walks back through the panel in visual order
-  await ta.focus();
-  const seen = [];
-  for (let i = 0; i < 60; i++) {
-    await page.keyboard.press("Shift+Tab");
+  // 16: Tab from the back chevron: chevron, call, conversation controls, mic, textarea, send, then the launcher
+  await page.getByRole("button", { name: "Close chat" }).focus();
+  const order = [];
+  for (let i = 0; i < 80; i++) {
     const info = await page.evaluate(() => {
       const el = document.activeElement;
-      const panel = document.querySelector(".hm-assist-panel");
-      return { inPanel: panel.contains(el), top: el.getBoundingClientRect().top, cls: el.className.split(" ")[0] || el.tagName, label: el.getAttribute("aria-label") || el.textContent.trim().slice(0, 20) };
+      return { cls: el.className.split(" ")[0] || el.tagName, label: el.getAttribute("aria-label") || "", inPanel: !!el.closest(".hm-assist-panel") };
     });
+    order.push(info);
     if (!info.inPanel) break;
-    seen.push(info);
+    await page.keyboard.press("Tab");
   }
-  const expectedStart = ["hm-assist-mic"];
-  const order = seen.map((s) => s.cls);
-  const headerIdx = order.indexOf("hm-assist-round");
-  check(16, order[0] === expectedStart[0] && order.at(-1) === "hm-assist-round" && headerIdx >= order.length - 2, "1440 reverse order", order.join(" < "));
+  const labels = order.map((o) => o.label || o.cls);
+  const tail = order.slice(-4).map((o) => o.cls);
+  check(16, labels[0] === "Close chat" && labels[1] === "Call Ha-Meem (coming soon)" && JSON.stringify(tail) === JSON.stringify(["hm-assist-mic", "hm-assist-textarea", "hm-assist-send", "hm-assist-fab"]), "1440 order", labels.join(" > "));
 
-  // 17: every control shows a 2px outline when focused from the keyboard
-  await page.getByRole("button", { name: "Call Ha-Meem (coming soon)" }).focus();
+  // 17: every control shows a 2px ring when focused from the keyboard: white on the blue header, blue elsewhere
+  await page.getByRole("button", { name: "Close chat" }).focus();
   const outlines = [];
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 80; i++) {
     const o = await page.evaluate(() => {
       const el = document.activeElement;
-      const target = el.classList.contains("hm-assist-textarea") ? el.closest(".hm-assist-composer") : el;
-      const s = getComputedStyle(target);
-      return { label: el.getAttribute("aria-label") || el.textContent.trim().slice(0, 20), style: s.outlineStyle, width: s.outlineWidth, inPanel: !!el.closest(".hm-assist-panel") };
+      const s = getComputedStyle(el);
+      return { label: el.getAttribute("aria-label") || el.textContent.trim().slice(0, 20), style: s.outlineStyle, width: s.outlineWidth, color: s.outlineColor, inHeader: !!el.closest(".hm-assist-header"), inPanel: !!el.closest(".hm-assist-panel") };
     });
     if (!o.inPanel) break;
     outlines.push(o);
     await page.keyboard.press("Tab");
   }
-  const noRing = outlines.filter((o) => o.style === "none" || o.width !== "2px");
-  check(17, outlines.length > 5 && noRing.length === 0, "1440", noRing.map((o) => o.label).join(", ") || `${outlines.length} controls`);
+  const noRing = outlines.filter((o) => o.style === "none" || o.width !== "2px" || o.color !== (o.inHeader ? WHITE : PRIMARY));
+  check(17, outlines.length > 5 && noRing.length === 0, "1440", noRing.map((o) => `${o.label} ${o.color}`).join(", ") || `${outlines.length} controls`);
+  const fabRing = await page.evaluate(() => {
+    const f = document.querySelector(".hm-assist-fab");
+    f.focus();
+    const s = getComputedStyle(f);
+    return { outline: s.outlineStyle !== "none" && s.outlineWidth === "2px", shadow: s.boxShadow.includes("255, 255, 255") };
+  });
+  check(17, fabRing.outline && fabRing.shadow, "launcher ring", JSON.stringify(fabRing));
 
-  // 29: open/close quickly five times
+  // 29: open/close quickly five times (launcher and Escape)
   await page.keyboard.press("Escape");
-  await page.locator(".hm-assist-launcher").waitFor({ state: "visible" });
+  await page.locator(".hm-assist-panel").waitFor({ state: "detached" });
   for (let i = 0; i < 5; i++) {
-    await page.locator(".hm-assist-ask").click();
+    await fab(page).click();
     await wait(60);
-    await page.keyboard.press("Escape");
-    await page.locator(".hm-assist-launcher").waitFor({ state: "visible", timeout: 3000 });
+    if (i % 2) await page.keyboard.press("Escape");
+    else await fab(page).click();
+    await page.locator(".hm-assist-panel").waitFor({ state: "detached", timeout: 3000 });
   }
   await wait(600);
   const settled = await page.evaluate(() => ({
     panel: document.querySelectorAll(".hm-assist-panel").length,
-    launcher: getComputedStyle(document.querySelector(".hm-assist-launcher")).opacity,
+    launcher: getComputedStyle(document.querySelector(".hm-assist-fab")).opacity,
   }));
-  await page.locator(".hm-assist-ask").click();
+  await fab(page).click();
   await wait(600);
   const reopened = await page.evaluate(() => {
     const p = document.querySelector(".hm-assist-panel");
@@ -513,7 +688,7 @@ async function contentRows(browser) {
   // 16 (mobile): focus never leaves the sheet
   const m = await newPage(browser, 375, 812);
   await load(m.page, 375, 812);
-  await openPanel(m.page, 375);
+  await openPanel(m.page);
   let outside = 0;
   for (let i = 0; i < 25; i++) {
     await m.page.keyboard.press(i % 2 ? "Tab" : "Shift+Tab");
@@ -532,8 +707,8 @@ async function reducedRows(browser) {
   for (const [w, h] of [[1440, 900], [375, 812]]) {
     const { page, context } = await newPage(browser, w, h, { reducedMotion: "reduce" });
     await load(page, w, h);
-    const launcherT = await page.evaluate(() => getComputedStyle(document.querySelector(".hm-assist-launcher")).transform);
-    await opener(page, w).click();
+    const launcherT = await fab(page).evaluate((el) => getComputedStyle(el).transform);
+    await fab(page).click();
     const samples = [];
     for (let i = 0; i < 8; i++) {
       samples.push(await page.evaluate(() => getComputedStyle(document.querySelector(".hm-assist-panel")).transform));
@@ -546,6 +721,7 @@ async function reducedRows(browser) {
     const dots = await page.evaluate(() => ({
       anim: getComputedStyle(document.querySelector(".hm-assist-dot")).animationName,
       text: getComputedStyle(document.querySelector(".hm-assist-typing-text")).display,
+      header: getComputedStyle(document.querySelector(".hm-assist-header")).transitionDuration,
     }));
     const msgSamples = [];
     await waitReply(page);
@@ -555,7 +731,7 @@ async function reducedRows(browser) {
     const scrolls = await page.evaluate(() => window.__scrollCalls);
     const flat = (t) => t === "none" || t === "matrix(1, 0, 0, 1, 0, 0)";
     check(28, flat(launcherT) && samples.every(flat) && msgSamples.every(flat), `${w} transforms`, JSON.stringify({ launcherT, samples: [...new Set(samples)], msg: [...new Set(msgSamples)] }));
-    check(28, dots.anim === "none" && dots.text !== "none", `${w} typing`, JSON.stringify(dots));
+    check(28, dots.anim === "none" && dots.text !== "none" && dots.header === "0s", `${w} typing + header`, JSON.stringify(dots));
     check(28, !scrolls.includes("smooth"), `${w} scroll`, scrolls.join(","));
     await context.close();
   }
@@ -563,15 +739,13 @@ async function reducedRows(browser) {
 
 /* ── Static checks ── */
 async function staticRows() {
-  // 1: isolation
+  // 1: isolation — only the module, scripts and design/screenshot assets change; App.tsx untouched
   const status = execSync("git status --porcelain -uall", { encoding: "utf8" }).split("\n").filter(Boolean);
-  const allowed = /^(src\/features\/ai-assistant\/|scripts\/|screenshots\/|design\/|package(-lock)?\.json$|src\/App\.tsx$)/;
+  const allowed = /^(src\/features\/ai-assistant\/|scripts\/|screenshots\/|design\/)/;
   const stray = status.map((l) => l.slice(3)).filter((p) => !allowed.test(p));
   check(1, stray.length === 0, "git status", stray.join(", "));
-  const appDiff = execSync("git diff --unified=0 -- src/App.tsx", { encoding: "utf8" });
-  const added = appDiff.split("\n").filter((l) => l.startsWith("+") && !l.startsWith("+++")).map((l) => l.slice(1).trim());
-  const removed = appDiff.split("\n").filter((l) => l.startsWith("-") && !l.startsWith("---"));
-  check(1, removed.length === 0 && added.length === 2 && added.includes('import { AiAssistant } from "./features/ai-assistant";') && added.includes("{!loading && <AiAssistant />}"), "App.tsx diff", JSON.stringify(added));
+  const appDiff = execSync("git diff -- src/App.tsx", { encoding: "utf8" });
+  check(1, appDiff.trim() === "", "App.tsx untouched");
 
   // 2: every selector is namespaced
   const css = (await readFile("src/features/ai-assistant/ai-assistant.css", "utf8")).replace(/\/\*[\s\S]*?\*\//g, "");
@@ -589,21 +763,23 @@ async function staticRows() {
     else if (!sel.startsWith("@") && !keyframeDepth.length) selectors.push(...sel.split(",").map((s) => s.trim()));
     depth++;
   }
-  const leaks = selectors.filter((s) => !/^(\.hm-assist-|:root\b|body:has\(\.hm-assist-(launcher|panel)\) \.back-to-top$)/.test(s));
+  const leaks = selectors.filter((s) => !/^(\.hm-assist-|body:has\(\.hm-assist-panel\) \.back-to-top$)/.test(s));
   check(2, leaks.length === 0, `${selectors.length} selectors`, leaks.join(" | "));
 
-  // 6: no stray hex colours in the module
-  const files = execSync("git ls-files --others --cached --exclude-standard src/features/ai-assistant", { encoding: "utf8" }).trim().split("\n");
+  // 6: hex only on the three token declarations
+  const files = execSync("git ls-files --others --cached --exclude-standard src/features/ai-assistant", { encoding: "utf8" }).trim().split("\n").filter(existsSync);
   const hex = [];
+  const tokens = [];
   for (const f of files) {
     const lines = (await readFile(f, "utf8")).split("\n");
     lines.forEach((line, i) => {
       for (const m of line.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) {
-        if (!/--assist-(online|red-hover):/.test(line)) hex.push(`${f}:${i + 1} ${m[0]}`);
+        if (/^\s*--assist-(primary|accent|online):/.test(line)) tokens.push(m[0]);
+        else hex.push(`${f}:${i + 1} ${m[0]}`);
       }
     });
   }
-  check(6, hex.length === 0, "module", hex.join(", "));
+  check(6, hex.length === 0 && tokens.length === 3, "module", hex.join(", ") || `tokens ${tokens.join(" ")}`);
 
   // 26: no network or device APIs in the source
   const src = (await Promise.all(files.map((f) => readFile(f, "utf8")))).join("\n");
@@ -618,12 +794,12 @@ async function staticRows() {
     check(27, false, "facts", e.stdout);
   }
 
-  // 31: build
+  // 31: types and build, with no warnings on stdout or stderr
   if (!SKIP_BUILD) {
     for (const cmd of ["npx tsc --noEmit -p tsconfig.json", "npm run build"]) {
       try {
-        const out = execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-        const warnings = out.split("\n").filter((l) => /warn|\(!\)/i.test(l) && !/configLoader|__dirname|VITE_CONFIG_NATIVE/.test(l));
+        const out = execSync(`${cmd} 2>&1`, { encoding: "utf8" });
+        const warnings = out.split("\n").filter((l) => /warn|\(!\)/i.test(l) && !/configLoader|__dirname|VITE_CONFIG_NATIVE|npm notice/.test(l));
         check(31, warnings.length === 0, cmd, warnings.join(" | "));
       } catch (e) {
         check(31, false, cmd, `${e.stdout || ""}${e.stderr || ""}`.slice(0, 300));
@@ -631,51 +807,6 @@ async function staticRows() {
     }
     results[31].note = "no lint script in package.json";
   }
-}
-
-/* ── Compare images (needs the design references) ── */
-async function compare(browser) {
-  const refs = ["launcher.png", "chat-panel.png", "welcome.png"];
-  const missing = refs.filter((r) => !existsSync(`${REF}/${r}`));
-  if (missing.length) return `references missing in ${REF}/: ${missing.join(", ")}`;
-  await mkdir(CMP, { recursive: true });
-
-  // Crops of ours at 1440×900
-  const { page, context } = await newPage(browser, 1440, 900);
-  await load(page, 1440, 900);
-  const card = await page.locator(".hm-assist-card").boundingBox();
-  await page.screenshot({ path: `${OUT}/1440x900-launcher-crop.png`, clip: { x: card.x - 16, y: card.y - 16, width: card.width + 32, height: card.height + 32 } });
-  await openPanel(page, 1440);
-  const panelBox = async () => page.locator(".hm-assist-panel").boundingBox();
-  let p = await panelBox();
-  await page.screenshot({ path: `${OUT}/1440x900-welcome-crop.png`, clip: p });
-  await page.locator(".hm-assist-chip", { hasText: "Sustainability" }).click();
-  await waitReply(page);
-  await page.locator(".hm-assist-textarea").fill("I need a job");
-  await page.locator(".hm-assist-textarea").press("Enter");
-  await waitReply(page);
-  p = await panelBox();
-  await page.screenshot({ path: `${OUT}/1440x900-conversation-crop.png`, clip: p });
-  await context.close();
-
-  const pairs = [
-    ["launcher.png", "1440x900-launcher-crop.png"],
-    ["chat-panel.png", "1440x900-conversation-crop.png"],
-    ["welcome.png", "1440x900-welcome-crop.png"],
-  ];
-  const sheet = await browser.newPage();
-  for (const [ref, ours] of pairs) {
-    const b64 = async (f) => (await readFile(f)).toString("base64");
-    await sheet.setViewportSize({ width: 1400, height: 900 });
-    await sheet.setContent(`<body style="margin:0;background:#888;font:600 14px system-ui;color:#fff">
-      <div style="display:flex;gap:24px;align-items:flex-start;padding:12px">
-        <figure style="margin:0"><figcaption>REFERENCE ${ref}</figcaption><img style="height:820px;display:block" src="data:image/png;base64,${await b64(`${REF}/${ref}`)}"></figure>
-        <figure style="margin:0"><figcaption>OURS ${ours}</figcaption><img style="height:820px;display:block" src="data:image/png;base64,${await b64(`${OUT}/${ours}`)}"></figure>
-      </div></body>`);
-    await sheet.screenshot({ path: `${CMP}/${ref}`, fullPage: true });
-  }
-  await sheet.close();
-  return null;
 }
 
 /* ── Run ── */
@@ -689,18 +820,19 @@ process.stdout.write("… content + keyboard\n");
 await contentRows(browser);
 process.stdout.write("… reduced motion\n");
 await reducedRows(browser);
-const compareBlocked = await compare(browser);
+process.stdout.write("… reference\n");
+await referenceRows(browser);
+const compareBlocked = await compareSheets(browser);
+if (compareBlocked) for (const id of [3, 4, 5]) check(id, false, "compare", compareBlocked);
 await browser.close();
 await staticRows();
 check(26, externalRequests.length === 0, "requests", externalRequests.slice(0, 5).join(" | "));
 const noise = consoleProblems.filter((p) => !/Images loaded lazily/.test(p));
 check(32, noise.length === 0, "console", noise.slice(0, 5).join(" | "));
+for (const id of [3, 4, 5]) results[id].note = `side by side in ${CMP}/`;
 
 const rows = Object.entries(ROWS).map(([id, name]) => {
   const r = results[id];
-  if (["3", "4", "5"].includes(id)) {
-    return [id, name, compareBlocked ? "BLOCKED" : "MANUAL", compareBlocked ?? `review ${CMP}/`];
-  }
   if (id === "31" && SKIP_BUILD) return [id, name, "SKIPPED", "--skip-build"];
   const status = r.runs === 0 ? "NOT RUN" : r.fails.length ? "FAIL" : "PASS";
   return [id, name, status, r.fails.length ? r.fails.slice(0, 2).join(" ‖ ") : `${r.runs} assertions${r.note ? `; ${r.note}` : ""}`];

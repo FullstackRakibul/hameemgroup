@@ -1,18 +1,16 @@
 type AvatarProps = {
-  size: number;
-  shape?: "circle" | "rounded";
-  className?: string;
+  size: 56 | 36 | 32;
+  /** Green "online" dot at the bottom right. */
+  online?: boolean;
 };
 
-/** Ink → red gradient tile with a white "H" monogram. Decorative: the name is always shown next to it. */
-export default function Avatar({ size, shape = "circle", className = "" }: AvatarProps) {
+/** Circle split like the group logo: brown top, blue bottom, white "HG", white ring.
+    Decorative: the assistant's name is always given in text. */
+export default function Avatar({ size, online = false }: AvatarProps) {
   return (
-    <span
-      className={`hm-assist-avatar hm-assist-avatar--${shape} ${className}`}
-      style={{ width: size, height: size, fontSize: Math.round(size * 0.48) }}
-      aria-hidden="true"
-    >
+    <span className={`hm-assist-avatar hm-assist-avatar--${size}`} aria-hidden="true">
       HG
+      {online && <span className="hm-assist-online" />}
     </span>
   );
 }

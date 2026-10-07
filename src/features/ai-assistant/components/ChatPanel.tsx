@@ -9,10 +9,12 @@ import Composer from "./Composer";
 import MessageList from "./MessageList";
 import PanelHeader from "./PanelHeader";
 import Toast from "./Toast";
-import WelcomeView from "./WelcomeView";
 import { ArrowDownIcon } from "./icons";
 
 type ChatPanelProps = {
+  id: string;
+  /** Incremented by the launcher to ask the panel to close (with its animation). */
+  closeSignal: number;
   messages: Message[];
   isTyping: boolean;
   hasUserMessages: boolean;
@@ -94,6 +96,12 @@ export default function ChatPanel(props: ChatPanelProps) {
     else run();
   }, []);
 
+  /* ── The launcher's close icon ── */
+  const firstSignal = useRef(props.closeSignal);
+  useEffect(() => {
+    if (props.closeSignal !== firstSignal.current) close();
+  }, [props.closeSignal, close]);
+
   /* ── Escape closes ── */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -164,27 +172,25 @@ export default function ChatPanel(props: ChatPanelProps) {
   return (
     <div
       ref={panelRef}
+      id={props.id}
       className="hm-assist-panel"
       role="dialog"
       aria-labelledby={nameId}
       aria-modal={isMobile ? true : undefined}
     >
-      <PanelHeader nameId={nameId} onCall={props.onCall} onClose={() => close()} />
+      <PanelHeader nameId={nameId} compact={hasUserMessages} onCall={props.onCall} onClose={() => close()} />
 
       <div className="hm-assist-scroll-wrap">
         <div ref={scrollRef} className="hm-assist-scroll" onScroll={onScroll}>
-          {hasUserMessages ? (
-            <MessageList
-              messages={messages}
-              isTyping={isTyping}
-              animateFrom={animateFrom}
-              onPick={pick}
-              onLink={onLink}
-              onSpeaker={props.onSpeaker}
-            />
-          ) : (
-            <WelcomeView onPick={pick} />
-          )}
+          <MessageList
+            messages={messages}
+            isTyping={isTyping}
+            hasUserMessages={hasUserMessages}
+            animateFrom={animateFrom}
+            onPick={pick}
+            onLink={onLink}
+            onSpeaker={props.onSpeaker}
+          />
         </div>
         {showNewPill && (
           <button type="button" className="hm-assist-newpill" onClick={() => scrollToBottom(true)}>
@@ -194,7 +200,7 @@ export default function ChatPanel(props: ChatPanelProps) {
       </div>
 
       <div className="hm-assist-bottom">
-        <Toast message={toastMessage} placement="panel" />
+        <Toast message={toastMessage} />
         <Composer textareaRef={textareaRef} isTyping={isTyping} onSend={send} onMic={props.onMic} />
       </div>
     </div>

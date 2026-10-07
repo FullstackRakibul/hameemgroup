@@ -1,25 +1,29 @@
 /* ── Shuvo · Ha-Meem Assist ──
-   Every class is prefixed hm-assist-. Brand colours come from the site tokens
-   (--ink, --red, --mist, --mute, --hair); the two below are the only additions. */
+   Every class is prefixed hm-assist-. Colour comes from the group logo's two
+   bands plus the online green; these three are the only hex values in the
+   module, and every other shade is mixed from them. Neutrals are the site's
+   (--ink, --mute, --hair, --mist). Brown is used only for the avatar's top
+   half and the action pills, and never touches blue as text on background. */
 .hm-assist-root {
+  --assist-primary: #274257;
+  --assist-accent: #5d2e24;
   --assist-online: #16a34a;
-  --assist-red-hover: #264156;
+  --assist-primary-hover: color-mix(in srgb, var(--assist-primary) 85%, black);
+  --assist-primary-tint: color-mix(in srgb, var(--assist-primary) 8%, white);
+  --assist-accent-hover: color-mix(in srgb, var(--assist-accent) 85%, black);
+  --assist-on-primary-soft: color-mix(in srgb, white 80%, var(--assist-primary));
+  --assist-shadow: 0 24px 64px rgba(17, 20, 24, 0.18);
   --assist-condensed: "Fira Sans Condensed", "Fira Sans", sans-serif;
   --assist-sans: "Fira Sans", sans-serif;
   font-family: var(--assist-sans);
   color: var(--ink);
 }
 
-/* Keep back-to-top above the launcher, and out of the way while the panel is open. */
-body:has(.hm-assist-panel) .back-to-top,
-body:has(.hm-assist-launcher:hover) .back-to-top {
+/* Back-to-top steps aside while the panel is open. */
+body:has(.hm-assist-panel) .back-to-top {
   opacity: 0 !important;
   pointer-events: none !important;
   transform: translateY(20px) !important;
-}
-body:has(.hm-assist-panel) .back-to-top {
-  opacity: 0;
-  pointer-events: none;
 }
 
 /* ── Shared ── */
@@ -29,20 +33,16 @@ body:has(.hm-assist-panel) .back-to-top {
   padding: 0;
   border: 0;
   background: none;
-  /* <--- This is erasing your red background */
   color: inherit;
-  /* <--- This is erasing your white text */
   font: inherit;
   cursor: pointer;
 }
 .hm-assist-root :focus-visible {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--assist-primary);
   outline-offset: 2px;
 }
-/* Red buttons get a white inner ring as well, so focus reads on red */
-.hm-assist-root .hm-assist-btn-red:focus-visible {
-  box-shadow: inset 0 0 0 2px white;
-}
+/* On the blue header the ring is white */
+.hm-assist-root .hm-assist-header :focus-visible { outline-color: white; }
 .hm-assist-sr {
   position: absolute;
   width: 1px;
@@ -55,297 +55,253 @@ body:has(.hm-assist-panel) .back-to-top {
   border: 0;
 }
 
-/* ── Avatar ── */
+/* ── Avatar: split like the logo, brown over blue, white ring ── */
 .hm-assist-avatar {
+  position: relative;
   display: inline-grid;
   place-items: center;
   flex-shrink: 0;
-  background: linear-gradient(135deg, var(--ink) 0%, var(--ink) 25%, var(--red) 100%);
+  border-radius: 50%;
+  background: linear-gradient(to bottom, var(--assist-accent) 50%, var(--assist-primary) 50%);
   color: white;
   font-family: var(--assist-condensed);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.01em;
+  box-shadow: 0 0 0 2px white;
   user-select: none;
 }
-.hm-assist-avatar--circle { border-radius: 50%; }
-.hm-assist-avatar--rounded {
-  border-radius: 18px;
-  box-shadow: 0 0 0 3px white, 0 12px 28px rgba(17, 20, 24, 0.18);
+.hm-assist-avatar--56 { width: 56px; height: 56px; font-size: 21px; }
+.hm-assist-avatar--36 { width: 36px; height: 36px; font-size: 14px; }
+.hm-assist-avatar--32 { width: 32px; height: 32px; font-size: 13px; }
+.hm-assist-online {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--assist-online);
+  box-shadow: 0 0 0 2px white;
+}
+.hm-assist-avatar--36 .hm-assist-online {
+  width: 10px;
+  height: 10px;
 }
 
-/* ── Launcher: desktop card ── */
+/* ── Launcher: the round button, and the teaser beside it ── */
 .hm-assist-launcher {
   position: fixed;
   right: 24px;
   bottom: calc(24px + env(safe-area-inset-bottom));
   z-index: 1050;
 }
-.hm-assist-card {
-  position: relative;
-  width: 340px;
-  max-width: calc(100vw - 48px);
-  padding: 24px;
-  border: 1px solid var(--hair);
-  border-radius: 24px;
-  background: white;
-  box-shadow: 0 12px 40px rgba(17, 20, 24, 0.12);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+@media (max-width: 639px) {
+  .hm-assist-launcher {
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+  }
 }
-.hm-assist-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 44px rgba(17, 20, 24, 0.15);
-}
-.hm-assist-card-top {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding-right: 34px;
-}
-.hm-assist-card-text { min-width: 0; }
-.hm-assist-launcher-title {
-  margin: 0;
-  font-family: var(--assist-condensed);
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.1;
-  color: var(--ink);
-}
-.hm-assist-launcher-sub {
-  margin: 4px 0 0;
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--mute);
-}
-.hm-assist-root .hm-assist-expand {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.hm-assist-root .hm-assist-fab {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  color: var(--mute);
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-.hm-assist-root .hm-assist-expand:hover {
-  color: var(--ink);
-  background-color: var(--mist);
-}
-.hm-assist-card-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-.hm-assist-root .hm-assist-ask {
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  height: 52px;
-  border-radius: 9999px;
-  background-color: var(--red);
-  color: white;
-  font-family: var(--assist-condensed);
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 1;
-  transition: background-color 0.2s ease;
-}
-.hm-assist-root .hm-assist-call {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background-color: var(--red);
-  color: white;
-  transition: background-color 0.2s ease;
-}
-.hm-assist-root .hm-assist-ask:hover,
-.hm-assist-root .hm-assist-call:hover {
-  background-color: var(--assist-red-hover);
-}
-
-/* ── Launcher: compact pill (phones) ── */
-.hm-assist-launcher--compact {
-  right: 16px;
-  bottom: calc(16px + env(safe-area-inset-bottom));
-}
-.hm-assist-pill {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  width: 56px;
   height: 56px;
-  padding: 5px;
+  border-radius: 50%;
+  background-color: var(--assist-primary);
+  color: white;
+  box-shadow: 0 8px 24px rgba(17, 20, 24, 0.24);
+  transition: background-color 0.2s ease;
+}
+.hm-assist-root .hm-assist-fab:hover { background-color: var(--assist-primary-hover); }
+/* A white inner ring as well, so focus reads on any page background */
+.hm-assist-root .hm-assist-fab:focus-visible {
+  box-shadow: 0 0 0 2px white, 0 8px 24px rgba(17, 20, 24, 0.24);
+}
+.hm-assist-fab-icon {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  transition: opacity 0.15s ease;
+}
+.hm-assist-fab-icon--close,
+.hm-assist-fab--open .hm-assist-fab-icon--chat { opacity: 0; }
+.hm-assist-fab--open .hm-assist-fab-icon--close { opacity: 1; }
+
+.hm-assist-teaser {
+  position: absolute;
+  right: 68px;
+  bottom: 4px;
+  width: max-content;
+  max-width: 260px;
+  animation: hm-assist-fade 0.3s ease-out both;
+}
+.hm-assist-root .hm-assist-teaser-open {
+  display: block;
+  min-height: 48px;
+  padding: 13px 18px;
   border: 1px solid var(--hair);
-  border-radius: 9999px;
-  background: white;
-  box-shadow: 0 8px 28px rgba(17, 20, 24, 0.14);
-}
-.hm-assist-root .hm-assist-pill-open {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 44px;
-  padding-right: 10px;
-  border-radius: 9999px;
-  font-family: var(--assist-condensed);
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1;
+  border-radius: 12px;
+  background-color: white;
   color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+  box-shadow: 0 10px 28px rgba(17, 20, 24, 0.14);
+  transition: border-color 0.2s ease;
 }
-.hm-assist-root .hm-assist-call--sm {
+.hm-assist-root .hm-assist-teaser-open:hover { border-color: var(--assist-primary); }
+/* 44×44 button centred on the bubble's top-left corner; the visible chip is 22px */
+.hm-assist-root .hm-assist-teaser-dismiss {
+  position: absolute;
+  top: -22px;
+  left: -22px;
+  display: grid;
+  place-items: center;
   width: 44px;
   height: 44px;
+  border-radius: 50%;
+  color: var(--assist-primary);
 }
-
-/* ── Toast ── */
-.hm-assist-toast-region {
-  position: absolute;
-  display: flex;
-  pointer-events: none;
+.hm-assist-teaser-chip {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--assist-primary-tint);
+  box-shadow: 0 0 0 1px white, 0 2px 6px rgba(17, 20, 24, 0.14);
+  transition: background-color 0.2s ease;
 }
-/* Above the card, clear of back-to-top on the right */
-.hm-assist-toast-region--launcher {
-  bottom: calc(100% + 12px);
-  left: 0;
-  width: 260px;
-}
-.hm-assist-launcher--compact .hm-assist-toast-region--launcher {
-  left: auto;
-  right: 72px;
-  width: min(240px, calc(100vw - 104px));
-  justify-content: flex-end;
-}
-.hm-assist-toast-region--panel {
-  left: 16px;
-  right: 16px;
-  bottom: calc(100% + 8px);
-  justify-content: center;
-}
-.hm-assist-toast {
-  margin: 0;
-  padding: 10px 16px;
-  border-radius: 18px;
-  background: var(--ink);
-  color: white;
-  font-size: 13px;
-  line-height: 1.4;
-  box-shadow: 0 8px 24px rgba(17, 20, 24, 0.2);
-  animation: hm-assist-toast-in 0.2s ease-out;
-}
-@keyframes hm-assist-toast-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+.hm-assist-root .hm-assist-teaser-dismiss:hover .hm-assist-teaser-chip {
+  background: color-mix(in srgb, var(--assist-primary) 16%, white);
 }
 
 /* ── Panel ── */
 .hm-assist-panel {
   position: fixed;
   right: 24px;
-  bottom: 24px;
+  bottom: calc(92px + env(safe-area-inset-bottom));
   z-index: 1100;
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: min(680px, calc(100dvh - 48px));
+  height: min(680px, calc(100dvh - 116px));
   overflow: hidden;
-  border: 1px solid var(--hair);
-  border-radius: 20px;
+  border-radius: 18px;
   background: white;
   color: var(--ink);
   font-family: var(--assist-sans);
-  box-shadow: 0 24px 64px rgba(17, 20, 24, 0.18);
+  box-shadow: var(--assist-shadow);
 }
-/* Tablets: 16px offsets (the stitch scrollbar only shows from 900px) */
-@media (min-width: 640px) and (max-width: 899px) {
-  .hm-assist-panel {
-    right: 16px;
-    bottom: 16px;
-    width: min(400px, calc(100vw - 32px));
-    height: min(680px, calc(100dvh - 32px));
-  }
-}
-@media (min-width: 640px) and (max-height: 639px) {
-  .hm-assist-panel {
-    bottom: 16px;
-    height: calc(100dvh - 32px);
-  }
-}
-/* Phones: full-screen sheet */
+/* Phones: full-screen sheet; the launcher is not shown while it is open */
 @media (max-width: 639px) {
   .hm-assist-panel {
     inset: 0;
     width: auto;
     height: 100dvh;
-    border: 0;
     border-radius: 0;
     box-shadow: none;
   }
 }
 
-/* ── Header ── */
+/* ── Header: welcome block, then a compact bar once the conversation starts ── */
 .hm-assist-header {
-  display: flex;
   flex-shrink: 0;
-  align-items: center;
-  gap: 10px;
-  min-height: 76px;
-  padding: 12px 12px 12px 16px;
-  border-bottom: 1px solid var(--hair);
+  overflow: hidden;
+  background: var(--assist-primary);
+  color: white;
+  transition: height 0.2s ease;
 }
-.hm-assist-header-text { min-width: 0; }
-.hm-assist-name {
+.hm-assist-header--welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 208px;
+  padding: 12px 10px 0;
+  text-align: center;
+}
+.hm-assist-header--compact {
+  height: 64px;
+  padding: 0 10px;
+}
+.hm-assist-header-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+}
+.hm-assist-header--compact .hm-assist-header-bar { height: 64px; }
+.hm-assist-root .hm-assist-hbtn {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+.hm-assist-root .hm-assist-hbtn:hover { background-color: var(--assist-primary-hover); }
+.hm-assist-title {
+  flex: 1;
+  min-width: 0;
   margin: 0;
   font-family: var(--assist-condensed);
   font-size: 22px;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.2;
+  color: white;
+}
+.hm-assist-header-avatar {
+  display: flex;
+  margin-top: 8px;
+}
+.hm-assist-headline {
+  margin: 14px 0 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: white;
+}
+.hm-assist-note {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--assist-on-primary-soft);
+}
+.hm-assist-header--compact .hm-assist-avatar { margin-left: 2px; }
+.hm-assist-header-text {
+  flex: 1;
+  min-width: 0;
+  padding-left: 4px;
+}
+.hm-assist-name {
+  margin: 0;
+  font-family: var(--assist-condensed);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: white;
 }
 .hm-assist-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 3px 0 0;
+  margin: 2px 0 0;
+  overflow: hidden;
   font-size: 12px;
   line-height: 1.35;
-  color: var(--mute);
+  color: var(--assist-on-primary-soft);
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
-@media (max-width: 380px) {
-  .hm-assist-meta { white-space: normal; }
+/* Short screens: drop the avatar row so the welcome content still fits */
+@media (max-height: 759px) {
+  .hm-assist-header--welcome { height: 144px; }
+  .hm-assist-header-avatar { display: none; }
 }
-.hm-assist-online {
-  flex-shrink: 0;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--assist-online);
-  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.18);
-}
-.hm-assist-header-actions {
-  display: flex;
-  gap: 0;
-  margin-left: auto;
-}
-.hm-assist-root .hm-assist-round {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  color: var(--ink);
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-.hm-assist-root .hm-assist-round--outline { border: 1px solid var(--hair); }
-.hm-assist-root .hm-assist-round:hover { background-color: var(--mist); }
 
-/* ── Scroll area ── */
+/* ── Conversation ── */
 .hm-assist-scroll-wrap {
   position: relative;
   flex: 1;
@@ -363,216 +319,142 @@ body:has(.hm-assist-panel) .back-to-top {
   border-radius: 3px;
   background: var(--hair);
 }
-.hm-assist-root .hm-assist-newpill {
-  position: absolute;
-  left: 50%;
-  bottom: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 44px;
-  padding: 0 16px;
-  border-radius: 9999px;
-  background: var(--ink);
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  transform: translateX(-50%);
-  box-shadow: 0 8px 24px rgba(17, 20, 24, 0.2);
-}
-
-/* ── Welcome ── */
-.hm-assist-welcome {
+.hm-assist-thread {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 24px 24px 28px;
+  gap: 16px;
+  padding: 16px 20px 20px;
+}
+.hm-assist-date {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--mute);
   text-align: center;
 }
-.hm-assist-welcome-art {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 116px;
+.hm-assist-log {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
-.hm-assist-wave {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  color: var(--hair);
-  opacity: 0.6;
+.hm-assist-msg--assistant {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-.hm-assist-welcome-avatar { position: relative; }
-.hm-assist-welcome-hello {
-  margin: 10px 0 0;
-  font-size: 22px;
-  line-height: 1.3;
-  color: var(--mute);
+.hm-assist-msg-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
 }
-.hm-assist-welcome-title {
-  margin: 2px 0 0;
-  font-family: var(--assist-condensed);
-  font-size: 26px;
-  font-weight: 700;
-  line-height: 1.15;
+.hm-assist-bubble {
+  min-width: 0;
+  max-width: 85%;
+  padding: 12px 14px;
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  background: white;
   color: var(--ink);
 }
-.hm-assist-welcome-intro {
-  max-width: 300px;
-  margin: 10px 0 0;
+.hm-assist-msg-text p {
+  margin: 0;
   font-size: 15px;
   line-height: 1.5;
+  color: var(--ink);
+}
+.hm-assist-msg-text p + p { margin-top: 8px; }
+.hm-assist-root .hm-assist-speaker {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-left: -6px;
+  border-radius: 50%;
   color: var(--mute);
+  transition: color 0.2s ease;
 }
-.hm-assist-welcome .hm-assist-chips {
-  justify-content: center;
-  margin-top: 22px;
+.hm-assist-root .hm-assist-speaker:hover,
+.hm-assist-root .hm-assist-speaker[aria-pressed="true"] { color: var(--assist-primary); }
+
+/* Action pills: the reply's links, aligned with the bubble's left edge */
+.hm-assist-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-left: 40px;
 }
-@media (max-height: 639px) {
-  .hm-assist-welcome { padding-top: 12px; }
-  .hm-assist-welcome-art { height: 80px; }
-  .hm-assist-welcome-avatar { transform: scale(0.74); }
-  .hm-assist-welcome-hello { margin-top: 4px; font-size: 18px; }
+.hm-assist-root .hm-assist-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px 0 14px;
+  border-radius: 9999px;
+  background-color: var(--assist-accent);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+.hm-assist-root .hm-assist-link:hover { background-color: var(--assist-accent-hover); }
+/* 44px tall hit area around the 36px pill */
+.hm-assist-root .hm-assist-link::after {
+  content: "";
+  position: absolute;
+  inset: -4px 0;
 }
 
-/* ── Chips ── */
+.hm-assist-msg--user {
+  align-self: flex-end;
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--assist-primary);
+  color: white;
+}
+.hm-assist-msg--user p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: white;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ── Quick replies: outlined, right-aligned ── */
 .hm-assist-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  justify-content: flex-end;
+  gap: 8px;
 }
 .hm-assist-root .hm-assist-chip {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 44px;
+  min-width: 44px;
+  height: 36px;
   padding: 0 14px;
-  border: 1px solid var(--hair);
-  border-radius: 12px;
+  border: 1px solid var(--assist-primary);
+  border-radius: 8px;
   background-color: white;
-  color: var(--ink);
+  color: var(--assist-primary);
   font-family: var(--assist-condensed);
   font-size: 15px;
   font-weight: 600;
   line-height: 1;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
-.hm-assist-root .hm-assist-chip svg { color: var(--red); flex-shrink: 0; }
-.hm-assist-root .hm-assist-chip:hover {
-  border-color: var(--ink);
-  background-color: var(--mist);
-}
-.hm-assist-chips--sm {
-  gap: 8px;
-  margin-top: 12px;
-}
-.hm-assist-root .hm-assist-chip--sm {
-  height: 36px;
-  padding: 0 12px;
-  font-size: 14px;
-}
-/* 44px tall hit area around the 36px follow-up chips */
-.hm-assist-root .hm-assist-chip--sm::after {
+.hm-assist-root .hm-assist-chip:hover { background-color: var(--assist-primary-tint); }
+/* 44px tall hit area around the 36px chip */
+.hm-assist-root .hm-assist-chip::after {
   content: "";
   position: absolute;
   inset: -4px 0;
-}
-/* ── Denim Launcher Animation ── */
-@keyframes denim-bob {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-.animate-denim-bob {
-  animation: denim-bob 3s ease-in-out infinite;
-}
-
-/* Ensure the animation stops when the user prefers reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .animate-denim-bob {
-    animation: none;
-  }
-}
-/* ── Messages ── */
-.hm-assist-log {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 24px;
-}
-.hm-assist-msg--assistant { align-self: stretch; }
-.hm-assist-msg-label {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  height: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--mute);
-}
-/* 44×44 target, pulled in so the label row stays compact */
-.hm-assist-root .hm-assist-speaker {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  margin: -12px 0 -12px -10px;
-  border-radius: 50%;
-  color: var(--mute);
-}
-.hm-assist-root .hm-assist-speaker:hover,
-.hm-assist-root .hm-assist-speaker[aria-pressed="true"] { color: var(--red); }
-.hm-assist-msg-text { margin-top: 6px; }
-.hm-assist-msg-text p {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--ink);
-}
-.hm-assist-msg-text p + p { margin-top: 12px; }
-.hm-assist-msg-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 18px;
-  margin-top: 2px;
-}
-.hm-assist-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: var(--red);
-  font-family: var(--assist-sans);
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.hm-assist-link:hover { color: var(--assist-red-hover); }
-.hm-assist-msg--user {
-  align-self: flex-end;
-  max-width: 80%;
-  padding: 12px 16px;
-  border-radius: 16px;
-  background: var(--mist);
-}
-.hm-assist-msg--user p {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
 
 /* ── Typing indicator ── */
@@ -580,8 +462,7 @@ body:has(.hm-assist-panel) .back-to-top {
   display: flex;
   align-items: center;
   gap: 5px;
-  height: 26px;
-  margin-top: 6px;
+  min-height: 48px;
 }
 .hm-assist-dot {
   width: 6px;
@@ -603,102 +484,115 @@ body:has(.hm-assist-panel) .back-to-top {
   30% { transform: translateY(-4px); opacity: 1; }
 }
 
-/* ── Composer ── */
+.hm-assist-root .hm-assist-newpill {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 9999px;
+  background-color: var(--assist-primary);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  transform: translateX(-50%);
+  box-shadow: 0 8px 24px rgba(17, 20, 24, 0.2);
+}
+
+/* ── Toast (above the composer) ── */
+.hm-assist-toast-region {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: calc(100% + 8px);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.hm-assist-toast {
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: var(--ink);
+  color: white;
+  font-size: 13px;
+  line-height: 1.4;
+  box-shadow: 0 8px 24px rgba(17, 20, 24, 0.2);
+  animation: hm-assist-toast-in 0.2s ease-out;
+}
+@keyframes hm-assist-toast-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Composer: mic, pill input, paper plane ── */
 .hm-assist-bottom {
   position: relative;
   flex-shrink: 0;
-  padding: 8px 16px env(safe-area-inset-bottom);
+  padding: 10px 12px env(safe-area-inset-bottom);
 }
 .hm-assist-composer {
   display: flex;
   align-items: flex-end;
-  gap: 0;
-  min-height: 56px;
-  padding: 8px 6px;
-  border-radius: 16px;
-  background: var(--mist);
+  gap: 4px;
 }
-.hm-assist-root .hm-assist-mic {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  margin-left: -4px;
-  border-radius: 50%;
-  color: var(--mute);
-}
-.hm-assist-root .hm-assist-mic:hover { color: var(--ink); }
-.hm-assist-textarea {
-  flex: 1;
-  min-width: 0;
-  margin: 0;
-  padding: 10px 2px;
-  border: 0;
-  border-radius: 8px;
-  resize: none;
-  background: transparent;
-  color: var(--ink);
-  font-family: var(--assist-sans);
-  font-size: 16px;
-  line-height: 24px;
-  overflow-y: auto;
-}
-/* The focus ring goes round the whole composer rather than the bare textarea */
-.hm-assist-root .hm-assist-textarea:focus-visible { outline: none; }
-.hm-assist-composer:has(.hm-assist-textarea:focus-visible) {
-  outline: 2px solid var(--red);
-  outline-offset: 2px;
-}
-.hm-assist-textarea::placeholder {
-  color: var(--mute);
-  opacity: 1;
-}
+.hm-assist-root .hm-assist-mic,
 .hm-assist-root .hm-assist-send {
   display: grid;
   place-items: center;
   flex-shrink: 0;
   width: 44px;
   height: 44px;
-  margin-right: -4px;
   border-radius: 50%;
-}
-.hm-assist-send-circle {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--red);
-  color: white;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-.hm-assist-root .hm-assist-send:hover .hm-assist-send-circle { background: var(--assist-red-hover); }
-.hm-assist-root .hm-assist-send[aria-disabled="true"] { cursor: default; }
-.hm-assist-root .hm-assist-send[aria-disabled="true"] .hm-assist-send-circle {
-  background: transparent;
   color: var(--mute);
+  transition: color 0.2s ease;
 }
+.hm-assist-root .hm-assist-mic:hover { color: var(--ink); }
+.hm-assist-root .hm-assist-send { color: var(--assist-primary); }
+.hm-assist-root .hm-assist-send:hover { color: var(--assist-primary-hover); }
+.hm-assist-root .hm-assist-send[aria-disabled="true"] {
+  color: var(--mute);
+  cursor: default;
+}
+.hm-assist-textarea {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 9px 16px;
+  border: 1px solid var(--hair);
+  border-radius: 22px;
+  resize: none;
+  background: white;
+  color: var(--ink);
+  font-family: var(--assist-sans);
+  font-size: 16px;
+  line-height: 24px;
+  overflow-y: auto;
+  transition: border-color 0.2s ease;
+}
+.hm-assist-root .hm-assist-textarea:focus-visible { border-color: var(--assist-primary); }
+.hm-assist-textarea::placeholder {
+  color: var(--mute);
+  opacity: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.hm-assist-textarea:placeholder-shown { overflow: hidden; }
 .hm-assist-footnote {
   margin: 0;
-  padding: 10px 0;
+  padding: 8px 0 12px;
   font-size: 12px;
   line-height: 1.4;
   color: var(--mute);
   text-align: center;
 }
-.hm-assist-footnote svg {
-  display: inline-block;
-  margin-right: 5px;
-  vertical-align: -1px;
-}
 
-/* ── Reduced motion: no transforms, static dots + visible "typing…" ── */
+/* ── Reduced motion: nothing moves; fades only, static dots + visible "typing…" ── */
 @media (prefers-reduced-motion: reduce) {
-  .hm-assist-card,
-  .hm-assist-root .hm-assist-chip,
-  .hm-assist-send-circle { transition: none; }
-  .hm-assist-card:hover { transform: none; }
+  .hm-assist-header { transition: none; }
   .hm-assist-dot { animation: none; opacity: 0.7; }
   .hm-assist-typing-text { display: inline; }
   .hm-assist-toast { animation-name: hm-assist-fade; }
