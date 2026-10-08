@@ -172,12 +172,17 @@ const newsItems = [
     date: "1 SEP 2025",
     title: "Ha-Meem opens a new yarn-dyeing plant at Sreepur, Gazipur",
     img: "news-yarn.jpg",
+    // Original report not found yet: the card shows without a link until one is added.
+    url: "#",
+    source: "",
   },
   {
     cat: "SUSTAINABILITY",
     date: "2 FEB 2025",
     title: "A 4.4 MWp rooftop plant takes group solar capacity to 12.2 MWp",
     img: "biz/textiles.jpg",
+    url: "https://www.thedailystar.net/business/news/ha-meem-group-installs-44mwp-rooftop-solar-power-plant-3814796",
+    source: "The Daily Star",
   },
   {
     cat: "RECOGNITION",
@@ -185,6 +190,8 @@ const newsItems = [
     title:
       "Refat Garments receives the Bangabandhu Sheikh Mujib Export Trophy for FY2020-21",
     img: "chain-sewing.jpg",
+    url: "https://www.tbsnews.net/bangladesh/73-businesses-receive-national-export-trophy-735806",
+    source: "The Business Standard",
   },
 ];
 
@@ -398,130 +405,304 @@ export default function HomePage() {
           )}
         </section>
 
-        {/* ── VERTICAL INTEGRATION (Steps accordion) ── */}
-        <section id="chain" className="bg-white pt-24 md:pt-28">
-          <div className="wrap flex flex-col md:flex-row justify-between md:items-end gap-8 pb-12">
-            <div>
-              <Eyebrow>VERTICAL INTEGRATION</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[58px] leading-none mt-6">
-                Six steps, all ours.
-              </h2>
+{/* ── VERTICAL INTEGRATION (Steps accordion) ── */}
+<section id="chain" className="bg-white pt-24 md:pt-28">
+  <div className="wrap flex flex-col md:flex-row justify-between md:items-end gap-8 pb-12">
+    <div>
+      <Eyebrow>VERTICAL INTEGRATION</Eyebrow>
+      <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[58px] leading-none mt-6">
+        Six steps, all ours.
+      </h2>
+    </div>
+    <p className="max-w-97.5 text-(--mute) leading-relaxed">
+      From yarn and denim fabric to finished garments, seven washing
+      plants and export-ready apparel, integrated facilities connect
+      each stage of production.
+    </p>
+  </div>
+  {/* Desktop and tablet (768px and up): horizontal accordion, unchanged */}
+  <div className="hidden md:flex h-155 md:h-168 text-white bg-(--ink) overflow-x-auto">
+    {steps.map((item, i) => (
+      <button
+        key={item.title}
+        className={`step-panel relative border-0 border-r-2 border-white text-white bg-transparent p-6 text-left bg-cover bg-center overflow-hidden cursor-pointer ${
+          step === i ? "step-open flex-[1_1_50%]" : "flex-[0_0_10%]"
+        }`}
+        style={{
+          backgroundImage: `url("${media}${item.image}")`,
+        }}
+        onClick={() => setStep(i)}
+        onMouseEnter={() => setStep(i)}
+      >
+        {/* Overlay: Light for active (image clear), Darker for collapsed (60% opacity) */}
+        <span
+          className={`absolute inset-0 transition-all duration-500 ${
+            step === i
+              ? "bg-linear-to-r from-[rgba(17,20,24,0.55)] to-[rgba(17,20,24,0.35)]"
+              : "bg-[rgba(17,20,24,0.6)]"
+          }`}
+          aria-hidden="true"
+        />
+
+        {/* Content wrapper - z-10 to sit above the overlay */}
+        <span className="relative z-10 block h-full">
+          <span className="step-num-text absolute left-1/2 top-0 -translate-x-1/2 font-semibold transition-opacity duration-300">
+            0{i + 1}
+          </span>
+
+          {step === i ? (
+            <span className="step-body absolute left-10 right-12 bottom-4 flex flex-col">
+              <em className="text-(--red) not-italic text-xs font-semibold tracking-widest">
+                STEP {String(i + 1).padStart(2, "0")} OF 6
+              </em>
+              <strong className="font-['Fira_Sans_Condensed'] text-[32px] md:text-[40px] my-4">
+                {item.title}
+              </strong>
+              <span className="max-w-117.5 text-(--hair) leading-relaxed">
+                {item.text}
+              </span>
+              <b className="font-['Fira_Sans_Condensed'] text-[28px] mt-6">
+                {item.stat}{" "}
+                <small className="font-['Fira_Sans'] text-[10px] tracking-[0.15em] font-medium">
+                  {item.unit}
+                </small>
+              </b>
+            </span>
+          ) : (
+            <strong className="step-vertical absolute bottom-10 left-1/2 [writing-mode:vertical-rl] -translate-x-1/2 rotate-180 font-['Fira_Sans_Condensed'] text-[19px] whitespace-nowrap transition-all duration-300">
+              {item.title}
+            </strong>
+          )}
+        </span>
+      </button>
+    ))}
+  </div>
+
+  {/* Phones (below 768px): the same six steps as a vertical accordion.
+      Closed steps are image strips; the open step shows its photo
+      uncropped above the text, so neither competes with the other. */}
+  <ol className="md:hidden bg-(--ink) text-white">
+    {steps.map((item, i) => {
+      const open = step === i;
+      const num = String(i + 1).padStart(2, "0");
+      return (
+        <li
+          key={item.title}
+          className="scroll-mt-24 border-b-2 border-white last:border-b-0"
+        >
+          <button
+            type="button"
+            id={`chain-step-${i}`}
+            aria-expanded={open}
+            aria-controls={`chain-panel-${i}`}
+            className="relative flex w-full min-h-18 items-center gap-4 overflow-hidden px-5 py-4 text-left"
+            onClick={(e) => {
+              const row = e.currentTarget.parentElement;
+              setStep(i);
+              // Without the height animation there is no transitionend to wait for.
+              if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                requestAnimationFrame(() =>
+                  row?.scrollIntoView({ block: "nearest", behavior: "instant" }),
+                );
+              }
+            }}
+          >
+            {/* The strip photo fades out once the step is open: the full photo sits below */}
+            <span
+              aria-hidden="true"
+              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 motion-reduce:transition-none ${
+                open ? "opacity-0" : "opacity-100"
+              }`}
+              style={{ backgroundImage: `url("${media}${item.image}")` }}
+            />
+            <span aria-hidden="true" className="absolute inset-0 bg-[rgba(17,20,24,0.62)]" />
+            <span
+              className={`relative z-1 w-6 shrink-0 text-sm font-semibold tabular-nums ${
+                open ? "text-[#ef7898]" : "text-white/70"
+              }`}
+            >
+              {num}
+            </span>
+            <span className="relative z-1 flex-1 font-['Fira_Sans_Condensed'] text-[22px] font-bold leading-tight text-white">
+              {item.title}
+            </span>
+            <svg
+              aria-hidden="true"
+              width="14"
+              height="8"
+              viewBox="0 0 14 8"
+              className={`relative z-1 shrink-0 text-white transition-transform duration-300 motion-reduce:transition-none ${
+                open ? "rotate-180" : ""
+              }`}
+            >
+              <path d="M1 1l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="1.6" />
+            </svg>
+          </button>
+
+          {/* Grid rows 0fr → 1fr animates to the content's natural height */}
+          <div
+            id={`chain-panel-${i}`}
+            role="region"
+            aria-labelledby={`chain-step-${i}`}
+            inert={!open}
+            className={`grid transition-[grid-template-rows] duration-500 ease-in-out motion-reduce:transition-none ${
+              open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            }`}
+            onTransitionEnd={(e) => {
+              // Once open, bring the whole step into view: the step that
+              // closed above it may have pulled it off-screen.
+              if (open && e.target === e.currentTarget && e.propertyName === "grid-template-rows") {
+                e.currentTarget.parentElement?.scrollIntoView({ block: "nearest" });
+              }
+            }}
+          >
+            <div className="min-h-0 overflow-hidden">
+              <img
+                src={`${media}${item.image}`}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="block w-full aspect-16/10 object-cover"
+              />
+              <div className="flex flex-col gap-3 px-5 pt-5 pb-7">
+                <span className="text-[#ef7898] text-[11px] font-semibold tracking-widest">
+                  STEP {num} OF {steps.length}
+                </span>
+                <p className="max-w-117.5 text-(--hair) text-[15px] leading-relaxed">
+                  {item.text}
+                </p>
+                <b className="font-['Fira_Sans_Condensed'] text-[28px] leading-none mt-2">
+                  {item.stat}{" "}
+                  <small className="font-['Fira_Sans'] text-[10px] tracking-[0.15em] font-medium">
+                    {item.unit}
+                  </small>
+                </b>
+              </div>
             </div>
-            <p className="max-w-97.5 text-(--mute) leading-relaxed">
-              From yarn and denim fabric to finished garments, seven washing
-              plants and export-ready apparel, integrated facilities connect
-              each stage of production.
-            </p>
           </div>
-          <div className="flex h-155 md:h-168 text-white bg-(--ink) overflow-x-auto">
-            {steps.map((item, i) => (
-              <button
-                key={item.title}
-                className={`step-panel relative border-0 border-r-2 border-white text-white bg-transparent p-6 text-left bg-cover bg-center overflow-hidden cursor-pointer ${
-                  step === i ? "step-open flex-[1_1_50%]" : "flex-[0_0_10%]"
-                }`}
-                style={{
-                  backgroundImage: `url("${media}${item.image}")`,
-                }}
-                onClick={() => setStep(i)}
-                onMouseEnter={() => setStep(i)}
-              >
-                {/* Overlay: Light for active (image clear), Darker for collapsed (60% opacity) */}
-                <span
-                  className={`absolute inset-0 transition-all duration-500 ${
-                    step === i
-                      ? "bg-linear-to-r from-[rgba(17,20,24,0.55)] to-[rgba(17,20,24,0.35)]"
-                      : "bg-[rgba(17,20,24,0.6)]"
-                  }`}
-                  aria-hidden="true"
-                />
+        </li>
+      );
+    })}
+  </ol>
+</section>
 
-                {/* Content wrapper - z-10 to sit above the overlay */}
-                <span className="relative z-10 block h-full">
-                  <span className="step-num-text absolute left-1/2 top-0 -translate-x-1/2 font-semibold transition-opacity duration-300">
-                    0{i + 1}
-                  </span>
+{/* ── BUSINESSES ── */}
+<section id="businesses" className="wrap py-24 md:py-28">
+  <div className="text-center max-w-155 mx-auto">
+    <Eyebrow>WHAT WE DO</Eyebrow>
+    <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[59px] leading-[0.94] mt-7 mb-7">
+      One group, from yarn
+      <br />
+      to shipped carton.
+    </h2>
+    <p className="text-(--mute) text-base leading-relaxed">
+      Every unit upstream of a sewing line exists to make that line
+      faster and more reliable. Around the apparel chain sit media,
+      jute, tea and logistics.
+    </p>
+  </div>
+  <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    {businesses.map((b, i) => (
+      <Link
+        to={b.to}
+        key={b.title}
+        className="biz-card group relative block h-74.5 overflow-hidden p-6 text-white transition-all duration-350 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
+      >
+        <img
+          src={`${media}${b.image}`}
+          alt=""
+          className="biz-img absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out motion-reduce:transition-none"
+        />
+        <span className="biz-overlay absolute inset-0 bg-linear-to-b from-[#11141828] to-[#111418dc] transition-all duration-350" />
 
-                  {step === i ? (
-                    <span className="step-body absolute left-10 right-12 bottom-4 flex flex-col">
-                      <em className="text-(--red) not-italic text-xs font-semibold tracking-widest">
-                        STEP {String(i + 1).padStart(2, "0")} OF 6
-                      </em>
-                      <strong className="font-['Fira_Sans_Condensed'] text-[32px] md:text-[40px] my-4">
-                        {item.title}
-                      </strong>
-                      <span className="max-w-117.5 text-(--hair) leading-relaxed">
-                        {item.text}
-                      </span>
-                      <b className="font-['Fira_Sans_Condensed'] text-[28px] mt-6">
-                        {item.stat}{" "}
-                        <small className="font-['Fira_Sans'] text-[10px] tracking-[0.15em] font-medium">
-                          {item.unit}
-                        </small>
-                      </b>
-                    </span>
-                  ) : (
-                    <strong className="step-vertical absolute bottom-10 left-1/2 [writing-mode:vertical-rl] -translate-x-1/2 rotate-180 font-['Fira_Sans_Condensed'] text-[19px] whitespace-nowrap transition-all duration-300">
-                      {item.title}
-                    </strong>
-                  )}
-                </span>
-              </button>
-            ))}
-          </div>
-        </section>
+        {/* Stitched seam: on hover (or keyboard focus) a dashed line is
+            sewn around the card, like topstitching on a denim hem.
+            The mask reveals the 8/6 dash pattern along the path, so the
+            dashes keep their size whatever the card's width. Touch
+            screens have no hover, so there it is always shown. */}
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-2.5 h-[calc(100%-20px)] w-[calc(100%-20px)] overflow-visible"
+        >
+          <defs>
+            <mask id={`biz-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+              <rect
+                x="0"
+                y="0"
+                width="100%"
+                height="100%"
+                pathLength={1}
+                fill="none"
+                stroke="white"
+                strokeWidth="6"
+                className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-900 group-focus-visible:[stroke-dashoffset:0] motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0]"
+              />
+            </mask>
+          </defs>
+          <rect
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            fill="none"
+            stroke="white"
+            strokeOpacity="0.85"
+            strokeWidth="1.5"
+            strokeDasharray="8 6"
+            mask={`url(#biz-stitch-${i})`}
+          />
+        </svg>
 
-        {/* ── BUSINESSES ── */}
-        <section id="businesses" className="wrap py-24 md:py-28">
-          <div className="text-center max-w-155 mx-auto">
-            <Eyebrow>WHAT WE DO</Eyebrow>
-            <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[59px] leading-[0.94] mt-7 mb-7">
-              One group, from yarn
-              <br />
-              to shipped carton.
-            </h2>
-            <p className="text-(--mute) text-base leading-relaxed">
-              Every unit upstream of a sewing line exists to make that line
-              faster and more reliable. Around the apparel chain sit media,
-              jute, tea and logistics.
-            </p>
-          </div>
-          <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {businesses.map((b) => (
-              <Link
-                to={b.to}
-                key={b.title}
-                className="biz-card relative h-74.5 text-white overflow-hidden p-6 transition-all duration-350 block"
-              >
-                <img
-                  src={`${media}${b.image}`}
-                  alt=""
-                  className="biz-img absolute inset-0 w-full h-full object-cover transition-transform duration-350"
-                />
-                <span className="biz-overlay absolute inset-0 bg-linear-to-b from-[#11141828] to-[#111418dc] transition-all duration-350" />
-                <span className="relative z-1 flex flex-col">
-                  <b className="font-['Fira_Sans_Condensed'] text-white text-[37px]">
-                    {b.stat}
-                  </b>
-                  <small className="text-[10px] text-white tracking-[0.13em]">
-                    {b.unit}
-                  </small>
-                </span>
-                <span className="absolute left-6 right-6 bottom-6 z-1 flex flex-col">
-                  <strong className="font-['Fira_Sans_Condensed'] text-white text-[25px] mb-2">
-                    {b.title}
-                  </strong>
-                  <small className="leading-snug text-white opacity-80 text-sm">
-                    {b.text}
-                  </small>
-                </span>
-              </Link>
-            ))}
-          </div>
-          <p className="text-center text-(--mute) text-[13px] mt-12">
-            Tiles open the group&apos;s own pages for each unit.
-          </p>
-        </section>
+        {/* Open button: a round arrow that grows into a labelled pill on
+            hover. A visual cue only; the whole card is the link. */}
+        <span
+          aria-hidden="true"
+          className="absolute right-6 top-6 z-1 flex h-11 items-center rounded-full border border-white/60 bg-[#11141833] text-white backdrop-blur-sm transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-(--ink) group-focus-visible:border-white group-focus-visible:bg-white group-focus-visible:text-(--ink) motion-reduce:transition-none"
+        >
+          <span className="max-w-0 overflow-hidden whitespace-nowrap text-[11px] font-semibold tracking-[0.14em] opacity-0 transition-all duration-300 group-hover:max-w-24 group-hover:pl-4 group-hover:opacity-100 group-focus-visible:max-w-24 group-focus-visible:pl-4 group-focus-visible:opacity-100 motion-reduce:transition-none">
+            OPEN
+          </span>
+          <span className="grid size-11 shrink-0 place-items-center">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              className="transition-transform duration-300 group-hover:rotate-45 group-focus-visible:rotate-45 motion-reduce:transition-none"
+            >
+              <path d="M4.5 11.5l7-7M5.5 4.5h6v6" fill="none" stroke="currentColor" strokeWidth="1.6" />
+            </svg>
+          </span>
+        </span>
+
+        <span className="relative z-1 flex flex-col pr-14">
+          <b className="font-['Fira_Sans_Condensed'] text-white text-[37px] leading-none">
+            {b.stat}
+          </b>
+          <small className="mt-2 text-[10px] text-white tracking-[0.13em]">
+            {b.unit}
+          </small>
+        </span>
+
+        <span className="absolute left-6 right-6 bottom-6 z-1 flex flex-col">
+          <strong className="font-['Fira_Sans_Condensed'] text-white text-[25px] leading-tight">
+            {b.title}
+          </strong>
+          {/* A short red rule that grows on hover: the eyebrow's colour, used once */}
+          <span
+            aria-hidden="true"
+            className="mt-2 mb-3 h-0.5 w-8 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-16 group-focus-visible:w-16 motion-reduce:transition-none"
+          />
+          <small className="line-clamp-3 text-sm leading-snug text-white/80 transition-colors duration-300 group-hover:text-white">
+            {b.text}
+          </small>
+        </span>
+      </Link>
+    ))}
+  </div>
+  <p className="text-center text-(--mute) text-[13px] mt-12">
+    Tiles open the group&apos;s own pages for each unit.
+  </p>
+</section>
 
         {/* ── RECOGNITION & AWARDS ── */}
         <section id="recognition" className="bg-(--mist) py-24 md:py-28">
@@ -566,131 +747,333 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── SUSTAINABILITY ── */}
-        <section
-          id="sustainability"
-          className="relative min-h-205 md:h-218.25 bg-(--ink) text-white overflow-hidden"
-        >
-          <img
-            src={`${media}sustain-campus.jpg`}
-            alt="Ha-Meem Textiles at Mawna"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+{/* ── SUSTAINABILITY ── */}
+<section
+  id="sustainability"
+  className="relative isolate overflow-hidden bg-(--ink) text-white"
+>
+  <img
+    src={`${media}sustain-campus.jpg`}
+    alt="Ha-Meem Textiles at Mawna"
+    className="absolute inset-0 -z-10 h-full w-full object-cover"
+  />
+  {/* Overlay: darkest behind the heading, a little more photo at the edges */}
+  <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_35%,rgba(10,14,18,0.9)_0%,rgba(10,14,18,0.82)_55%,rgba(10,14,18,0.72)_100%)] backdrop-blur-[2px]" />
 
-          {/* Overlay: strong opacity + subtle blur for text contrast */}
-          <div className="absolute inset-0 bg-[rgba(10,14,18,0.85)] backdrop-blur-[2px]" />
+  <div className="wrap flex flex-col items-center pt-28 pb-24 text-center md:pt-36 md:pb-32">
+    <Eyebrow className="text-white!">SUSTAINABILITY</Eyebrow>
 
-          <div className="relative z-10 max-w-5xl mx-auto px-6 pt-32 pb-24 flex flex-col items-center text-center">
-            <Eyebrow className="text-white!">SUSTAINABILITY</Eyebrow>
+    <h2 className="pt-6 font-['Fira_Sans_Condensed'] text-[48px] font-black leading-[0.95] md:text-[64px]">
+      Cleaner water.
+      <br />
+      Cleaner power.
+      <br />
+      <span className="text-[#c5c6c8]">Measured.</span>
+    </h2>
 
-            <h2 className="font-['Fira_Sans_Condensed'] flex flex-col gap-8 font-black text-[48px] md:text-[61px] leading-[0.95] mt-8 mb-6">
-              Cleaner water.
-              <br />
-              Cleaner power.
-              <br />
-              <span className="text-[#c5c6c8]">Measured.</span>
-            </h2>
+    <p className="max-w-[52ch] pt-7 text-[17px] leading-relaxed text-[#d5d6d7]">
+      Our mills treat effluent biologically, recover process chemicals
+      and put solar on factory roofs, working toward net-zero by{" "}
+      {F.netZeroBy}.
+    </p>
 
-            <p className="text-[#d5d6d7] text-[17px] leading-relaxed max-w-2xl mx-auto">
-              Our mills treat effluent biologically, recover process chemicals
-              and put solar on factory roofs, working toward net-zero by{" "}
-              {F.netZeroBy}.
-            </p>
-
-            <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 w-full max-w-4xl mx-auto">
-              {SUSTAINABILITY_STATS.map((s) => {
-                const [num, unit] = splitUnit(s.value);
-                return (
-                  <div key={s.label} className="flex flex-col items-center">
-                    <div className="flex items-baseline justify-center gap-1">
-                      <span className="font-['Fira_Sans_Condensed'] text-[42px] font-black leading-none">
-                        {num}
-                      </span>
-                      {unit && (
-                        <span className="text-[14px] font-normal text-[#c5c6c8]">
-                          {unit}
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-[#c5c6c8] text-[13px] leading-relaxed mt-3 max-w-50">
-                      {s.label}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ── PEOPLE ── */}
-        <section
-          id="people"
-          className="grid md:grid-cols-2 min-h-150 md:h-184 bg-(--mist)"
-        >
-          <div className="flex flex-col justify-center py-16 md:py-0 px-8 md:px-[7vw]">
-            <Eyebrow>PEOPLE</Eyebrow>
-            <h2 className="font-['Fira_Sans_Condensed'] font-black text-[48px] md:text-[62px] leading-[0.94] mt-7 mb-9">
-              {F.employeesText}
-              <br />
-              people.<sup className="text-(--red)">*</sup>
-            </h2>
-            <p className="text-(--mute) max-w-107.5 leading-relaxed mb-10">
-              Most of our {F.employeesText} people joined as machine
-              operators. The group founded three schools for their children,
-              funds scholarships, and runs a higher-education pathway with the
-              Asian University for Women called Dreams Beyond the Factory Floor.
-            </p>
-            <Link
-              className="inline-block self-start px-8 py-4 border border-(--ink) rounded-full text-xs font-semibold tracking-widest hover:bg-(--ink) hover:text-white! transition-colors duration-300"
-              to="/#careers"
+    {/* Four measured results. Hairline grid: the 1px gaps show the
+        container's tint, so rows and columns line up on every width. */}
+    <ul className="mt-16 grid w-full max-w-5xl auto-rows-fr grid-cols-2 gap-px border border-white/15 bg-white/15 md:mt-20 lg:grid-cols-4">
+      {SUSTAINABILITY_STATS.map((s, i) => {
+        const [num, unit] = splitUnit(s.value);
+        return (
+          <li
+            key={s.label}
+            className="group relative flex flex-col items-center justify-center bg-[rgba(10,14,18,0.55)] px-3 py-10 transition-colors duration-300 hover:bg-[rgba(255,255,255,0.06)] motion-reduce:transition-none sm:px-6 md:py-12"
+          >
+            {/* Stitched seam, sewn round the tile on hover; always shown on touch screens */}
+            <svg
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-2 h-[calc(100%-16px)] w-[calc(100%-16px)] overflow-visible"
             >
-              WORK WITH US
-            </Link>
-          </div>
-          <img
-            src={`${media}people-knit.jpg`}
-            alt="A knitting technician programming a Stoll machine"
-            className="w-full h-100 md:h-full object-cover"
-          />
-        </section>
+              <defs>
+                <mask id={`eco-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    pathLength={1}
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="6"
+                    className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-900 motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
+                  />
+                </mask>
+              </defs>
+              <rect
+                x="0"
+                y="0"
+                width="100%"
+                height="100%"
+                fill="none"
+                stroke="white"
+                strokeOpacity="0.7"
+                strokeWidth="1.5"
+                strokeDasharray="8 6"
+                mask={`url(#eco-stitch-${i})`}
+              />
+            </svg>
 
-        {/* ── NEWSROOM ── */}
-        <section id="news" className="bg-white">
-          <div className="wrap flex flex-col md:flex-row items-start md:items-center justify-between py-16 md:py-20 gap-4">
-            <div>
-              <Eyebrow>NEWSROOM</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[54px] mt-5">
-                Latest from the group.
-              </h2>
+            <div className="flex flex-wrap items-baseline justify-center gap-x-1.5 transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
+              <span className="font-['Fira_Sans_Condensed'] text-[40px] font-black leading-none sm:text-[52px]">
+                {num}
+              </span>
+              {unit && (
+                <span className="text-[15px] font-medium text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
+                  {unit}
+                </span>
+              )}
             </div>
-            <Eyebrow className="text-(--mute)!">
-              LINKS OPEN THE ORIGINAL REPORT
-            </Eyebrow>
-          </div>
-          <div className="grid md:grid-cols-3 min-h-100 md:h-123 bg-[#e9e9e6]">
-            {newsItems.map((n) => (
-              <a
-                key={n.title}
-                className="news-card relative overflow-hidden text-white p-8 flex flex-col justify-end h-100 md:h-full group cursor-pointer"
-              >
-                <img
-                  src={`${media}${n.img}`}
-                  alt=""
-                  className="news-img absolute inset-0 w-full h-full object-cover brightness-[0.55] transition-all duration-400"
-                />
-                <span className="relative z-1 text-[#ef7898] text-[11px] tracking-widest font-semibold">
-                  {n.cat} · {n.date}
+            {/* Red rule that stretches on hover, as on the business cards */}
+            <span
+              aria-hidden="true"
+              className="mt-4 h-0.5 w-6 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
+            />
+            <span className="mt-4 max-w-[24ch] text-balance text-[13px] font-semibold uppercase leading-snug tracking-[0.12em] text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
+              {s.label}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</section>
+
+{/* ── PEOPLE ── */}
+<section id="people" className="grid bg-(--mist) md:min-h-184 md:grid-cols-2">
+  <div className="flex flex-col justify-center px-5 py-20 sm:px-8 md:px-[7vw] md:py-24">
+    <Eyebrow>PEOPLE</Eyebrow>
+    {/* index.css zeroes margins on h2 and p, so these are spaced with padding */}
+    <h2 className="pt-7 font-['Fira_Sans_Condensed'] text-[48px] font-black leading-[0.94] md:text-[62px]">
+      {F.employeesText}
+      <br />
+      people.<sup className="text-(--red)">*</sup>
+    </h2>
+    <p className="max-w-107.5 pt-6 leading-relaxed text-(--mute)">
+      Most of our {F.employeesText} people joined as machine operators.
+    </p>
+
+    {/* The three programmes, one per row, so they can be scanned */}
+    <ul className="mt-8 max-w-107.5 border-t border-(--hair)">
+      {[
+        { title: "Three schools", text: "Founded by the group for its workers' children." },
+        { title: "Scholarships", text: "Funded by the group." },
+        {
+          title: "Dreams Beyond the Factory Floor",
+          text: "A higher-education pathway with the Asian University for Women.",
+        },
+      ].map((item) => (
+        <li key={item.title} className="group relative border-b border-(--hair) py-4 pl-5">
+          <span
+            aria-hidden="true"
+            className="absolute left-0 top-4 bottom-4 w-0.5 origin-top scale-y-50 bg-(--red) transition-transform duration-300 group-hover:scale-y-100 motion-reduce:transition-none"
+          />
+          <b className="block font-['Fira_Sans_Condensed'] text-[20px] font-bold leading-tight text-(--ink)">
+            {item.title}
+          </b>
+          <span className="mt-1 block text-sm leading-snug text-(--mute)">{item.text}</span>
+        </li>
+      ))}
+    </ul>
+
+    <Link
+      to="/#careers"
+      className="group/cta mt-10 inline-flex items-center gap-3 self-start rounded-full border border-(--ink) px-8 py-4 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
+    >
+      WORK WITH US
+      <span
+        aria-hidden="true"
+        className="transition-transform duration-300 group-hover/cta:translate-x-1 motion-reduce:transition-none"
+      >
+        →
+      </span>
+    </Link>
+  </div>
+
+  <figure className="group relative m-0 min-h-100 overflow-hidden md:min-h-0">
+    <img
+      src={`${media}people-knit.jpg`}
+      alt=""
+      className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+    />
+    {/* Stitched seam, sewn round the photo on hover; always shown on touch screens */}
+    <svg
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-4 h-[calc(100%-32px)] w-[calc(100%-32px)] overflow-visible md:inset-6 md:h-[calc(100%-48px)] md:w-[calc(100%-48px)]"
+    >
+      <defs>
+        <mask id="people-stitch" maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+          <rect
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            pathLength={1}
+            fill="none"
+            stroke="white"
+            strokeWidth="6"
+            className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-700 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-1200 motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
+          />
+        </mask>
+      </defs>
+      <rect
+        x="0"
+        y="0"
+        width="100%"
+        height="100%"
+        fill="none"
+        stroke="white"
+        strokeOpacity="0.85"
+        strokeWidth="1.5"
+        strokeDasharray="8 6"
+        mask="url(#people-stitch)"
+      />
+    </svg>
+    <figcaption className="absolute bottom-8 left-8 right-8 md:bottom-10 md:left-10 md:right-auto">
+      <span className="inline-block bg-[rgba(17,20,24,0.78)] px-3 py-2 text-xs leading-snug text-white backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none">
+        A knitting technician programming a Stoll machine
+      </span>
+    </figcaption>
+  </figure>
+</section>
+
+        
+{/* ── NEWSROOM ── */}
+<section id="news" className="bg-white">
+  <div className="wrap flex flex-col lg:flex-row items-start lg:items-end justify-between gap-4 py-16 md:py-20">
+    <div>
+      <Eyebrow>NEWSROOM</Eyebrow>
+      {/* index.css zeroes margins on h2, so it is spaced with padding */}
+      <h2 className="pt-5 font-['Fira_Sans_Condensed'] text-[42px] font-black leading-none md:text-[54px]">
+        Latest from the group.
+      </h2>
+    </div>
+    {newsItems.some((n) => n.url) && (
+      <Eyebrow className="text-(--mute)!">LINKS OPEN THE ORIGINAL REPORT</Eyebrow>
+    )}
+  </div>
+ 
+  <div className="grid gap-px bg-white sm:grid-cols-2 lg:h-123 lg:grid-cols-3">
+    {newsItems.map((n, i) => {
+      const linked = Boolean(n.url);
+      const body = (
+        <>
+          <img
+            src={`${media}${n.img}`}
+            alt=""
+            className="news-img absolute inset-0 h-full w-full object-cover brightness-[0.55] transition-all duration-500 ease-out motion-reduce:transition-none"
+          />
+          {/* Darker at the foot, where the headline sits */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 bg-linear-to-t from-[rgba(10,14,18,0.9)] via-[rgba(10,14,18,0.2)] to-[rgba(10,14,18,0.35)]"
+          />
+ 
+          {linked && (
+            /* Stitched seam, sewn round the card on hover or keyboard focus;
+               always shown on touch screens. Only linked cards get it. */
+            <svg
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-3 h-[calc(100%-24px)] w-[calc(100%-24px)] overflow-visible"
+            >
+              <defs>
+                <mask id={`news-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    pathLength={1}
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="6"
+                    className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-1000 group-focus-visible:[stroke-dashoffset:0] motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
+                  />
+                </mask>
+              </defs>
+              <rect
+                x="0"
+                y="0"
+                width="100%"
+                height="100%"
+                fill="none"
+                stroke="white"
+                strokeOpacity="0.8"
+                strokeWidth="1.5"
+                strokeDasharray="8 6"
+                mask={`url(#news-stitch-${i})`}
+              />
+            </svg>
+          )}
+ 
+          {/* Top: category chip and date */}
+          <span className="relative z-1 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="rounded-full border border-[#ef7898]/60 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#ef7898]">
+              {n.cat}
+            </span>
+            <span className="text-[11px] font-semibold tracking-widest text-white/75">{n.date}</span>
+          </span>
+ 
+          {/* Bottom: headline, then source and the open button */}
+          <span className="relative z-1 mt-auto flex flex-col">
+            <strong className="news-title font-['Fira_Sans_Condensed'] text-[24px] font-bold leading-[1.08] text-white text-balance md:text-[28px]">
+              {n.title}
+            </strong>
+            <span
+              aria-hidden={!linked || undefined}
+              className={`mt-5 flex items-center justify-between gap-4 border-t pt-4 ${
+                linked ? "border-white/20" : "invisible border-transparent"
+              }`}
+            >
+                <span className="text-[11px] font-semibold tracking-[0.14em] text-white/70 transition-colors duration-300 group-hover:text-white">
+                  {n.source.toUpperCase() || "\u00a0"}
                 </span>
-                <strong className="news-title relative z-1 font-['Fira_Sans_Condensed'] text-white text-[22px] md:text-[26px] leading-[1.05] mt-3">
-                  {n.title}
-                </strong>
-                <span className="absolute bottom-8 right-8 z-1 text-white/70 text-xl group-hover:translate-x-1 transition-transform duration-300">
-                  →
+                <span
+                  aria-hidden="true"
+                  className="grid size-11 shrink-0 place-items-center rounded-full border border-white/60 text-white transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-(--ink) group-focus-visible:bg-white group-focus-visible:text-(--ink) motion-reduce:transition-none"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+                  >
+                    <path d="M4.5 11.5l7-7M5.5 4.5h6v6" fill="none" stroke="currentColor" strokeWidth="1.6" />
+                  </svg>
                 </span>
-              </a>
-            ))}
-          </div>
-        </section>
+            </span>
+          </span>
+        </>
+      );
+      const cardClass = `relative flex h-100 flex-col overflow-hidden p-7 text-white lg:h-full lg:p-8 ${
+        i === 0 ? "sm:col-span-2 lg:col-span-1" : ""
+      }`;
+      return linked ? (
+        <a
+          key={n.title}
+          href={n.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`news-card group ${cardClass} focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white`}
+        >
+          {body}
+          <span className="sr-only"> (opens the report on {n.source} in a new tab)</span>
+        </a>
+      ) : (
+        <article key={n.title} className={cardClass}>
+          {body}
+        </article>
+      );
+    })}
+  </div>
+</section>
 
         {/* ── CAREERS CTA ── */}
         <ContactCta id="careers" />
