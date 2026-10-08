@@ -79,8 +79,8 @@ export const megaMenuData: Record<MenuKey, MegaMenu> = {
 
 export const PLAIN_LINKS = [
   { title: "Sustainability", href: "/#sustainability" },
-  { title: "News", href: "/#news" },
-  { title: "Careers", href: "/#careers" },
+  { title: "Contact", href: "/contact" },
+  { title: "Careers", href: "https://jobs.hameemgroup.com/" },
 ];
 
 /* ── Footer ── An item without href is plain text: it has no real destination yet. */
@@ -99,7 +99,7 @@ export const footerColumns: FooterColumn[] = [
       { label: "Sustainability", href: "/#sustainability" },
       { label: "People & community", href: "/#people" },
       { label: "Newsroom", href: "/#news" },
-      { label: "Careers", href: "/#careers" },
+      { label: "Careers", href: "https://jobs.hameemgroup.com/" },
       { label: "Contact", href: "/contact" },
     ],
   },
