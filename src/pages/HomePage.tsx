@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import WorldRoutes from "../WorldRoutes";
 import Productcarousel from "../components/Productcarousel ";
 import Eyebrow from "../components/Eyebrow";
-import StatGrid from "../components/StatGrid";
 import BuyerGrid from "../components/BuyerGrid";
 import AwardGrid from "../components/AwardGrid";
 import ContactCta from "../components/ContactCta";
@@ -26,10 +25,15 @@ export const HOME_DESCRIPTION = `Ha-Meem Group is a leading wholesale clothing m
 
 /* ── Data ── */
 const heroSlides = [
-  { src: "cine/looms.jpg", alt: "Long rows of looms weaving indigo denim" },
-  { src: "cine/fabric.jpg", alt: "Rolls of indigo denim fabric" },
-  { src: "chain-sewing.jpg", alt: "Sewing floor at Ha-Meem garment factory" },
+  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00051.jpeg", alt: "Long rows of looms weaving indigo denim" },
+  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00052.jpeg", alt: "Rolls of indigo denim fabric" },
+  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00053.jpeg", alt: "Sewing floor at Ha-Meem garment factory" },
+  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00054.jpeg", alt: "Ha-Meem Group manufacturing facility" },
+  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00055.jpeg", alt: "Ha-Meem Group manufacturing facility" },
+  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00056.jpeg", alt: "Ha-Meem Group manufacturing facility" },
+  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00057.jpeg", alt: "Ha-Meem Group manufacturing facility" },
 ];
+
 
 const products = [
   [
@@ -206,22 +210,20 @@ export default function HomePage() {
   const [step, setStep] = useState(1);
   const [heroSlide, setHeroSlide] = useState(0);
   const [heroPaused, setHeroPaused] = useState(false);
-  const heroTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   usePageMeta(HOME_TITLE, HOME_DESCRIPTION, true);
 
-  // Hero slider auto-advance
+  // Hero slider auto-advance. The timer restarts on every slide change, so a
+  // manual jump gets a full 6s and the stitched progress line stays in step.
   const advanceSlide = useCallback(() => {
     setHeroSlide((prev) => (prev + 1) % heroSlides.length);
   }, []);
 
   useEffect(() => {
     if (heroPaused) return;
-    heroTimerRef.current = setInterval(advanceSlide, 6000);
-    return () => {
-      if (heroTimerRef.current) clearInterval(heroTimerRef.current);
-    };
-  }, [heroPaused, advanceSlide]);
+    const timer = setTimeout(advanceSlide, 6000);
+    return () => clearTimeout(timer);
+  }, [heroPaused, heroSlide, advanceSlide]);
 
   const prevSlide = () =>
     setHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
@@ -234,68 +236,331 @@ export default function HomePage() {
       {/* ═══ HERO with KEN BURNS SLIDER ═══ */}
       <section
         id="top"
-        className="relative h-screen min-h-180 max-h-250 overflow-hidden text-white bg-(--ink)"
+        className="group/hero relative h-screen min-h-180 max-h-250 overflow-hidden text-white bg-(--ink)"
       >
         {heroSlides.map((slide, i) => (
           <img
             key={slide.src + i}
-            src={`${media}${slide.src}`}
+            src={slide.src}
             alt={slide.alt}
             className={`hero-slide ${heroSlide === i ? "active" : ""}`}
           />
         ))}
-        <div className="absolute inset-0 bg-linear-to-b from-[rgba(5,12,17,0.48)] via-[rgba(5,12,17,0.23)] to-[rgba(5,12,17,0.56)]" />
-        <div className="absolute z-2 left-1/2 top-1/2 -translate-x-1/2 translate-y-[-43%]">
-          <h1
-            tabIndex={-1}
-            className="font-['Fira_Sans_Condensed'] text-[clamp(52px,8vw,98px)] leading-[0.97] tracking-[-0.035em] font-semibold text-center"
-          >
-            Wholesale clothing
-            <br />
-            manufacturer in Bangladesh.
-          </h1>
+        {/* Shade: darkest at the foot, where the text sits, and at the top
+            behind the header; on wide screens also from the left. */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-linear-to-t from-[rgba(5,12,17,0.85)] via-[rgba(5,12,17,0.25)] to-[rgba(5,12,17,0.5)]"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 hidden md:block bg-linear-to-r from-[rgba(5,12,17,0.55)] via-[rgba(5,12,17,0.1)] to-transparent"
+        />
+        {/* Denim: an indigo wash and a fine diagonal twill over the photo */}
+        <div aria-hidden="true" className="absolute inset-0 bg-(--navy) opacity-30 mix-blend-multiply" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.045)_0_1px,transparent_1px_5px)]"
+        />
+
+        {/* Stitched seam round the hero, below the header. A faint guide is
+            always there; on hover the thread is sewn over it. Touch screens
+            have no hover, so there it is always shown. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-3 right-3 bottom-3 top-[calc(var(--header-h)+4px)] md:left-6 md:right-6 md:bottom-6"
+        >
+          <svg className="absolute inset-0 h-full w-full overflow-visible">
+            <defs>
+              <mask id="hero-stitch" maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+                <rect
+                  x="0"
+                  y="0"
+                  width="100%"
+                  height="100%"
+                  pathLength={1}
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="6"
+                  className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-700 ease-in-out group-hover/hero:[stroke-dashoffset:0] group-hover/hero:duration-1600 motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
+                />
+              </mask>
+            </defs>
+            <rect
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              fill="none"
+              stroke="white"
+              strokeOpacity="0.16"
+              strokeWidth="1.5"
+              strokeDasharray="10 7"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              fill="none"
+              stroke="white"
+              strokeOpacity="0.75"
+              strokeWidth="1.5"
+              strokeDasharray="10 7"
+              mask="url(#hero-stitch)"
+            />
+          </svg>
         </div>
-        <p className="hero-caption-text absolute left-1/2 -translate-x-1/2 bottom-10 z-2 text-xs opacity-75">
-          From fibre to finish — Ha-Meem Group
-        </p>
-        <div className="hero-controls-wrap absolute right-46.25 bottom-8 z-2 flex gap-2">
-          <button
-            onClick={prevSlide}
-            aria-label="Previous slide"
-            className="border border-white/50 bg-[#11141826] text-white rounded-full w-10.5 h-10.5"
-          >
-            ←
-          </button>
-          <button
-            onClick={togglePause}
-            aria-label={heroPaused ? "Play slideshow" : "Pause slideshow"}
-            className="border border-white/50 bg-[#11141826] text-white rounded-full w-10.5 h-10.5"
-          >
-            {heroPaused ? "▶" : "Ⅱ"}
-          </button>
-          <button
-            onClick={nextSlide}
-            aria-label="Next slide"
-            className="border border-white/50 bg-[#11141826] text-white rounded-full w-10.5 h-10.5"
-          >
-            →
-          </button>
+
+        {/* Copy and controls: left-aligned at the foot, on the page grid */}
+        <div className="absolute inset-x-0 bottom-0 z-2 pb-9 md:pb-14">
+          <div className="wrap">
+            <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/85 md:text-xs">
+              <svg aria-hidden="true" width="32" height="2" className="shrink-0 overflow-visible">
+                <line x1="0" y1="1" x2="32" y2="1" stroke="#ef7898" strokeWidth="2" strokeDasharray="5 4" />
+              </svg>
+              Denim &amp; apparel since {F.established}
+            </p>
+            <h1
+              tabIndex={-1}
+              className="pt-5 max-w-[16ch] font-['Fira_Sans_Condensed'] text-[clamp(42px,7.2vw,96px)] leading-[0.95] tracking-[-0.035em] font-semibold text-left"
+            >
+              Wholesale clothing manufacturer in Bangladesh.
+            </h1>
+            <p className="pt-5 max-w-md text-[15px] leading-relaxed text-white/80 md:pt-6 md:text-base">
+              From fibre to finish — Ha-Meem Group
+            </p>
+
+            {/* Slide progress and controls, under a stitched hairline */}
+            <div className="mt-8 flex flex-col gap-4 border-t border-dashed border-white/30 pt-5 sm:flex-row sm:items-center sm:justify-between md:mt-12">
+              <div className="flex items-center gap-4">
+                <span className="w-14 shrink-0 font-['Fira_Sans_Condensed'] text-sm tabular-nums tracking-[0.08em] text-white/70">
+                  <b className="font-semibold text-white">{String(heroSlide + 1).padStart(2, "0")}</b>
+                  {" / "}
+                  {String(heroSlides.length).padStart(2, "0")}
+                </span>
+                {/* One stitch per slide; the current one is sewn in red as it plays */}
+                <div className="flex items-center" role="group" aria-label="Choose a slide">
+                  {heroSlides.map((slide, i) => {
+                    const current = heroSlide === i;
+                    return (
+                      <button
+                        key={slide.src}
+                        type="button"
+                        onClick={() => setHeroSlide(i)}
+                        aria-label={`Show slide ${i + 1} of ${heroSlides.length}`}
+                        aria-current={current || undefined}
+                        className="group/seg flex h-8 items-center px-1 focus-visible:outline-2 focus-visible:outline-white"
+                      >
+                        <svg
+                          // Remounted on each slide change or resume, which restarts the sewing
+                          key={current ? `${heroSlide}-${heroPaused}` : undefined}
+                          aria-hidden="true"
+                          width="22"
+                          height="4"
+                          className="overflow-visible"
+                        >
+                          <line
+                            x1="0"
+                            y1="2"
+                            x2="22"
+                            y2="2"
+                            stroke="white"
+                            strokeOpacity="0.45"
+                            strokeWidth="2"
+                            strokeDasharray="4 3"
+                            className="transition-[stroke-opacity] duration-300 group-hover/seg:[stroke-opacity:1]"
+                          />
+                          {current && (
+                            <>
+                              <defs>
+                                <mask id="hero-progress" maskUnits="userSpaceOnUse" x="-4" y="-4" width="30" height="12">
+                                  <line
+                                    x1="0"
+                                    y1="2"
+                                    x2="22"
+                                    y2="2"
+                                    pathLength={1}
+                                    stroke="white"
+                                    strokeWidth="6"
+                                    className={`[stroke-dasharray:1] ${
+                                      heroPaused
+                                        ? "[stroke-dashoffset:0]"
+                                        : "[stroke-dashoffset:1] animate-[stitchDash_6s_linear_forwards] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
+                                    }`}
+                                  />
+                                </mask>
+                              </defs>
+                              <line
+                                x1="0"
+                                y1="2"
+                                x2="22"
+                                y2="2"
+                                stroke="#ef7898"
+                                strokeWidth="2"
+                                strokeDasharray="4 3"
+                                mask="url(#hero-progress)"
+                              />
+                            </>
+                          )}
+                        </svg>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {[
+                  { id: "prev", label: "Previous slide", onClick: prevSlide, icon: <path d="M10 3.5L5.5 8l4.5 4.5" /> },
+                  {
+                    id: "toggle",
+                    label: heroPaused ? "Play slideshow" : "Pause slideshow",
+                    onClick: togglePause,
+                    icon: heroPaused ? (
+                      <path d="M5.5 3.5v9l7-4.5z" fill="currentColor" stroke="none" />
+                    ) : (
+                      <path d="M6 3.5v9M10 3.5v9" />
+                    ),
+                  },
+                  { id: "next", label: "Next slide", onClick: nextSlide, icon: <path d="M6 3.5l4.5 4.5L6 12.5" /> },
+                ].map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={c.onClick}
+                    aria-label={c.label}
+                    className="group/btn relative grid size-11 place-items-center rounded-full border border-white/50 bg-[#11141826] text-white backdrop-blur-sm transition-colors duration-300 hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+                  >
+                    {/* Stitched ring, sewn inside the button on hover or focus */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-1 scale-75 rounded-full border border-dashed border-white/0 transition-all duration-300 group-hover/btn:scale-100 group-hover/btn:border-white/90 group-focus-visible/btn:scale-100 group-focus-visible/btn:border-white/90 motion-reduce:transition-none"
+                    />
+                    <svg
+                      aria-hidden="true"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      {c.icon}
+                    </svg>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ═══ RAISED CONTENT ═══ */}
       <div className="relative z-3 shadow-[0_-35px_70px_#00000040]">
         {/* ── FOUNDED IN 1984 ── */}
-        <section id="company" className="bg-white py-24 md:py-32">
-          <div className="wrap text-center flex flex-col gap-3 justify-center items-center">
-            <Eyebrow>FOUNDED IN {F.established}</Eyebrow>
-            <h2 className="font-['Fira_Sans_Condensed'] text-justify subpixel-antialiased font-black text-[30px] md:text-[38px] leading-[1.18]  mt-16 max-w-300 mx-auto">
-              Ha-Meem Group is one of Bangladesh&apos;s largest vertically
-              integrated apparel manufacturers. From our own yarn and denim to
-              sewing, washing, trims and shipping, we make bottoms, tops,
-              denim and sweaters for the world&apos;s leading retailers.
-            </h2>
-            <StatGrid stats={GROUP_STATS} className="mt-16 pt-10 border-t border-(--hair)" />
+        <section id="company" className="relative bg-white py-24 md:py-32">
+          {/* Selvedge: the red-line edge of a roll of denim, with a stitch just inside it */}
+          <div aria-hidden="true" className="absolute inset-x-0 top-0">
+            <div className="h-1 bg-(--red)" />
+            <div className="mt-2 border-t border-dashed border-(--ink)/25" />
+          </div>
+
+          <div className="wrap">
+            {/* Eyebrow in its own column on wide screens; the statement reads left-aligned */}
+            <div className="grid gap-8 lg:grid-cols-[240px_1fr] lg:gap-16">
+              <Eyebrow className="flex  items-center gap-3 lg:pt-4">
+                <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
+                  <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
+                </svg>
+                <p className="font-['Fira_Sans_Condensed'] text-[11px] font-semibold uppercase tracking-[0.2em] text-(--red) sm:text-[12px]">
+                FOUNDED IN {F.established}
+                </p>
+              </Eyebrow>
+              <h2 className="font-['Fira_Sans_Condensed'] font-black text-[30px] sm:text-[34px] md:text-[42px] leading-[1.12] text-left text-pretty">
+                Ha-Meem Group is one of Bangladesh&apos;s largest{" "}
+                {/* Red topstitch under the key phrase */}
+                <span className="box-decoration-clone bg-[repeating-linear-gradient(90deg,var(--red)_0_7px,transparent_7px_11px)] bg-size-[100%_2px] bg-bottom-left bg-no-repeat pb-0.5">
+                  vertically integrated
+                </span>{" "}
+                apparel manufacturers.{" "}
+                <span className="text-(--mute)">
+                  From our own yarn and denim to sewing, washing, trims and
+                  shipping, we make bottoms, tops, denim and sweaters for the
+                  world&apos;s leading retailers.
+                </span>
+              </h2>
+            </div>
+
+            {/* The group at a glance. Hairline grid: the 1px gaps show the
+                container's tint, so rows and columns line up on every width. */}
+            <ul className="mt-16 grid grid-cols-2 gap-px border border-(--hair) bg-(--hair) md:mt-20 lg:grid-cols-3">
+              {GROUP_STATS.map((s, i) => (
+                <li
+                  key={s.label}
+                  className="group relative flex flex-col bg-white px-4 py-7 transition-colors duration-300 hover:bg-(--mist) motion-reduce:transition-none sm:px-6 md:px-8 md:py-10"
+                >
+                  {/* Stitched seam, sewn round the tile on hover; always shown on touch screens */}
+                  <svg
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-2 h-[calc(100%-16px)] w-[calc(100%-16px)] overflow-visible"
+                  >
+                    <defs>
+                      <mask id={`company-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+                        <rect
+                          x="0"
+                          y="0"
+                          width="100%"
+                          height="100%"
+                          pathLength={1}
+                          fill="none"
+                          stroke="white"
+                          strokeWidth="6"
+                          className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-900 motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
+                        />
+                      </mask>
+                    </defs>
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      fill="none"
+                      strokeOpacity="0.4"
+                      strokeWidth="1.5"
+                      strokeDasharray="8 6"
+                      className="stroke-(--ink)"
+                      mask={`url(#company-stitch-${i})`}
+                    />
+                  </svg>
+
+                  {/* Figure, with a tag-style index in the corner */}
+                  <span className="flex items-start justify-between gap-3">
+                    <b className="font-['Fira_Sans_Condensed'] text-[38px] font-black leading-none text-(--ink) transition-colors duration-300 group-hover:text-(--red) sm:text-[46px] md:text-[56px]">
+                      {s.value}
+                    </b>
+                    <span className="pt-1 text-[11px] font-semibold tabular-nums tracking-widest text-(--mute)">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </span>
+                  {/* Red rule that stretches on hover, as on the business cards */}
+                  <span
+                    aria-hidden="true"
+                    className="mt-5 h-0.5 w-6 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
+                  />
+                  <span className="mt-4 text-[10px] font-semibold tracking-[0.14em] text-(--red) sm:text-[11px]">
+                    {s.label}
+                  </span>
+                  {s.sub && (
+                    <span className="mt-2 text-[13px] leading-snug text-(--mute) transition-colors duration-300 group-hover:text-(--ink) sm:text-sm">
+                      {s.sub}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 

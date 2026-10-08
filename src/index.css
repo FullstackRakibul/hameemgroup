@@ -407,10 +407,6 @@ body:has(.hm-assist-panel) .back-to-top {
   .stitch-track { display: none; }
 }
 
-@media (max-width: 560px) {
-  .hero-caption-text, .hero-controls-wrap { display: none; }
-}
-
 /* ── Routing: in-page targets clear the fixed header; programmatic focus
    (a new page's h1, a #section) shows no ring ── */
 section[id],
