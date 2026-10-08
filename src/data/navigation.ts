@@ -79,7 +79,7 @@ export const megaMenuData: Record<MenuKey, MegaMenu> = {
 
 export const PLAIN_LINKS = [
   { title: "Sustainability", href: "/#sustainability" },
-  { title: "News", href: "/#news" },
+  { title: "Contact", href: "/contact" },
   { title: "Careers", href: "https://jobs.hameemgroup.com/" },
 ];
 
