@@ -218,11 +218,26 @@ h1, h2, h3, p { margin: 0; }
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 1.2s ease-in-out;
+  z-index: 0;
+  /* A slide leaving `prev` hides only once the new one is fully in */
+  transition: opacity 0s linear 1.4s;
 }
+/* The new slide fades in on top of the old one, which stays opaque and keeps
+   zooming underneath: no dip to the backdrop, no snap back to scale(1). */
 .hero-slide.active {
   opacity: 1;
+  z-index: 2;
+  transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hero-slide.prev {
+  opacity: 1;
+  z-index: 1;
+  transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hero-slide.active,
+.hero-slide.prev {
   animation: kenBurns 10s ease-out forwards;
+  will-change: opacity, transform;
 }
 
 /* ── World routes map ── */
@@ -416,7 +431,8 @@ footer[id] { scroll-margin-top: var(--header-h); }
 /* ── Reduced motion: no smooth scroll, hover zoom or Ken Burns ── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .hero-slide.active { animation: none; }
+  .hero-slide.active,
+  .hero-slide.prev { animation: none; }
   .biz-card:hover { transform: none; }
   .biz-card:hover .biz-img,
   .news-card:hover .news-img { transform: none; }

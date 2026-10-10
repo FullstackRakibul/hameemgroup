@@ -208,16 +208,26 @@ const productSlides = products.map(([title, text, image]) => ({
 
 export default function HomePage() {
   const [step, setStep] = useState(1);
-  const [heroSlide, setHeroSlide] = useState(0);
+  // The outgoing slide is kept as `prev`: it stays opaque underneath while the
+  // new one fades in on top, so the cross-fade never dips to the dark backdrop.
+  const [hero, setHero] = useState({ current: 0, prev: -1 });
+  const heroSlide = hero.current;
   const [heroPaused, setHeroPaused] = useState(false);
 
   usePageMeta(HOME_TITLE, HOME_DESCRIPTION, true);
+
+  const setHeroSlide = useCallback((next: number | ((cur: number) => number)) => {
+    setHero((h) => {
+      const n = typeof next === "function" ? next(h.current) : next;
+      return n === h.current ? h : { current: n, prev: h.current };
+    });
+  }, []);
 
   // Hero slider auto-advance. The timer restarts on every slide change, so a
   // manual jump gets a full 6s and the stitched progress line stays in step.
   const advanceSlide = useCallback(() => {
     setHeroSlide((prev) => (prev + 1) % heroSlides.length);
-  }, []);
+  }, [setHeroSlide]);
 
   useEffect(() => {
     if (heroPaused) return;
@@ -238,14 +248,18 @@ export default function HomePage() {
         id="top"
         className="relative h-screen min-h-180 max-h-250 overflow-hidden text-white bg-(--ink)"
       >
-        {heroSlides.map((slide, i) => (
-          <img
-            key={slide.src + i}
-            src={slide.src}
-            alt={slide.alt}
-            className={`hero-slide ${heroSlide === i ? "active" : ""}`}
-          />
-        ))}
+        {/* Isolated, so the slides' z-index stays under the shade layers */}
+        <div className="absolute inset-0 isolate">
+          {heroSlides.map((slide, i) => (
+            <img
+              key={slide.src + i}
+              src={slide.src}
+              alt={slide.alt}
+              decoding="async"
+              className={`hero-slide ${heroSlide === i ? "active" : hero.prev === i ? "prev" : ""}`}
+            />
+          ))}
+        </div>
         {/* Shade: darkest at the foot, where the text sits, and at the top
             behind the header; on wide screens also from the left. */}
         <div
