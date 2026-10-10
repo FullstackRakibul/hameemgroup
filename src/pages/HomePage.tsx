@@ -244,7 +244,7 @@ export default function HomePage() {
             className={`hero-slide ${heroSlide === i ? "active" : ""}`}
           />
         ))}
-        <div className="absolute inset-0 bg-linear-to-b from-[rgba(5,12,17,0.48)] via-[rgba(5,12,17,0.23)] to-[rgba(5,12,17,0.56)]" />
+        {/* <div className="absolute inset-0 bg-linear-to-b from-[rgba(5,12,17,0.48)] via-[rgba(5,12,17,0.23)] to-[rgba(5,12,17,0.56)]" /> */}
         <div className="absolute z-2 left-1/2 top-1/2 -translate-x-1/2 translate-y-[-43%]">
           <h1
             tabIndex={-1}
