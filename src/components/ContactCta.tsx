@@ -9,15 +9,20 @@ export default function ContactCta({ id }: { id?: string }) {
   return (
     <section id={id} className="relative overflow-hidden text-white bg-(--ink) [--ring:#fff]">
       <img src="/media/cine/fabric.jpg" alt="" className="absolute inset-0 w-full h-full object-cover" />
-      <div className="absolute inset-0 bg-[rgba(10,14,18,0.88)]" />
+      {/* A lighter wash so the fabric shows, and a scrim that stays dark behind the copy */}
+      <div aria-hidden="true" className="absolute inset-0 bg-[rgba(10,14,18,0.55)]" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_60%_65%_at_50%_50%,rgba(10,14,18,0.6)_0%,rgba(10,14,18,0.3)_65%,transparent_100%)]"
+      />
       <div data-reveal className="wrap relative z-1 flex flex-col items-center section-y text-center">
         <Eyebrow className="text-white!">WORK WITH US</Eyebrow>
-        <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-statement font-black tracking-widest">
+        <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-statement font-black tracking-widest [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]">
           Sourcing from
           <br />
           Bangladesh?
         </h2>
-        <p className="mt-head-intro max-w-[60ch] text-pretty text-intro text-[#d9dadb]">
+        <p className="mt-head-intro max-w-[60ch] text-pretty text-intro text-[#d9dadb] [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
           One partner from yarn to vessel. Tell us what you make
           <br className="hidden sm:inline" /> and we will tell you where it fits.
         </p>

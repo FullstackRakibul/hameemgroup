@@ -352,7 +352,7 @@ export default function HomePage() {
             {/* Two lines that rise in from a clip mask, 80ms apart */}
             <h1
               tabIndex={-1}
-              className="mt-head-eyebrow max-w-[16ch] text-balance font-['Fira_Sans_Condensed'] text-hero tracking-[-0.035em] font-semibold text-left [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]"
+              className="hero-headline mt-head-eyebrow max-w-[16ch] text-balance font-['Fira_Sans_Condensed'] text-hero tracking-[-0.035em] font-semibold text-left [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]"
             >
               <span className="hero-line">
                 <span>Wholesale clothing</span>
@@ -522,28 +522,28 @@ export default function HomePage() {
 
                   {/* The tile stays; its content reveals, so the hairlines never show through */}
                   <div data-reveal className="flex flex-col">
-                  {/* Figure, with a tag-style index in the corner */}
-                  <span className="flex items-start justify-between gap-3">
-                    <b className="font-['Fira_Sans_Condensed'] text-[38px] font-black leading-none text-(--ink) transition-colors duration-300 group-hover:text-(--red) sm:text-[46px] md:text-[56px]">
-                      {s.value}
-                    </b>
-                    <span className="pt-1 text-[11px] font-semibold tabular-nums tracking-widest text-(--mute)">
-                      {String(i + 1).padStart(2, "0")}
+                    {/* Figure, with a tag-style index in the corner */}
+                    <span className="flex items-start justify-between gap-3">
+                      <b className="font-['Fira_Sans_Condensed'] text-[38px] font-black leading-none text-(--ink) transition-colors duration-300 group-hover:text-(--red) sm:text-[46px] md:text-[56px]">
+                        {s.value}
+                      </b>
+                      <span className="pt-1 text-[11px] font-semibold tabular-nums tracking-widest text-(--mute)">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                     </span>
-                  </span>
-                  {/* Red rule that stretches on hover, as on the business cards */}
-                  <span
-                    aria-hidden="true"
-                    className="mt-5 h-0.5 w-6 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
-                  />
-                  <span className="mt-4 text-[10px] font-semibold tracking-[0.14em] text-(--red) sm:text-[11px]">
-                    {s.label}
-                  </span>
-                  {s.sub && (
-                    <span className="mt-2 text-[13px] leading-snug text-(--mute) transition-colors duration-300 group-hover:text-(--ink) sm:text-sm">
-                      {s.sub}
+                    {/* Red rule that stretches on hover, as on the business cards */}
+                    <span
+                      aria-hidden="true"
+                      className="mt-5 h-0.5 w-6 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
+                    />
+                    <span className="mt-4 text-[10px] font-semibold tracking-[0.14em] text-(--red) sm:text-[11px]">
+                      {s.label}
                     </span>
-                  )}
+                    {s.sub && (
+                      <span className="mt-2 text-[13px] leading-snug text-(--mute) transition-colors duration-300 group-hover:text-(--ink) sm:text-sm">
+                        {s.sub}
+                      </span>
+                    )}
                   </div>
                 </li>
               ))}
@@ -1021,14 +1021,19 @@ export default function HomePage() {
     alt="Ha-Meem Textiles at Mawna"
     className="absolute inset-0 -z-10 h-full w-full object-cover"
   />
-  {/* Overlay: darkest behind the heading, a little more photo at the edges */}
-  <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_35%,rgba(10,14,18,0.9)_0%,rgba(10,14,18,0.82)_55%,rgba(10,14,18,0.72)_100%)] backdrop-blur-[2px]" />
+  {/* Overlay: a lighter wash so the campus shows (no blur), and a scrim that
+      stays dark behind the heading and intro */}
+  <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[rgba(10,14,18,0.5)]" />
+  <div
+    aria-hidden="true"
+    className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_75%_55%_at_50%_30%,rgba(10,14,18,0.6)_0%,rgba(10,14,18,0.35)_60%,transparent_100%)]"
+  />
 
   <div className="wrap flex flex-col items-center section-y text-center">
     <div data-reveal className="flex flex-col items-center">
       <Eyebrow className="text-white!">SUSTAINABILITY</Eyebrow>
 
-      <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-statement font-black">
+      <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-statement font-black [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]">
         Cleaner water.
         <br />
         Cleaner power.
@@ -1036,7 +1041,7 @@ export default function HomePage() {
         <span className="text-[#c5c6c8]">Measured.</span>
       </h2>
 
-      <p className="mt-head-intro max-w-[52ch] text-pretty text-intro text-[#d5d6d7]">
+      <p className="mt-head-intro max-w-[52ch] text-pretty text-intro text-[#d5d6d7] [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
         Our mills treat effluent biologically, recover process chemicals
         and put solar on factory roofs, working toward net-zero by{" "}
         {F.netZeroBy}.
@@ -1089,24 +1094,24 @@ export default function HomePage() {
 
             {/* The tile stays; its content reveals */}
             <div data-reveal className="flex flex-col items-center">
-            <div className="flex flex-wrap items-baseline justify-center gap-x-1.5 transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
-              <span className="font-['Fira_Sans_Condensed'] text-[40px] font-black leading-none sm:text-[52px]">
-                {num}
-              </span>
-              {unit && (
-                <span className="text-[15px] font-medium text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
-                  {unit}
+              <div className="flex flex-wrap items-baseline justify-center gap-x-1.5 transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
+                <span className="font-['Fira_Sans_Condensed'] text-[40px] font-black leading-none sm:text-[52px]">
+                  {num}
                 </span>
-              )}
-            </div>
-            {/* Red rule that stretches on hover, as on the business cards */}
-            <span
-              aria-hidden="true"
-              className="mt-4 h-0.5 w-6 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
-            />
-            <span className="mt-4 max-w-[24ch] text-balance text-[13px] font-semibold uppercase leading-snug tracking-[0.12em] text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
-              {s.label}
-            </span>
+                {unit && (
+                  <span className="text-[15px] font-medium text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
+                    {unit}
+                  </span>
+                )}
+              </div>
+              {/* Red rule that stretches on hover, as on the business cards */}
+              <span
+                aria-hidden="true"
+                className="mt-4 h-0.5 w-6 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
+              />
+              <span className="mt-4 max-w-[24ch] text-balance text-[13px] font-semibold uppercase leading-snug tracking-[0.12em] text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
+                {s.label}
+              </span>
             </div>
           </li>
         );

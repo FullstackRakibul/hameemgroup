@@ -81,7 +81,8 @@
     --fs-body: 16px;
   }
 }
-@media (width >= 900px) {
+/* Same switch as .wrap's (max-width: 900px) rule below */
+@media (width > 900px) {
   :root { --gutter: calc((100vw - min(1232px, 100vw - 64px)) / 2); }
 }
 @media (width >= 1024px) {
@@ -591,6 +592,19 @@ body:has(.hm-assist-panel) .back-to-top {
 }
 /* Held while the preloader covers the page, so the lines rise once it lifts */
 [data-loading] .hero-line > span { animation: none; }
+
+/* Hero headline scrim: a soft 25% shade behind the headline only, so it
+   stays legible on the brightest slides without darkening the whole photo.
+   The plateau reaches the headline box's corners (√2 / 2 of the way out). */
+.hero-headline { position: relative; isolation: isolate; }
+.hero-headline::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  z-index: -1;
+  background: radial-gradient(farthest-side, rgba(5, 12, 17, 0.25) 72%, rgba(5, 12, 17, 0) 100%);
+  pointer-events: none;
+}
 
 /* ── On-scroll reveal (useReveal) ──
    Blocks start hidden only once JavaScript has added html.reveal-ready and

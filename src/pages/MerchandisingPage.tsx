@@ -35,22 +35,22 @@ export default function MerchandisingPage() {
         </SectionHeader>
         {/* The contacts button sits the CTA gap under the last row */}
         <div className="flex flex-col gap-cta">
-        <FactList
-          rows={[
-            { label: "Merchandisers", value: `${F.merchandisers} merchandisers link each buyer to the factories.` },
-            { label: "Buyer sub-groups", value: "Organised into sub-groups by buyer, so that goods ship on time." },
-            {
-              label: "Clearing & forwarding",
-              value: "Our own C&F offices at every Bangladeshi port clear and forward shipments quickly.",
-            },
-          ]}
-        />
-        <Link
-          to="/contact#merchandising"
-          className="btn-ring inline-flex min-h-12 items-center self-start rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white"
-        >
-          MERCHANDISING CONTACTS
-        </Link>
+          <FactList
+            rows={[
+              { label: "Merchandisers", value: `${F.merchandisers} merchandisers link each buyer to the factories.` },
+              { label: "Buyer sub-groups", value: "Organised into sub-groups by buyer, so that goods ship on time." },
+              {
+                label: "Clearing & forwarding",
+                value: "Our own C&F offices at every Bangladeshi port clear and forward shipments quickly.",
+              },
+            ]}
+          />
+          <Link
+            to="/contact#merchandising"
+            className="btn-ring inline-flex min-h-12 items-center self-start rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white"
+          >
+            MERCHANDISING CONTACTS
+          </Link>
         </div>
       </Section>
 
