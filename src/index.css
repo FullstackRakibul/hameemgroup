@@ -14,21 +14,121 @@
   color: var(--ink);
 }
 
-/* ── Global resets ── */
-* { box-sizing: border-box; }
-html { 
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+/* ── Global resets ──
+   In Tailwind's base layer, so margin, colour and font utilities on headings,
+   paragraphs, links and buttons win over them. */
+@layer base {
+  * { box-sizing: border-box; }
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
+  body {
+    margin: 0;
+    background: #fff;
+    font-size: var(--fs-body);
+    line-height: 1.6;
+  }
+  button, a { color: inherit; font: inherit; }
+  a { text-decoration: none; }
+  button { cursor: pointer; }
+  h1, h2, h3, p { margin: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
 }
-html::-webkit-scrollbar {
-  display: none;
+
+/* ── Spacing and type scale ──
+   One definition, three steps: phone (<768px), tablet (768–1023px), desktop
+   (≥1024px). Used through the utilities below, never as raw numbers. */
+:root {
+  --section-y: 72px;
+  --section-head: 40px;
+  --head-eyebrow: 16px;
+  --head-intro: 20px;
+  --grid-gap: 16px;
+  --cta-gap: 32px;
+
+  --fs-hero: clamp(44px, 11vw, 56px);
+  --fs-h2: 36px;
+  --fs-statement: 44px;
+  --fs-lead: 26px;
+  --fs-card: 22px;
+  --fs-intro: 16px;
+  --fs-body: 15px;
+
+  /* Distance from the viewport edge to the .wrap content edge */
+  --gutter: 20px;
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-body { margin: 0; background: #fff; }
-button, a { color: inherit; font: inherit; }
-a { text-decoration: none; }
-button { cursor: pointer; }
-h1, h2, h3, p { margin: 0; }
+@media (width >= 768px) {
+  :root {
+    --section-y: 96px;
+    --section-head: 48px;
+    --head-intro: 24px;
+    --grid-gap: 20px;
+    --cta-gap: 40px;
+    --fs-hero: clamp(56px, 8vw, 72px);
+    --fs-h2: 46px;
+    --fs-statement: 58px;
+    --fs-lead: 34px;
+    --fs-card: 24px;
+    --fs-intro: 17px;
+    --fs-body: 16px;
+  }
+}
+@media (width >= 900px) {
+  :root { --gutter: calc((100vw - min(1232px, 100vw - 64px)) / 2); }
+}
+@media (width >= 1024px) {
+  :root {
+    --section-y: 112px;
+    --section-head: 64px;
+    --head-eyebrow: 20px;
+    --fs-hero: clamp(72px, 7vw, 98px);
+    --fs-h2: 56px;
+    --fs-statement: 68px;
+    --fs-lead: 42px;
+    --fs-card: 26px;
+  }
+}
+
+/* Spacing: mt-section-head, gap-head-eyebrow, mt-head-intro, gap-grid, mt-cta,
+   px-gutter … Type: text-hero, text-h2, text-statement, text-lead, text-card,
+   text-intro, text-body (each with its line height). */
+@theme inline {
+  --spacing-section: var(--section-y);
+  --spacing-section-head: var(--section-head);
+  --spacing-head-eyebrow: var(--head-eyebrow);
+  --spacing-head-intro: var(--head-intro);
+  --spacing-grid: var(--grid-gap);
+  --spacing-cta: var(--cta-gap);
+  --spacing-gutter: var(--gutter);
+
+  --text-hero: var(--fs-hero);
+  --text-hero--line-height: 0.97;
+  --text-h2: var(--fs-h2);
+  --text-h2--line-height: 0.98;
+  --text-statement: var(--fs-statement);
+  --text-statement--line-height: 0.95;
+  --text-lead: var(--fs-lead);
+  --text-lead--line-height: 1.15;
+  --text-card: var(--fs-card);
+  --text-card--line-height: 1.08;
+  --text-intro: var(--fs-intro);
+  --text-intro--line-height: 1.6;
+  --text-body: var(--fs-body);
+  --text-body--line-height: 1.6;
+}
+
+/* Top and bottom padding of every light and dark statement section */
+@utility section-y {
+  padding-block: var(--section-y);
+}
 
 /* ── Layout utility ── */
 .wrap { width: min(1232px, calc(100% - 64px)); margin-inline: auto; }
@@ -174,10 +274,51 @@ h1, h2, h3, p { margin: 0; }
   color: inherit;
   background: none;
   border: 0;
-  transition: opacity 0.2s ease;
 }
-.nav-link:hover,
-.nav-link.is-active { opacity: 0.6; }
+
+/* ── The stitch: a 2px dashed seam (6px dashes, 4px gaps) sewn left to right ──
+   Under the header labels (white over the hero, red once the header is solid),
+   under mega-menu rows on hover or focus, and under mobile-menu rows on tap. */
+.header-wrapper { --nav-stitch: #fff; }
+.header-wrapper.is-solid { --nav-stitch: var(--red); }
+.nav-text,
+.row-stitch,
+.row-stitch-tap { position: relative; }
+.nav-text::after,
+.row-stitch::after,
+.row-stitch-tap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--stitch, var(--red)) 0 6px, transparent 6px 10px);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.25s var(--ease-out);
+  pointer-events: none;
+}
+.nav-text::after {
+  --stitch: var(--nav-stitch);
+  top: calc(100% + 8px);
+}
+.nav-link:hover .nav-text::after,
+.nav-link:focus-visible .nav-text::after,
+.nav-link[aria-expanded="true"] .nav-text::after,
+.nav-link[aria-current="page"] .nav-text::after,
+.nav-link.is-current .nav-text::after { clip-path: inset(0); }
+
+.row-stitch,
+.row-stitch-tap { transition: border-color 0.25s ease; }
+.row-stitch::after,
+.row-stitch-tap::after { bottom: -1px; }
+.row-stitch:hover,
+.row-stitch:focus-visible,
+.row-stitch-tap:active,
+.row-stitch-tap:focus-visible { border-bottom-color: transparent; }
+.row-stitch:hover::after,
+.row-stitch:focus-visible::after,
+.row-stitch-tap:active::after,
+.row-stitch-tap:focus-visible::after { clip-path: inset(0); }
 .nav-chevron { transition: transform 0.25s ease; }
 .nav-chevron.is-open { transform: rotate(180deg); }
 .menu-btn { color: inherit; background: none; border: 0; padding: 0; }
@@ -207,7 +348,10 @@ h1, h2, h3, p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   .mega-panel,
   .mobile-menu { animation-name: fadeIn; }
-  .nav-chevron { transition: none; }
+  .nav-chevron,
+  .nav-text::after,
+  .row-stitch::after,
+  .row-stitch-tap::after { transition: none; }
 }
 
 /* ── Hero Ken Burns slider ── */
@@ -363,19 +507,6 @@ body:has(.hm-assist-panel) .back-to-top {
 .animate-stat-in {
   animation: statIn 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
-/* ── Buyer grid hover effects ── */
-.buyer-logo {
-  filter: grayscale(1);
-  opacity: 0.7;
-  transition: filter 0.4s ease, opacity 0.4s ease, transform 0.35s ease;
-}
-.buyer-cell:hover { background: rgba(255, 255, 255, 0.45); }
-.buyer-cell:hover .buyer-logo {
-  filter: grayscale(0) drop-shadow(0 0 8px rgba(155, 0, 43, 0.35));
-  opacity: 1;
-  transform: scale(1.1);
-}
-
 /* ── Business card hover ── */
 .biz-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); }
 .biz-card:hover .biz-overlay { background: linear-gradient(180deg, #11141815, #111418c8); }
@@ -416,6 +547,111 @@ body:has(.hm-assist-panel) .back-to-top {
 .step-panel.step-open {
   background-size: 110% 110%;
 }
+/* ── Theme border on buttons ──
+   A dashed ring 4px outside pill and round buttons, fading in and settling
+   from 96% on hover or focus. --ring is ink on light sections, white on dark. */
+.btn-ring { position: relative; }
+.btn-ring::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px dashed var(--ring, var(--ink));
+  border-radius: 9999px;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+  pointer-events: none;
+}
+.btn-ring:hover::after,
+.btn-ring:focus-visible::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Page entrance ──
+   The content under the header fades up on first load and on every route
+   change (App.tsx runs it). The homepage headline's two lines then rise from
+   a clip mask, 80ms apart: the clip moves with the text, so its lower edge
+   stays on the line's foot while the text slides up through it. */
+@keyframes heroLine {
+  from {
+    transform: translateY(100%);
+    clip-path: inset(-0.2em -0.2em 100% -0.2em);
+  }
+  to {
+    transform: translateY(0);
+    clip-path: inset(-0.2em -0.2em -0.3em -0.2em);
+  }
+}
+.hero-line { display: block; }
+.hero-line > span {
+  display: block;
+  animation: heroLine 0.6s var(--ease-out) backwards;
+  animation-delay: calc(150ms + var(--line, 0) * 80ms);
+}
+/* Held while the preloader covers the page, so the lines rise once it lifts */
+[data-loading] .hero-line > span { animation: none; }
+
+/* ── On-scroll reveal (useReveal) ──
+   Blocks start hidden only once JavaScript has added html.reveal-ready and
+   marked them data-reveal="hidden" (blocks already in view are never hidden).
+   An animation, not a transition, so nothing lingers on the element after it
+   lands and its own hover transitions keep working. */
+@keyframes revealIn {
+  from { opacity: 0; transform: translateY(16px); }
+}
+.reveal-ready [data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.reveal-ready [data-reveal="shown"] {
+  animation: revealIn 0.6s var(--ease-out) var(--reveal-delay, 0ms) backwards;
+}
+
+/* ── Buyer logos: full colour; a diagonal wave in, a ripple on hover ── */
+@keyframes buyerIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+}
+.buyer-grid[data-wave="pending"] .buyer-wave {
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+}
+.buyer-grid[data-wave="play"] .buyer-wave {
+  animation: buyerIn 0.45s var(--ease-out) var(--wave-delay, 0ms) backwards;
+}
+.buyer-wave { display: grid; place-items: center; width: 100%; height: 100%; }
+.buyer-logo { transition: transform 0.3s var(--ease-out); }
+.buyer-stitch rect.buyer-stitch-mask {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.5s ease-in-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .buyer-cell:hover .buyer-logo { transform: translateY(-3px) scale(1.06); }
+  /* Left and right neighbours in the same row lift half as far, a beat later */
+  .buyer-cell:not([data-row-end]):hover + .buyer-cell .buyer-logo,
+  .buyer-cell:not([data-row-end]):has(+ .buyer-cell:hover) .buyer-logo {
+    transform: translateY(-1.5px);
+    transition-delay: 60ms;
+  }
+  .buyer-cell:hover .buyer-stitch rect.buyer-stitch-mask {
+    stroke-dashoffset: 0;
+    transition-duration: 0.9s;
+  }
+}
+
+/* ── Reduced motion: content is simply there ── */
+@media (prefers-reduced-motion: reduce) {
+  .hero-line > span,
+  .reveal-ready [data-reveal="shown"],
+  .buyer-grid[data-wave="play"] .buyer-wave { animation: none; }
+  .reveal-ready [data-reveal="hidden"],
+  .buyer-grid[data-wave="pending"] .buyer-wave { opacity: 1; transform: none; }
+  .buyer-cell .buyer-logo { transform: none !important; }
+  .buyer-stitch rect.buyer-stitch-mask,
+  .btn-ring::after { transition: none; }
+}
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .wrap { width: calc(100% - 40px); }
@@ -428,9 +664,8 @@ section[id],
 footer[id] { scroll-margin-top: var(--header-h); }
 [tabindex="-1"]:focus { outline: none; }
 
-/* ── Reduced motion: no smooth scroll, hover zoom or Ken Burns ── */
+/* ── Reduced motion: no hover zoom or Ken Burns (smooth scroll: base layer) ── */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   .hero-slide.active,
   .hero-slide.prev { animation: none; }
   .biz-card:hover { transform: none; }

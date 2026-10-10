@@ -2,7 +2,7 @@ import type { Stat } from "../data/facts";
 
 const COLS: Record<number, string> = {
   2: "grid-cols-2",
-  3: "grid-cols-1 sm:grid-cols-3",
+  3: "grid-cols-2 sm:grid-cols-3",
   4: "grid-cols-2 lg:grid-cols-4",
   5: "grid-cols-2 md:grid-cols-3 lg:grid-cols-5",
   6: "grid-cols-2 md:grid-cols-3 lg:grid-cols-6",
@@ -12,11 +12,10 @@ const COLS: Record<number, string> = {
    grey sub-line. */
 export default function StatGrid({ stats, className = "" }: { stats: Stat[]; className?: string }) {
   return (
-    <div className={`grid gap-0 ${COLS[stats.length] ?? COLS[4]} ${className}`}>
-      {stats.map((s, i) => (
+    <div data-reveal-stagger className={`grid gap-0 ${COLS[stats.length] ?? COLS[4]} ${className}`}>
+      {stats.map((s) => (
         <div
           key={s.label}
-          style={{ animationDelay: `${i * 80}ms` }}
           className="group relative py-8 px-4 text-center border-r border-(--hair) last:border-r-0 transition-colors duration-300 ease-out hover:bg-(--mist) cursor-default"
         >
           {/* Red accent bar that slides in from center on hover */}

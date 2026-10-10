@@ -60,7 +60,7 @@ export default function WovenPage() {
         <SectionHeader eyebrow="UNITS" title="Our woven units.">
           <p>Each unit, its address and its production lines.</p>
         </SectionHeader>
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul data-reveal-stagger className="grid gap-grid sm:grid-cols-2 lg:grid-cols-3">
           {WOVEN_UNITS.map((u) => (
             <li key={u.name}>
               <UnitCard unit={u} />

@@ -68,7 +68,7 @@ type Engine = {
 };
 
 const roundBtn =
-  "grid place-items-center size-10.5 rounded-full border border-(--ink) bg-transparent text-(--ink) transition-colors duration-300 hover:bg-(--ink) hover:text-white! focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red)";
+  "btn-ring grid place-items-center size-11 rounded-full border border-(--ink) bg-transparent text-(--ink) transition-colors duration-300 hover:bg-(--ink) hover:text-white! focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red)";
 
 /* Stitch dash, same 8 / 6 rhythm as the page's stitch scrollbar. */
 const stitchRest =
@@ -498,7 +498,7 @@ function ProductCarousel({
                     href={ctaHref}
                     tabIndex={isActive ? 0 : -1}
                     draggable={false}
-                    className="inline-block rounded-full border border-white px-7 py-3.5 text-[11px] font-semibold tracking-widest text-white translate-x-[calc(var(--par-x,0px)*0.18)] translate-y-[calc(var(--par-y,0px)*0.18)] transition-[translate,background-color,color] duration-500 ease-[cubic-bezier(0.2,0.7,0,1)] hover:bg-white hover:text-(--ink)! focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    className="btn-ring [--ring:#fff] inline-block rounded-full border border-white px-7 py-3.5 text-[11px] font-semibold tracking-widest text-white translate-x-[calc(var(--par-x,0px)*0.18)] translate-y-[calc(var(--par-y,0px)*0.18)] transition-[translate,background-color,color] duration-500 ease-[cubic-bezier(0.2,0.7,0,1)] hover:bg-white hover:text-(--ink)! focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   >
                     {ctaLabel}
                   </a>
@@ -511,7 +511,7 @@ function ProductCarousel({
 
       {/* Controls: stitch pagination (also the autoplay progress) + buttons */}
       <div className="wrap flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-        <div className="flex items-center gap-2 sm:gap-2.5 md:gap-4">
+        <div className="flex items-center sm:gap-2.5 md:gap-4">
           {items.map((item, i) => {
             const isActive = i === active;
             return (
@@ -521,15 +521,15 @@ function ProductCarousel({
                 aria-label={`Show ${item.title}`}
                 aria-current={isActive ? "true" : undefined}
                 onClick={() => engineRef.current?.goTo(i)}
-                className="group/dot relative h-11 w-5.5 sm:w-9 md:w-16 border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-(--red)"
+                className="group/dot relative h-11 w-11 sm:w-9 md:w-16 border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-(--red)"
               >
                 <span
-                  className={`absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 ${
+                  className={`absolute inset-x-2 top-1/2 h-0.5 -translate-y-1/2 sm:inset-x-0 ${
                     isActive ? stitchActive : `${stitchRest} group-hover/dot:opacity-60`
                   }`}
                 />
                 <span
-                  className={`absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 ${stitchLive} ${
+                  className={`absolute inset-x-2 top-1/2 h-0.5 -translate-y-1/2 sm:inset-x-0 ${stitchLive} ${
                     isActive
                       ? "[clip-path:inset(0_calc((1_-_var(--carousel-progress,0))*100%)_0_0)]"
                       : "[clip-path:inset(0_100%_0_0)]"

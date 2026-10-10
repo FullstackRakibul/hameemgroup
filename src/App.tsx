@@ -3,6 +3,7 @@ import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router-
 import Preloader from "./Preloader";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./components/SiteFooter";
+import useReveal from "./components/useReveal";
 import { AiAssistant } from "./features/ai-assistant";
 import { megaMenuData } from "./data/navigation";
 import gsap from "gsap";
@@ -145,6 +146,24 @@ function Shell() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
 
+  // Page entrance: on first load (once the preloader lifts) and on every route
+  // change, the content under the header fades up. Nothing is left on the
+  // element afterwards, so it creates no containing block once it lands.
+  const pageRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (loading || reducedMotion() || !pageRef.current?.animate) return;
+    const anim = pageRef.current.animate(
+      [
+        { opacity: 0, transform: "translateY(12px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ],
+      { duration: 450, easing: "cubic-bezier(0.22, 0.61, 0.36, 1)" },
+    );
+    return () => anim.cancel();
+  }, [pathname, loading]);
+
+  useReveal(pathname, !loading);
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: reducedMotion() ? "instant" : "smooth" });
 
   return (
@@ -165,16 +184,19 @@ function Shell() {
       {!loading && <AiAssistant />}
 
       <div
+        data-loading={loading || undefined}
         style={{
           opacity: loading ? 0 : 1,
-          transition: "opacity 0.6s ease-in-out",
+          transition: "opacity 0.45s ease-out",
         }}
       >
         <SiteHeader menus={megaMenuData} />
-        <main>
-          <Outlet />
-        </main>
-        <SiteFooter />
+        <div ref={pageRef} className="page">
+          <main>
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
       </div>
     </>
   );

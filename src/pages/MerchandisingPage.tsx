@@ -33,6 +33,8 @@ export default function MerchandisingPage() {
             goods ship on time.
           </p>
         </SectionHeader>
+        {/* The contacts button sits the CTA gap under the last row */}
+        <div className="flex flex-col gap-cta">
         <FactList
           rows={[
             { label: "Merchandisers", value: `${F.merchandisers} merchandisers link each buyer to the factories.` },
@@ -45,10 +47,11 @@ export default function MerchandisingPage() {
         />
         <Link
           to="/contact#merchandising"
-          className="inline-block self-start px-8 py-4 border border-(--ink) rounded-full text-xs font-semibold tracking-widest hover:bg-(--ink) hover:text-white! transition-colors duration-300"
+          className="btn-ring inline-flex min-h-12 items-center self-start rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white"
         >
           MERCHANDISING CONTACTS
         </Link>
+        </div>
       </Section>
 
       <ContactCta />

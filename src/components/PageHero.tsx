@@ -23,13 +23,13 @@ export default function PageHero({ image, imageAlt, eyebrow, title, intro, crumb
       <img src={`/media/${image}`} alt={imageAlt} className="absolute inset-0 -z-10 h-full w-full object-cover" />
       <div className="absolute inset-0 -z-10 bg-[rgba(17,20,24,0.72)]" aria-hidden="true" />
 
-      <div className="wrap flex flex-col gap-5 pt-[calc(var(--header-h)+48px)] pb-16 md:pb-20">
+      <div className="wrap flex flex-col pt-[calc(var(--header-h)+40px)] pb-16 md:pb-20">
         <nav aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs tracking-[0.04em] text-white/75">
             {crumbs.map((c) => (
               <li key={c.label} className="flex items-center gap-2">
                 {c.to ? (
-                  <Link to={c.to} className="underline-offset-4 hover:text-white! hover:underline">
+                  <Link to={c.to} className="inline-flex min-h-11 min-w-11 items-center underline-offset-4 hover:text-white hover:underline">
                     {c.label}
                   </Link>
                 ) : (
@@ -48,11 +48,11 @@ export default function PageHero({ image, imageAlt, eyebrow, title, intro, crumb
         <Eyebrow className="text-white!">{eyebrow}</Eyebrow>
         <h1
           tabIndex={-1}
-          className="max-w-[18ch] text-balance font-['Fira_Sans_Condensed'] text-[clamp(44px,6vw,84px)] font-semibold leading-[0.98] tracking-[-0.03em]"
+          className="mt-head-eyebrow max-w-[18ch] text-balance font-['Fira_Sans_Condensed'] text-hero font-semibold tracking-[-0.03em]"
         >
           {title}
         </h1>
-        {intro && <p className="max-w-[56ch] text-[17px] leading-relaxed text-[#d5d6d7]">{intro}</p>}
+        {intro && <p className="mt-head-intro max-w-[56ch] text-intro text-pretty text-[#d5d6d7]">{intro}</p>}
       </div>
 
       {/* The stitch: a dashed red seam along the bottom edge */}

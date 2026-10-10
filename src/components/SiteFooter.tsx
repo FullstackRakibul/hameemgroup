@@ -13,13 +13,16 @@ function Brand() {
   );
 }
 
+// Links are at least 44px tall on phones
+const tap = "inline-flex min-h-11 min-w-11 items-center sm:min-h-0 sm:min-w-0";
+
 const phoneText = (phone: string) => phone.replaceAll("-", " ");
 
 export default function SiteFooter() {
   return (
     <footer id="contact" className="bg-(--mist) text-(--mute)">
-      <div className="wrap grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.6fr_repeat(5,1fr)] gap-10 pt-18 pb-16">
-        <div className="flex flex-col gap-4 text-sm leading-relaxed lg:col-span-1 sm:col-span-2">
+      <div className="wrap grid grid-cols-2 lg:grid-cols-[1.6fr_repeat(5,1fr)] gap-x-6 gap-y-10 sm:gap-10 pt-18 pb-16">
+        <div className="col-span-2 flex flex-col gap-4 text-sm leading-relaxed lg:col-span-1">
           <Brand />
           <p>
             {HEAD_OFFICE.lines[0]}
@@ -30,35 +33,35 @@ export default function SiteFooter() {
             {HEAD_OFFICE.phones.map((phone, i) => (
               <span key={phone}>
                 {i > 0 && " · "}
-                <a href={telHref(phone)} className="hover:text-(--ink)! transition-colors duration-200">
+                <a href={telHref(phone)} className={`${tap} hover:text-(--ink) transition-colors duration-200`}>
                   {phoneText(phone)}
                 </a>
               </span>
             ))}
           </p>
           <b className="text-(--ink) text-xs tracking-[0.08em]">SOURCING ENQUIRIES</b>
-          <a className="text-(--red)! hover:underline underline-offset-4" href={`mailto:${EMAIL.sales}`}>
+          <a className={`${tap} self-start text-(--red) hover:underline underline-offset-4`} href={`mailto:${EMAIL.sales}`}>
             {EMAIL.sales}
           </a>
           <b className="text-(--ink) text-xs tracking-[0.08em]">CAREERS</b>
-          <a className="text-(--red)! hover:underline underline-offset-4" href={`mailto:${EMAIL.careers}`}>
+          <a className={`${tap} self-start text-(--red) hover:underline underline-offset-4`} href={`mailto:${EMAIL.careers}`}>
             {EMAIL.careers}
           </a>
         </div>
         {footerColumns.map((c) => (
-          <div key={c.heading} className="flex flex-col gap-4 text-sm">
-            <b className="text-(--ink) text-xs tracking-widest mb-4">{c.heading}</b>
+          <div key={c.heading} className="flex flex-col text-sm sm:gap-4">
+            <b className="text-(--ink) text-xs tracking-widest mb-2 sm:mb-4">{c.heading}</b>
             {c.items.map((x) =>
               x.href ? (
                 <SmartLink
                   key={x.label}
                   href={x.href}
-                  className="self-start hover:text-(--ink)! aria-[current=page]:text-(--ink)! transition-colors duration-200"
+                  className={`${tap} self-start hover:text-(--ink) aria-[current=page]:text-(--ink) transition-colors duration-200`}
                 >
                   {x.label}
                 </SmartLink>
               ) : (
-                <span key={x.label}>{x.label}</span>
+                <span key={x.label} className="flex min-h-11 items-center sm:min-h-0">{x.label}</span>
               ),
             )}
           </div>

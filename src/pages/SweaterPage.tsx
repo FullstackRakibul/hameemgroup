@@ -47,7 +47,7 @@ export default function SweaterPage() {
 
       <Section tone="mist">
         <SectionHeader eyebrow="UNITS" title="Our sweater units." />
-        <ul className="grid gap-5 sm:grid-cols-2">
+        <ul data-reveal-stagger className="grid gap-grid sm:grid-cols-2">
           {SWEATER_UNITS.map((u) => (
             <li key={u.name}>
               <UnitCard unit={u} />

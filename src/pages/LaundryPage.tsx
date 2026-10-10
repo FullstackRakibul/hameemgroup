@@ -66,7 +66,7 @@ export default function LaundryPage() {
         <SectionHeader eyebrow="PLANTS" title="Washing plants.">
           <p>Each plant listed has dry-process and over-dyeing capability.</p>
         </SectionHeader>
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <ul data-reveal-stagger className="grid gap-grid sm:grid-cols-2 lg:grid-cols-4">
           {WASHING_PLANTS.map((u) => (
             <li key={u.name}>
               <UnitCard unit={u} />

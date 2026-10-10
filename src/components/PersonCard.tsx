@@ -6,12 +6,12 @@ export default function PersonCard({ person, tone = "white" }: { person: Person;
     <article
       className={`flex h-full flex-col gap-2 border border-(--hair) p-6 ${tone === "mist" ? "bg-(--mist)" : "bg-white"}`}
     >
-      <h3 className="font-['Fira_Sans_Condensed'] text-[22px] font-semibold leading-tight">{person.name}</h3>
+      <h3 className="text-balance font-['Fira_Sans_Condensed'] text-card font-semibold">{person.name}</h3>
       <p className="text-sm text-(--mute)">{person.role}</p>
       {person.email && (
         <a
           href={`mailto:${person.email}`}
-          className="mt-auto break-all pt-3 text-sm font-medium text-(--red)! underline-offset-4 hover:underline"
+          className="mt-auto inline-flex min-h-11 items-center self-start break-all pt-3 text-sm font-medium text-(--red) underline-offset-4 hover:underline"
         >
           {person.email}
         </a>

@@ -19,5 +19,6 @@ logs/
 # beside it.
 /.plugins/
 /.opencode-skills/
-
+/screenshots/
+/scripts/
 .figma/

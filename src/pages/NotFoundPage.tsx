@@ -20,7 +20,7 @@ export default function NotFoundPage() {
       <Section>
         <Link
           to="/"
-          className="inline-block self-start px-8 py-4 border border-(--ink) rounded-full text-xs font-semibold tracking-widest hover:bg-(--ink) hover:text-white! transition-colors duration-300"
+          className="btn-ring inline-flex min-h-12 items-center self-start rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white"
         >
           BACK TO THE HOMEPAGE
         </Link>

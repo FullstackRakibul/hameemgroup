@@ -8,7 +8,7 @@ import { EMAIL, HEAD_OFFICE, telHref } from "../data/facts";
 import { MANAGEMENT, MERCHANDISING_CONTACTS } from "../data/units";
 import { COMPANY_CRUMBS } from "./crumbs";
 
-const linkClass = "text-(--red)! font-medium underline-offset-4 hover:underline";
+const linkClass = "inline-flex min-h-11 items-center text-(--red) font-medium underline-offset-4 hover:underline";
 
 export default function ContactPage() {
   usePageMeta(
@@ -31,19 +31,19 @@ export default function ContactPage() {
       <Section>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
           <div className="flex flex-col gap-10">
-            <div className="flex flex-col gap-4">
+            <div data-reveal className="flex flex-col">
               <Eyebrow>HEAD OFFICE</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] text-[40px] font-black leading-[0.98] md:text-[54px]">
+              <h2 className="mt-head-eyebrow max-w-[16ch] text-balance font-['Fira_Sans_Condensed'] text-h2 font-black">
                 {HEAD_OFFICE.name}
               </h2>
-              <address className="not-italic leading-relaxed text-(--mute)">
+              <address className="mt-head-intro not-italic text-intro text-(--mute)">
                 {HEAD_OFFICE.lines.map((line) => (
                   <span key={line} className="block">
                     {line}
                   </span>
                 ))}
               </address>
-              <ul className="flex flex-col gap-1">
+              <ul className="mt-3 flex flex-col">
                 {HEAD_OFFICE.phones.map((phone) => (
                   <li key={phone}>
                     <a href={telHref(phone)} className={linkClass}>
@@ -86,7 +86,7 @@ export default function ContactPage() {
         <SectionHeader eyebrow="MANAGEMENT" title="Management.">
           <p>The group&apos;s founders and senior leadership.</p>
         </SectionHeader>
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div data-reveal-stagger className="grid gap-grid sm:grid-cols-2">
           {MANAGEMENT.map((p) => (
             <PersonCard key={p.name} person={p} />
           ))}
@@ -97,7 +97,7 @@ export default function ContactPage() {
         <SectionHeader eyebrow="MERCHANDISING" title="Merchandising contacts.">
           <p>For an existing order or programme, write to the merchandising team directly.</p>
         </SectionHeader>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div data-reveal-stagger className="grid gap-grid sm:grid-cols-2 lg:grid-cols-4">
           {MERCHANDISING_CONTACTS.map((p) => (
             <PersonCard key={p.email} person={p} tone="mist" />
           ))}

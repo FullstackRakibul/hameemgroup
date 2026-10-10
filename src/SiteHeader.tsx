@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { Link, useLocation } from "react-router-dom";
 import SmartLink from "./components/SmartLink";
-import { BUSINESS_PAGES, PLAIN_LINKS } from "./data/navigation";
+import { BUSINESS_PAGES, PLAIN_LINKS, isCurrentPage } from "./data/navigation";
 import type { MegaMenu, MenuKey } from "./data/navigation";
 
 /* ── Fixed site header: logo, desktop nav + mega menus, mobile menu ──
@@ -173,7 +173,9 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                   triggerRefs.current[key] = el;
                 }}
                 type="button"
-                className={`nav-link flex items-center gap-1.5 ${activeMenu === key ? "is-active" : ""}`}
+                className={`nav-link flex items-center gap-1.5 ${activeMenu === key ? "is-active" : ""} ${
+                  menus[key].links.some((l) => isCurrentPage(l.href, location.pathname)) ? "is-current" : ""
+                }`}
                 aria-expanded={activeMenu === key}
                 aria-controls={`mega-${key}`}
                 aria-haspopup="true"
@@ -184,7 +186,7 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                 }}
                 onClick={(e) => onTriggerClick(key, e)}
               >
-                {label(key)}
+                <span className="nav-text">{label(key)}</span>
                 <Chevron open={activeMenu === key} />
               </button>
             ))}
@@ -196,7 +198,7 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                 onPointerEnter={() => setActiveMenu(null)}
                 onFocus={() => setActiveMenu(null)}
               >
-                {link.title}
+                <span className="nav-text">{link.title}</span>
               </SmartLink>
             ))}
           </nav>
@@ -256,9 +258,9 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                     <SmartLink
                       href={link.href}
                       onClick={closeMenus}
-                      className="mega-row group flex h-full flex-col justify-center border-b border-(--hair) py-3.5"
+                      className="mega-row row-stitch group flex h-full flex-col justify-center border-b border-(--hair) py-3.5"
                     >
-                      <span className="font-['Fira_Sans_Condensed'] text-[1.15rem] font-bold leading-tight text-(--ink) transition-colors group-hover:text-(--red) group-aria-[current=page]:text-(--red)">
+                      <span className="font-['Fira_Sans_Condensed'] text-[1.15rem] font-bold leading-tight text-(--ink) transition-colors group-hover:text-(--red) group-focus-visible:text-(--red) group-aria-[current=page]:text-(--red)">
                         {link.title}
                       </span>
                       <span className="mt-0.5 text-[0.78rem] leading-relaxed text-(--mute)">{link.sub}</span>
@@ -267,17 +269,17 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                     <SmartLink
                       href={link.href}
                       onClick={closeMenus}
-                      className="mega-row group flex items-center justify-between gap-6 border-b border-(--hair) py-4"
+                      className="mega-row row-stitch group flex items-center justify-between gap-6 border-b border-(--hair) py-4"
                     >
                       <span>
-                        <span className="block text-[0.98rem] font-semibold leading-relaxed text-(--ink) transition-colors group-hover:text-(--red) group-aria-[current=page]:text-(--red)">
+                        <span className="block text-[0.98rem] font-semibold leading-relaxed text-(--ink) transition-colors group-hover:text-(--red) group-focus-visible:text-(--red) group-aria-[current=page]:text-(--red)">
                           {link.title}
                         </span>
                         <span className="mt-0.5 block text-[0.78rem] leading-relaxed text-(--mute)">{link.sub}</span>
                       </span>
                       <span
                         aria-hidden="true"
-                        className="text-(--mute) transition-all duration-300 group-hover:translate-x-1 group-hover:text-(--red)"
+                        className="text-(--mute) transition-[translate,color] duration-300 group-hover:translate-x-1 group-hover:text-(--red) group-focus-visible:translate-x-1 group-focus-visible:text-(--red)"
                       >
                         →
                       </span>
@@ -299,7 +301,7 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                 key={link.href}
                 href={link.href}
                 onClick={closeMenus}
-                className="flex items-center justify-between border-b border-(--hair) py-4"
+                className="row-stitch-tap flex items-center justify-between border-b border-(--hair) py-4"
               >
                 <span className="font-['Fira_Sans_Condensed'] text-[1.9rem] font-bold leading-[1.05] text-(--ink)">
                   {link.title}
@@ -318,7 +320,7 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                       key={link.title}
                       href={link.href}
                       onClick={closeMenus}
-                      className="group flex items-center justify-between border-b border-(--hair) py-3"
+                      className="row-stitch-tap group flex items-center justify-between border-b border-(--hair) py-3"
                     >
                       <span className="text-[1.1rem] font-medium leading-[1.6] text-(--ink) group-aria-[current=page]:text-(--red)">
                         {link.title}

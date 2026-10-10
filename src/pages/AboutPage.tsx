@@ -48,7 +48,7 @@ export default function AboutPage() {
         <SectionHeader eyebrow="LEADERSHIP" title="Founders & leadership.">
           <p>The founders lead the group as Managing Director and Group Deputy Managing Director.</p>
         </SectionHeader>
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div data-reveal-stagger className="grid gap-grid sm:grid-cols-2">
           {MANAGEMENT.map((p) => (
             <PersonCard key={p.name} person={{ name: p.name, role: p.role }} />
           ))}

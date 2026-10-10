@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import WorldRoutes from "../WorldRoutes";
 import Productcarousel from "../components/Productcarousel ";
 import Eyebrow from "../components/Eyebrow";
+import SectionHeader from "../components/SectionHeader";
 import BuyerGrid from "../components/BuyerGrid";
 import AwardGrid from "../components/AwardGrid";
 import ContactCta from "../components/ContactCta";
@@ -177,7 +178,7 @@ const newsItems = [
     title: "Ha-Meem opens a new yarn-dyeing plant at Sreepur, Gazipur",
     img: "news-yarn.jpg",
     // Original report not found yet: the card shows without a link until one is added.
-    url: "#",
+    url: "",
     source: "",
   },
   {
@@ -241,12 +242,73 @@ export default function HomePage() {
     setHeroSlide((prev) => (prev + 1) % heroSlides.length);
   const togglePause = () => setHeroPaused((p) => !p);
 
+  // One slide's stitch; the current one is sewn in red over the slide's 6s.
+  const renderStitch = (i: number, maskId: string) => {
+    const current = heroSlide === i;
+    return (
+      <svg
+        // Remounted on each slide change or resume, which restarts the sewing
+        key={current ? `${heroSlide}-${heroPaused}` : undefined}
+        aria-hidden="true"
+        width="22"
+        height="4"
+        className="overflow-visible"
+      >
+        <line
+          x1="0"
+          y1="2"
+          x2="22"
+          y2="2"
+          stroke="white"
+          strokeOpacity="0.45"
+          strokeWidth="2"
+          strokeDasharray="4 3"
+          className="transition-[stroke-opacity] duration-300 group-hover/seg:[stroke-opacity:1]"
+        />
+        {current && (
+          <>
+            <defs>
+              <mask id={maskId} maskUnits="userSpaceOnUse" x="-4" y="-4" width="30" height="12">
+                <line
+                  x1="0"
+                  y1="2"
+                  x2="22"
+                  y2="2"
+                  pathLength={1}
+                  stroke="white"
+                  strokeWidth="6"
+                  className={`[stroke-dasharray:1] ${
+                    heroPaused
+                      ? "[stroke-dashoffset:0]"
+                      : "[stroke-dashoffset:1] animate-[stitchDash_6s_linear_forwards] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
+                  }`}
+                />
+              </mask>
+            </defs>
+            <line
+              x1="0"
+              y1="2"
+              x2="22"
+              y2="2"
+              stroke="#ef7898"
+              strokeWidth="2"
+              strokeDasharray="4 3"
+              mask={`url(#${maskId})`}
+            />
+          </>
+        )}
+      </svg>
+    );
+  };
+
   return (
     <>
       {/* ═══ HERO with KEN BURNS SLIDER ═══ */}
+      {/* Full screen (svh, so mobile browser bars cannot cut it), and taller
+          if the copy needs it: the copy sits in flow at the foot. */}
       <section
         id="top"
-        className="relative h-screen min-h-180 max-h-250 overflow-hidden text-white bg-(--ink)"
+        className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden text-white bg-(--ink) [--ring:#fff]"
       >
         {/* Isolated, so the slides' z-index stays under the shade layers */}
         <div className="absolute inset-0 isolate">
@@ -260,15 +322,16 @@ export default function HomePage() {
             />
           ))}
         </div>
-        {/* Shade: darkest at the foot, where the text sits, and at the top
-            behind the header; on wide screens also from the left. */}
+        {/* Shade: light, so the photo carries the hero. A little at the top for
+            the header's white links, a little more at the foot under the copy;
+            on wide screens a faint scrim from the left. */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-linear-to-t from-[rgba(5,12,17,0.72)] from-0% via-[rgba(5,12,17,0.08)] via-55% to-[rgba(5,12,17,0.32)] to-100%"
+          className="absolute inset-0 bg-linear-to-t from-[rgba(5,12,17,0.45)] from-0% via-[rgba(5,12,17,0.05)] via-55% to-[rgba(5,12,17,0.25)] to-100%"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 hidden md:block bg-linear-to-r from-[rgba(5,12,17,0.35)] via-transparent via-50% to-transparent"
+          className="absolute inset-0 hidden md:block bg-linear-to-r from-[rgba(5,12,17,0.2)] via-transparent via-50% to-transparent"
         />
         {/* Denim: an indigo wash and a fine diagonal twill over the photo */}
         <div aria-hidden="true" className="absolute inset-0 bg-(--navy) opacity-12 mix-blend-multiply" />
@@ -278,21 +341,27 @@ export default function HomePage() {
         />
 
         {/* Copy and controls: left-aligned at the foot, on the page grid */}
-        <div className="absolute inset-x-0 bottom-0 z-2 pb-9 md:pb-14 [text-shadow:0_1px_2px_rgba(0,0,0,0.35),0_4px_24px_rgba(0,0,0,0.35)]">
+        <div className="relative z-2 pt-[calc(var(--header-h)+32px)] pb-9 md:pb-14">
           <div className="wrap">
-            <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/95 md:text-xs">
+            <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/95 [text-shadow:0_1px_2px_rgba(0,0,0,0.35)] md:text-xs">
               <svg aria-hidden="true" width="32" height="2" className="shrink-0 overflow-visible">
                 <line x1="0" y1="1" x2="32" y2="1" stroke="#ef7898" strokeWidth="2" strokeDasharray="5 4" />
               </svg>
               Denim &amp; apparel since {F.established}
             </p>
+            {/* Two lines that rise in from a clip mask, 80ms apart */}
             <h1
               tabIndex={-1}
-              className="pt-5 max-w-[16ch] font-['Fira_Sans_Condensed'] text-[clamp(42px,7.2vw,96px)] leading-[0.95] tracking-[-0.035em] font-semibold text-left"
+              className="mt-head-eyebrow max-w-[16ch] text-balance font-['Fira_Sans_Condensed'] text-hero tracking-[-0.035em] font-semibold text-left [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]"
             >
-              Wholesale clothing manufacturer in Bangladesh.
+              <span className="hero-line">
+                <span>Wholesale clothing</span>
+              </span>{" "}
+              <span className="hero-line [--line:1]">
+                <span>manufacturer in Bangladesh.</span>
+              </span>
             </h1>
-            <p className="pt-5 max-w-md text-[15px] leading-relaxed text-white/90 md:pt-6 md:text-base">
+            <p className="mt-head-intro max-w-md text-intro text-white/90 [text-shadow:0_1px_2px_rgba(0,0,0,0.35),0_2px_24px_rgba(0,0,0,0.35)]">
               From fibre to finish — Ha-Meem Group
             </p>
 
@@ -304,78 +373,33 @@ export default function HomePage() {
                   {" / "}
                   {String(heroSlides.length).padStart(2, "0")}
                 </span>
-                {/* One stitch per slide; the current one is sewn in red as it plays */}
-                <div className="flex items-center" role="group" aria-label="Choose a slide">
-                  {heroSlides.map((slide, i) => {
-                    const current = heroSlide === i;
-                    return (
-                      <button
-                        key={slide.src}
-                        type="button"
-                        onClick={() => setHeroSlide(i)}
-                        aria-label={`Show slide ${i + 1} of ${heroSlides.length}`}
-                        aria-current={current || undefined}
-                        className="group/seg flex h-8 items-center px-1 focus-visible:outline-2 focus-visible:outline-white"
-                      >
-                        <svg
-                          // Remounted on each slide change or resume, which restarts the sewing
-                          key={current ? `${heroSlide}-${heroPaused}` : undefined}
-                          aria-hidden="true"
-                          width="22"
-                          height="4"
-                          className="overflow-visible"
-                        >
-                          <line
-                            x1="0"
-                            y1="2"
-                            x2="22"
-                            y2="2"
-                            stroke="white"
-                            strokeOpacity="0.45"
-                            strokeWidth="2"
-                            strokeDasharray="4 3"
-                            className="transition-[stroke-opacity] duration-300 group-hover/seg:[stroke-opacity:1]"
-                          />
-                          {current && (
-                            <>
-                              <defs>
-                                <mask id="hero-progress" maskUnits="userSpaceOnUse" x="-4" y="-4" width="30" height="12">
-                                  <line
-                                    x1="0"
-                                    y1="2"
-                                    x2="22"
-                                    y2="2"
-                                    pathLength={1}
-                                    stroke="white"
-                                    strokeWidth="6"
-                                    className={`[stroke-dasharray:1] ${
-                                      heroPaused
-                                        ? "[stroke-dashoffset:0]"
-                                        : "[stroke-dashoffset:1] animate-[stitchDash_6s_linear_forwards] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
-                                    }`}
-                                  />
-                                </mask>
-                              </defs>
-                              <line
-                                x1="0"
-                                y1="2"
-                                x2="22"
-                                y2="2"
-                                stroke="#ef7898"
-                                strokeWidth="2"
-                                strokeDasharray="4 3"
-                                mask="url(#hero-progress)"
-                              />
-                            </>
-                          )}
-                        </svg>
-                      </button>
-                    );
-                  })}
+                {/* One stitch per slide; the current one is sewn in red as it
+                    plays. On phones the stitches only show progress (seven
+                    44px buttons do not fit): the arrows choose the slide. */}
+                <div className="flex items-center sm:hidden" aria-hidden="true">
+                  {heroSlides.map((slide, i) => (
+                    <span key={slide.src} className="flex h-8 items-center px-1">
+                      {renderStitch(i, "hero-progress-sm")}
+                    </span>
+                  ))}
+                </div>
+                <div className="hidden items-center sm:flex" role="group" aria-label="Choose a slide">
+                  {heroSlides.map((slide, i) => (
+                    <button
+                      key={slide.src}
+                      type="button"
+                      onClick={() => setHeroSlide(i)}
+                      aria-label={`Show slide ${i + 1} of ${heroSlides.length}`}
+                      aria-current={heroSlide === i || undefined}
+                      className="group/seg flex h-11 items-center px-1 focus-visible:outline-2 focus-visible:outline-white"
+                    >
+                      {renderStitch(i, "hero-progress")}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 {[
                   { id: "prev", label: "Previous slide", onClick: prevSlide, icon: <path d="M10 3.5L5.5 8l4.5 4.5" /> },
                   {
@@ -395,13 +419,8 @@ export default function HomePage() {
                     type="button"
                     onClick={c.onClick}
                     aria-label={c.label}
-                    className="group/btn relative grid size-11 place-items-center rounded-full border border-white/50 bg-[#11141826] text-white backdrop-blur-sm transition-colors duration-300 hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+                    className="btn-ring grid size-11 place-items-center rounded-full border border-white/50 bg-[#11141826] text-white backdrop-blur-sm transition-colors duration-300 hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
                   >
-                    {/* Stitched ring, sewn inside the button on hover or focus */}
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-1 scale-75 rounded-full border border-dashed border-white/0 transition-all duration-300 group-hover/btn:scale-100 group-hover/btn:border-white/90 group-focus-visible/btn:scale-100 group-focus-visible/btn:border-white/90 motion-reduce:transition-none"
-                    />
                     <svg
                       aria-hidden="true"
                       width="16"
@@ -426,7 +445,7 @@ export default function HomePage() {
       {/* ═══ RAISED CONTENT ═══ */}
       <div className="relative z-3 shadow-[0_-35px_70px_#00000040]">
         {/* ── FOUNDED IN 1984 ── */}
-        <section id="company" className="relative bg-white py-24 md:py-32">
+        <section id="company" className="relative bg-white section-y">
           {/* Selvedge: the red-line edge of a roll of denim, with a stitch just inside it */}
           <div aria-hidden="true" className="absolute inset-x-0 top-0">
             <div className="h-1 bg-(--red)" />
@@ -434,17 +453,17 @@ export default function HomePage() {
           </div>
 
           <div className="wrap">
-            {/* Eyebrow in its own column on wide screens; the statement reads left-aligned */}
-            <div className="grid gap-8 lg:grid-cols-[240px_1fr] lg:gap-16">
-              <Eyebrow className="flex  items-center gap-3 lg:pt-4">
+            {/* Eyebrow in its own column on wide screens, level with the
+                statement's first line; the statement reads left-aligned */}
+            <div data-reveal className="grid gap-head-eyebrow lg:grid-cols-[240px_1fr] lg:items-start lg:gap-16">
+              <Eyebrow className="flex items-center gap-3 lg:pt-4">
                 <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
                   <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
                 </svg>
-                <p className="font-['Fira_Sans_Condensed'] text-[11px] font-semibold uppercase tracking-[0.2em] text-(--red) sm:text-[12px]">
-                FOUNDED IN {F.established}
-                </p>
+                <span className="font-['Fira_Sans_Condensed']">FOUNDED IN {F.established}</span>
               </Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] font-black text-[30px] sm:text-[34px] md:text-[42px] leading-[1.12] text-left text-pretty">
+              {/* The lead statement: a paragraph, not a heading */}
+              <p className="max-w-[60ch] font-['Fira_Sans_Condensed'] text-lead font-black text-left text-pretty">
                 Ha-Meem Group is one of Bangladesh&apos;s largest{" "}
                 {/* Red topstitch under the key phrase */}
                 <span className="box-decoration-clone bg-[repeating-linear-gradient(90deg,var(--red)_0_7px,transparent_7px_11px)] bg-size-[100%_2px] bg-bottom-left bg-no-repeat pb-0.5">
@@ -456,12 +475,12 @@ export default function HomePage() {
                   shipping, we make bottoms, tops, denim and sweaters for the
                   world&apos;s leading retailers.
                 </span>
-              </h2>
+              </p>
             </div>
 
             {/* The group at a glance. Hairline grid: the 1px gaps show the
                 container's tint, so rows and columns line up on every width. */}
-            <ul className="mt-16 grid grid-cols-2 gap-px border border-(--hair) bg-(--hair) md:mt-20 lg:grid-cols-3">
+            <ul data-reveal-stagger className="mt-section-head grid grid-cols-2 gap-px border border-(--hair) bg-(--hair) lg:grid-cols-3">
               {GROUP_STATS.map((s, i) => (
                 <li
                   key={s.label}
@@ -501,6 +520,8 @@ export default function HomePage() {
                     />
                   </svg>
 
+                  {/* The tile stays; its content reveals, so the hairlines never show through */}
+                  <div data-reveal className="flex flex-col">
                   {/* Figure, with a tag-style index in the corner */}
                   <span className="flex items-start justify-between gap-3">
                     <b className="font-['Fira_Sans_Condensed'] text-[38px] font-black leading-none text-(--ink) transition-colors duration-300 group-hover:text-(--red) sm:text-[46px] md:text-[56px]">
@@ -523,6 +544,7 @@ export default function HomePage() {
                       {s.sub}
                     </span>
                   )}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -530,34 +552,37 @@ export default function HomePage() {
         </section>
 
         {/* ── WHERE WE ARE ── */}
-        <section className="bg-white border-t border-(--hair) py-24 md:py-32 relative overflow-hidden">
+        <section className="relative overflow-hidden border-t border-(--hair) bg-white section-y">
           <div className="wrap">
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <Eyebrow>WHERE WE ARE</Eyebrow>
-                <h2 className="font-['Fira_Sans_Condensed'] text-[48px] md:text-[64px] leading-[0.98] font-semibold mt-20">
+            <SectionHeader
+              eyebrow="WHERE WE ARE"
+              titleClassName="max-w-[20ch] font-semibold"
+              title={
+                <>
                   From Bangladesh
                   <br />
                   to the world.
-                </h2>
-              </div>
-              <p className="text-(--mute) text-base leading-relaxed self-end max-w-107.5 md:justify-self-end">
+                </>
+              }
+            >
+              <p>
                 Every factory sits within an hour of Dhaka, with sourcing
                 offices in Hong Kong and Shanghai. Around ninety-five percent
                 of what we make ships to the United States, the rest to
                 Europe, Japan and India.
               </p>
-            </div>
-            <WorldRoutes className="mt-16" />
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mt-12 gap-8">
-              <p className="max-w-117.5 text-(--mute) text-sm leading-relaxed">
+            </SectionHeader>
+            <WorldRoutes className="mt-section-head" />
+            {/* On phones the legend chips wrap under the paragraph */}
+            <div className="mt-section-head flex flex-col items-start justify-between gap-6 md:flex-row md:items-center md:gap-8">
+              <p className="max-w-[60ch] text-pretty text-sm leading-relaxed text-(--mute) md:max-w-117.5">
                 Today the group employs {F.employeesText} people across{" "}
                 {F.factories} garment factories, {F.productionLines} production
                 lines and seven washing plants, making {F.garmentsYear}{" "}
                 readymade garments a year. Denim production is{" "}
                 {F.denimYardsMonth} yards a month.
               </p>
-              <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3">
                 <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--red)">
                   <span
                     className="inline-block size-2 rounded-full bg-(--red)"
@@ -585,49 +610,56 @@ export default function HomePage() {
         </section>
 
         {/* ── OUR BUYERS ── */}
-        <section className="bg-white py-24 md:py-32">
+        <section className="bg-white section-y">
           <div className="wrap">
-            <div className="text-center flex flex-col items-center justify-center">
-              <Eyebrow>OUR BUYERS</Eyebrow>
-              <h3 className="font-['Fira_Sans_Condensed'] mx-auto mt-4 max-w-[22ch] text-[clamp(1.9rem,3vw,2.8rem)] font-black leading-[1.02] text-balance">
-                Retailers and brands we manufacture for.
-                <sup className="relative top-[-0.1em] ml-[0.08em] align-top text-[0.42em] leading-none text-(--color-red)">
-                  *
-                </sup>
-              </h3>
-            </div>
-            <BuyerGrid className="mt-10" />
+            <SectionHeader
+              eyebrow="OUR BUYERS"
+              titleClassName="max-w-[22ch] font-black"
+              title={
+                <>
+                  Retailers and brands we manufacture for.
+                  <sup className="relative top-[-0.1em] ml-[0.08em] align-top text-[0.42em] leading-none text-(--color-red)">
+                    *
+                  </sup>
+                </>
+              }
+            />
+            <BuyerGrid className="mt-section-head" />
           </div>
         </section>
 
         {/* ── PRODUCTS (3D carousel) ── */}
-        <section
-          id="products"
-          className="bg-(--mist) pt-24 md:pt-28 pb-16 md:pb-20"
-        >
-          <div className="wrap flex flex-col md:flex-row justify-between md:items-end gap-8 pb-6 md:pb-8">
-            <div>
-              <Eyebrow>WHAT WE MAKE</Eyebrow>
-              <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[58px] leading-[0.96] mt-7">
-                Bottoms, tops,
-                <br />
-                denim and sweaters.
-              </h2>
-            </div>
-            <p className="max-w-107.5 text-(--mute) text-base leading-relaxed">
-              From fashionable denim fabrics to wholesale apparel, Ha-Meem
-              makes bottoms, tops and sweaters for global fashion brands, with
-              products ranging from infant to adult sizes.
-            </p>
+        <section id="products" className="bg-(--mist) section-y">
+          <div className="wrap">
+            <SectionHeader
+              eyebrow="WHAT WE MAKE"
+              title={
+                <>
+                  Bottoms, tops,
+                  <br />
+                  denim and sweaters.
+                </>
+              }
+            >
+              <p>
+                From fashionable denim fabrics to wholesale apparel, Ha-Meem
+                makes bottoms, tops and sweaters for global fashion brands, with
+                products ranging from infant to adult sizes.
+              </p>
+            </SectionHeader>
           </div>
-          <Productcarousel items={productSlides} label="What we make" />
+          {/* The stage keeps 56px of air above the cards for their 3D swing;
+              it counts toward the header gap. */}
+          <div className="mt-[max(0px,calc(var(--section-head)-56px))]">
+            <Productcarousel items={productSlides} label="What we make" />
+          </div>
           {VIRTUAL_TOUR_URL && (
-            <div className="wrap mt-10 flex justify-center">
+            <div className="wrap mt-cta flex justify-center">
               <a
                 href={VIRTUAL_TOUR_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-8 py-4 border border-(--ink) rounded-full text-xs font-semibold tracking-widest hover:bg-(--ink) hover:text-white! transition-colors duration-300"
+                className="btn-ring inline-flex min-h-12 items-center rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white"
               >
                 TAKE A VIRTUAL TOUR OF HA-MEEM GROUP
               </a>
@@ -636,19 +668,15 @@ export default function HomePage() {
         </section>
 
 {/* ── VERTICAL INTEGRATION (Steps accordion) ── */}
-<section id="chain" className="bg-white pt-24 md:pt-28">
-  <div className="wrap flex flex-col md:flex-row justify-between md:items-end gap-8 pb-12">
-    <div>
-      <Eyebrow>VERTICAL INTEGRATION</Eyebrow>
-      <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[58px] leading-none mt-6">
-        Six steps, all ours.
-      </h2>
-    </div>
-    <p className="max-w-97.5 text-(--mute) leading-relaxed">
-      From yarn and denim fabric to finished garments, seven washing
-      plants and export-ready apparel, integrated facilities connect
-      each stage of production.
-    </p>
+<section id="chain" className="bg-white pt-section">
+  <div className="wrap pb-section-head">
+    <SectionHeader eyebrow="VERTICAL INTEGRATION" title="Six steps, all ours.">
+      <p>
+        From yarn and denim fabric to finished garments, seven washing
+        plants and export-ready apparel, integrated facilities connect
+        each stage of production.
+      </p>
+    </SectionHeader>
   </div>
   {/* Desktop and tablet (768px and up): horizontal accordion, unchanged */}
   <div className="hidden md:flex h-155 md:h-168 text-white bg-(--ink) overflow-x-auto">
@@ -817,21 +845,25 @@ export default function HomePage() {
 </section>
 
 {/* ── BUSINESSES ── */}
-<section id="businesses" className="wrap py-24 md:py-28">
-  <div className="text-center max-w-155 mx-auto">
-    <Eyebrow>WHAT WE DO</Eyebrow>
-    <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[59px] leading-[0.94] mt-7 mb-7">
-      One group, from yarn
-      <br />
-      to shipped carton.
-    </h2>
-    <p className="text-(--mute) text-base leading-relaxed">
+<section id="businesses" className="bg-white section-y">
+ <div className="wrap">
+  <SectionHeader
+    eyebrow="WHAT WE DO"
+    title={
+      <>
+        One group, from yarn
+        <br />
+        to shipped carton.
+      </>
+    }
+  >
+    <p>
       Every unit upstream of a sewing line exists to make that line
       faster and more reliable. Around the apparel chain sit media,
       jute, tea and logistics.
     </p>
-  </div>
-  <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+  </SectionHeader>
+  <div data-reveal-stagger className="mt-section-head grid grid-cols-1 gap-grid sm:grid-cols-2 lg:grid-cols-3">
     {businesses.map((b, i) => (
       <Link
         to={b.to}
@@ -914,7 +946,7 @@ export default function HomePage() {
         </span>
 
         <span className="absolute left-6 right-6 bottom-6 z-1 flex flex-col">
-          <strong className="font-['Fira_Sans_Condensed'] text-white text-[25px] leading-tight">
+          <strong className="font-['Fira_Sans_Condensed'] text-white text-card">
             {b.title}
           </strong>
           {/* A short red rule that grows on hover: the eyebrow's colour, used once */}
@@ -929,30 +961,32 @@ export default function HomePage() {
       </Link>
     ))}
   </div>
-  <p className="text-center text-(--mute) text-[13px] mt-12">
+  <p className="mt-head-intro text-[13px] text-(--mute)">
     Tiles open the group&apos;s own pages for each unit.
   </p>
+ </div>
 </section>
 
         {/* ── RECOGNITION & AWARDS ── */}
-        <section id="recognition" className="bg-(--mist) py-24 md:py-28">
+        <section id="recognition" className="bg-(--mist) section-y">
           <div className="wrap">
-            <div className="flex flex-col md:flex-row justify-between md:items-end gap-8">
-              <div>
-                <Eyebrow>RECOGNITION</Eyebrow>
-                <h2 className="font-['Fira_Sans_Condensed'] font-black text-[42px] md:text-[54px] leading-[0.98] mt-16">
+            <SectionHeader
+              eyebrow="RECOGNITION"
+              title={
+                <>
                   Judged by the people
                   <br />
                   who buy from us.
-                </h2>
-              </div>
-              <p className="max-w-107.5 text-(--mute) leading-relaxed">
+                </>
+              }
+            >
+              <p>
                 Two national export trophies in a row, and quality and
                 technical awards from the retailers whose audits we pass every
                 season.
               </p>
-            </div>
-            <AwardGrid awards={awards} className="mt-20" />
+            </SectionHeader>
+            <AwardGrid awards={awards} className="mt-section-head" />
             {/* Accreditations & certifications */}
             <div className="border-t border-(--hair) mt-9 pt-10 grid md:grid-cols-[260px_1fr] gap-6">
               <Eyebrow>
@@ -990,26 +1024,28 @@ export default function HomePage() {
   {/* Overlay: darkest behind the heading, a little more photo at the edges */}
   <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_35%,rgba(10,14,18,0.9)_0%,rgba(10,14,18,0.82)_55%,rgba(10,14,18,0.72)_100%)] backdrop-blur-[2px]" />
 
-  <div className="wrap flex flex-col items-center pt-28 pb-24 text-center md:pt-36 md:pb-32">
-    <Eyebrow className="text-white!">SUSTAINABILITY</Eyebrow>
+  <div className="wrap flex flex-col items-center section-y text-center">
+    <div data-reveal className="flex flex-col items-center">
+      <Eyebrow className="text-white!">SUSTAINABILITY</Eyebrow>
 
-    <h2 className="pt-6 font-['Fira_Sans_Condensed'] text-[48px] font-black leading-[0.95] md:text-[64px]">
-      Cleaner water.
-      <br />
-      Cleaner power.
-      <br />
-      <span className="text-[#c5c6c8]">Measured.</span>
-    </h2>
+      <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-statement font-black">
+        Cleaner water.
+        <br />
+        Cleaner power.
+        <br />
+        <span className="text-[#c5c6c8]">Measured.</span>
+      </h2>
 
-    <p className="max-w-[52ch] pt-7 text-[17px] leading-relaxed text-[#d5d6d7]">
-      Our mills treat effluent biologically, recover process chemicals
-      and put solar on factory roofs, working toward net-zero by{" "}
-      {F.netZeroBy}.
-    </p>
+      <p className="mt-head-intro max-w-[52ch] text-pretty text-intro text-[#d5d6d7]">
+        Our mills treat effluent biologically, recover process chemicals
+        and put solar on factory roofs, working toward net-zero by{" "}
+        {F.netZeroBy}.
+      </p>
+    </div>
 
     {/* Four measured results. Hairline grid: the 1px gaps show the
         container's tint, so rows and columns line up on every width. */}
-    <ul className="mt-16 grid w-full max-w-5xl auto-rows-fr grid-cols-2 gap-px border border-white/15 bg-white/15 md:mt-20 lg:grid-cols-4">
+    <ul data-reveal-stagger className="mt-section-head grid w-full max-w-5xl auto-rows-fr grid-cols-2 gap-px border border-white/15 bg-white/15 lg:grid-cols-4">
       {SUSTAINABILITY_STATS.map((s, i) => {
         const [num, unit] = splitUnit(s.value);
         return (
@@ -1051,6 +1087,8 @@ export default function HomePage() {
               />
             </svg>
 
+            {/* The tile stays; its content reveals */}
+            <div data-reveal className="flex flex-col items-center">
             <div className="flex flex-wrap items-baseline justify-center gap-x-1.5 transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
               <span className="font-['Fira_Sans_Condensed'] text-[40px] font-black leading-none sm:text-[52px]">
                 {num}
@@ -1069,6 +1107,7 @@ export default function HomePage() {
             <span className="mt-4 max-w-[24ch] text-balance text-[13px] font-semibold uppercase leading-snug tracking-[0.12em] text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
               {s.label}
             </span>
+            </div>
           </li>
         );
       })}
@@ -1078,15 +1117,15 @@ export default function HomePage() {
 
 {/* ── PEOPLE ── */}
 <section id="people" className="grid bg-(--mist) md:min-h-184 md:grid-cols-2">
-  <div className="flex flex-col justify-center px-5 py-20 sm:px-8 md:px-[7vw] md:py-24">
+  {/* The text starts on the page's content edge, like every other section */}
+  <div data-reveal className="flex flex-col justify-center section-y pl-gutter pr-gutter md:pr-[7vw]">
     <Eyebrow>PEOPLE</Eyebrow>
-    {/* index.css zeroes margins on h2 and p, so these are spaced with padding */}
-    <h2 className="pt-7 font-['Fira_Sans_Condensed'] text-[48px] font-black leading-[0.94] md:text-[62px]">
+    <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-h2 font-black">
       {F.employeesText}
       <br />
       people.<sup className="text-(--red)">*</sup>
     </h2>
-    <p className="max-w-107.5 pt-6 leading-relaxed text-(--mute)">
+    <p className="mt-head-intro max-w-107.5 text-pretty text-intro text-(--mute)">
       Most of our {F.employeesText} people joined as machine operators.
     </p>
 
@@ -1115,7 +1154,7 @@ export default function HomePage() {
 
     <Link
       to="/#careers"
-      className="group/cta mt-10 inline-flex items-center gap-3 self-start rounded-full border border-(--ink) px-8 py-4 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white! focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
+      className="btn-ring group/cta mt-cta inline-flex min-h-12 items-center gap-3 self-start rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
     >
       WORK WITH US
       <span
@@ -1176,132 +1215,140 @@ export default function HomePage() {
 
         
 {/* ── NEWSROOM ── */}
-<section id="news" className="bg-white">
-  <div className="wrap flex flex-col lg:flex-row items-start lg:items-end justify-between gap-4 py-16 md:py-20">
-    <div>
-      <Eyebrow>NEWSROOM</Eyebrow>
-      {/* index.css zeroes margins on h2, so it is spaced with padding */}
-      <h2 className="pt-5 font-['Fira_Sans_Condensed'] text-[42px] font-black leading-none md:text-[54px]">
-        Latest from the group.
-      </h2>
-    </div>
-    {newsItems.some((n) => n.url) && (
-      <Eyebrow className="text-(--mute)!">LINKS OPEN THE ORIGINAL REPORT</Eyebrow>
-    )}
-  </div>
- 
-  <div className="grid gap-px bg-white sm:grid-cols-2 lg:h-123 lg:grid-cols-3">
-    {newsItems.map((n, i) => {
-      const linked = Boolean(n.url);
-      const body = (
-        <>
-          <img
-            src={`${media}${n.img}`}
-            alt=""
-            className="news-img absolute inset-0 h-full w-full object-cover brightness-[0.55] transition-all duration-500 ease-out motion-reduce:transition-none"
-          />
-          {/* Darker at the foot, where the headline sits */}
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 bg-linear-to-t from-[rgba(10,14,18,0.9)] via-[rgba(10,14,18,0.2)] to-[rgba(10,14,18,0.35)]"
-          />
- 
-          {linked && (
-            /* Stitched seam, sewn round the card on hover or keyboard focus;
-               always shown on touch screens. Only linked cards get it. */
-            <svg
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-3 h-[calc(100%-24px)] w-[calc(100%-24px)] overflow-visible"
-            >
-              <defs>
-                <mask id={`news-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    pathLength={1}
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="6"
-                    className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-1000 group-focus-visible:[stroke-dashoffset:0] motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
-                  />
-                </mask>
-              </defs>
-              <rect
-                x="0"
-                y="0"
-                width="100%"
-                height="100%"
-                fill="none"
-                stroke="white"
-                strokeOpacity="0.8"
-                strokeWidth="1.5"
-                strokeDasharray="8 6"
-                mask={`url(#news-stitch-${i})`}
-              />
-            </svg>
-          )}
- 
-          {/* Top: category chip and date */}
-          <span className="relative z-1 flex flex-wrap items-center gap-x-3 gap-y-2">
-            <span className="rounded-full border border-[#ef7898]/60 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#ef7898]">
-              {n.cat}
-            </span>
-            <span className="text-[11px] font-semibold tracking-widest text-white/75">{n.date}</span>
-          </span>
- 
-          {/* Bottom: headline, then source and the open button */}
-          <span className="relative z-1 mt-auto flex flex-col">
-            <strong className="news-title font-['Fira_Sans_Condensed'] text-[24px] font-bold leading-[1.08] text-white text-balance md:text-[28px]">
-              {n.title}
-            </strong>
+{/* On the page grid, with the grid gap between the cards and the section's
+    own padding below them. The latest story leads, larger; from 1024px the
+    other two stack beside it. */}
+<section id="news" className="bg-white section-y">
+  <div className="wrap">
+    <SectionHeader eyebrow="NEWSROOM" title="Latest from the group.">
+      {newsItems.some((n) => n.url) && (
+        <Eyebrow className="text-(--mute)!">LINKS OPEN THE ORIGINAL REPORT</Eyebrow>
+      )}
+    </SectionHeader>
+
+    <div
+      data-reveal-stagger
+      className="mt-section-head grid gap-grid sm:grid-cols-2 lg:auto-rows-[minmax(17rem,auto)] lg:grid-cols-3"
+    >
+      {newsItems.map((n, i) => {
+        const linked = Boolean(n.url);
+        const lead = i === 0;
+        const body = (
+          <>
+            <img
+              src={`${media}${n.img}`}
+              alt=""
+              className="news-img absolute inset-0 h-full w-full object-cover brightness-[0.55] transition-all duration-500 ease-out motion-reduce:transition-none"
+            />
+            {/* Darker at the foot, where the headline sits */}
             <span
-              aria-hidden={!linked || undefined}
-              className={`mt-5 flex items-center justify-between gap-4 border-t pt-4 ${
-                linked ? "border-white/20" : "invisible border-transparent"
-              }`}
-            >
-                <span className="text-[11px] font-semibold tracking-[0.14em] text-white/70 transition-colors duration-300 group-hover:text-white">
-                  {n.source.toUpperCase() || "\u00a0"}
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="grid size-11 shrink-0 place-items-center rounded-full border border-white/60 text-white transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-(--ink) group-focus-visible:bg-white group-focus-visible:text-(--ink) motion-reduce:transition-none"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
-                  >
-                    <path d="M4.5 11.5l7-7M5.5 4.5h6v6" fill="none" stroke="currentColor" strokeWidth="1.6" />
-                  </svg>
-                </span>
+              aria-hidden="true"
+              className="absolute inset-0 bg-linear-to-t from-[rgba(10,14,18,0.9)] via-[rgba(10,14,18,0.2)] to-[rgba(10,14,18,0.35)]"
+            />
+
+            {linked && (
+              /* Stitched seam, sewn round the card on hover or keyboard focus;
+                 always shown on touch screens. Only linked cards get it. */
+              <svg
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-3 h-[calc(100%-24px)] w-[calc(100%-24px)] overflow-visible"
+              >
+                <defs>
+                  <mask id={`news-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      pathLength={1}
+                      fill="none"
+                      stroke="white"
+                      strokeWidth="6"
+                      className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-1000 group-focus-visible:[stroke-dashoffset:0] motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
+                    />
+                  </mask>
+                </defs>
+                <rect
+                  x="0"
+                  y="0"
+                  width="100%"
+                  height="100%"
+                  fill="none"
+                  stroke="white"
+                  strokeOpacity="0.8"
+                  strokeWidth="1.5"
+                  strokeDasharray="8 6"
+                  mask={`url(#news-stitch-${i})`}
+                />
+              </svg>
+            )}
+
+            {/* Top: category chip and date */}
+            <span className="relative z-1 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span className="rounded-full border border-[#ef7898]/60 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#ef7898]">
+                {n.cat}
+              </span>
+              <span className="text-[11px] font-semibold tracking-widest text-white/75">{n.date}</span>
             </span>
-          </span>
-        </>
-      );
-      const cardClass = `relative flex h-100 flex-col overflow-hidden p-7 text-white lg:h-full lg:p-8 ${
-        i === 0 ? "sm:col-span-2 lg:col-span-1" : ""
-      }`;
-      return linked ? (
-        <a
-          key={n.title}
-          href={n.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`news-card group ${cardClass} focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white`}
-        >
-          {body}
-          <span className="sr-only"> (opens the report on {n.source} in a new tab)</span>
-        </a>
-      ) : (
-        <article key={n.title} className={cardClass}>
-          {body}
-        </article>
-      );
-    })}
+
+            {/* Bottom: headline, a short red rule (as on the business cards),
+                then source and the open button */}
+            <span className="relative z-1 mt-auto flex flex-col">
+              <strong
+                className={`news-title text-balance font-['Fira_Sans_Condensed'] font-bold text-white ${
+                  lead ? "max-w-[22ch] text-lead" : "text-card"
+                }`}
+              >
+                {n.title}
+              </strong>
+              <span
+                aria-hidden="true"
+                className="mt-4 h-0.5 w-16 origin-left scale-x-50 bg-(--red) transition-[scale] duration-500 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100 motion-reduce:transition-none"
+              />
+              {linked && (
+                <span className="mt-5 flex items-center justify-between gap-4 border-t border-white/20 pt-4">
+                  <span className="text-[11px] font-semibold tracking-[0.14em] text-white/70 transition-colors duration-300 group-hover:text-white">
+                    {n.source.toUpperCase()}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="grid size-11 shrink-0 place-items-center rounded-full border border-white/60 text-white transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-(--ink) group-focus-visible:bg-white group-focus-visible:text-(--ink) motion-reduce:transition-none"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+                    >
+                      <path d="M4.5 11.5l7-7M5.5 4.5h6v6" fill="none" stroke="currentColor" strokeWidth="1.6" />
+                    </svg>
+                  </span>
+                </span>
+              )}
+            </span>
+          </>
+        );
+        const cardClass = `relative flex flex-col overflow-hidden bg-(--ink) text-white ${
+          lead ? "min-h-100 p-7 sm:col-span-2 lg:row-span-2 lg:p-10" : "min-h-80 p-7 lg:p-8"
+        }`;
+        return linked ? (
+          <a
+            key={n.title}
+            href={n.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`news-card group ${cardClass} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red)`}
+          >
+            {body}
+            <span className="sr-only"> (opens the report on {n.source} in a new tab)</span>
+          </a>
+        ) : (
+          <article key={n.title} className={cardClass}>
+            {body}
+          </article>
+        );
+      })}
+    </div>
   </div>
 </section>
 

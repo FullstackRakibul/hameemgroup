@@ -6,7 +6,7 @@ export type FactRow = { label: string; value?: ReactNode; to?: string; linkText?
 /* Label and value rows between hairlines, for processes and capabilities. */
 export default function FactList({ rows }: { rows: FactRow[] }) {
   return (
-    <dl className="border-t border-(--hair)">
+    <dl data-reveal-stagger className="border-t border-(--hair)">
       {rows.map((r) => (
         <div
           key={r.label}
@@ -18,7 +18,7 @@ export default function FactList({ rows }: { rows: FactRow[] }) {
             {r.to && (
               <SmartLink
                 href={r.to}
-                className="shrink-0 text-sm font-semibold whitespace-nowrap text-(--mute)! transition-colors hover:text-(--red)!"
+                className="inline-flex min-h-11 shrink-0 items-center text-sm font-semibold whitespace-nowrap text-(--mute) transition-colors hover:text-(--red)"
               >
                 {r.linkText ?? "More"} →
               </SmartLink>

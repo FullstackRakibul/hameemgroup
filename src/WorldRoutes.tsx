@@ -123,7 +123,10 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
     setWidth(el.getBoundingClientRect().width);
 
     const mq = window.matchMedia("(min-width: 768px)");
-    const onChange = () => setCompact(!mq.matches);
+    const onChange = () => {
+      setCompact(!mq.matches);
+      if (!mq.matches) setActive(null);
+    };
     onChange();
     mq.addEventListener("change", onChange);
     return () => {
@@ -360,15 +363,19 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
           const side = (compact && p.compactFlagSide) || p.flagSide;
           const off = flagOffset(side, w, h, r);
           const isActive = active === p.id;
+          // Below md the pins sit 7–23px apart, too close for 44px touch
+          // targets that do not overlap; there they are a picture, and what
+          // the tooltips say is in the copy beside the map.
+          const interactive = !compact;
 
           return (
             <g
               key={p.id}
               className="wr-place"
               transform={`translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${unit})`}
-              role="button"
-              tabIndex={0}
-              aria-label={`${p.name}. ${p.detail}`}
+              {...(interactive
+                ? { role: "button", tabIndex: 0, "aria-label": `${p.name}. ${p.detail}` }
+                : { pointerEvents: "none" })}
               onPointerEnter={(e) => {
                 lastPointer.current = e.pointerType;
                 if (e.pointerType !== "touch") setActive(p.id);

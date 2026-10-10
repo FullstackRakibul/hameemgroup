@@ -10,7 +10,7 @@ const COLS: Record<number, string> = {
    no lightbox. */
 export default function Gallery({ images, label }: { images: GalleryImage[]; label: string }) {
   return (
-    <ul aria-label={label} className={`grid grid-cols-1 gap-3 ${COLS[images.length] ?? "sm:grid-cols-2 lg:grid-cols-3"}`}>
+    <ul data-reveal-stagger aria-label={label} className={`grid grid-cols-1 gap-grid ${COLS[images.length] ?? "sm:grid-cols-2 lg:grid-cols-3"}`}>
       {images.map((img) => (
         <li key={img.src} className="group aspect-[4/3] overflow-hidden bg-(--mist)">
           <img

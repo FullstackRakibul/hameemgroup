@@ -5,7 +5,7 @@ import type { Unit } from "../data/units";
 export default function UnitCard({ unit, website }: { unit: Unit; website?: string }) {
   return (
     <article className="flex h-full flex-col gap-3 border border-(--hair) bg-white p-7">
-      <h3 className="font-['Fira_Sans_Condensed'] text-[24px] font-semibold leading-tight">{unit.name}</h3>
+      <h3 className="text-balance font-['Fira_Sans_Condensed'] text-card font-semibold">{unit.name}</h3>
       <p className="text-sm leading-relaxed text-(--mute)">
         {unit.address.map((line) => (
           <span key={line} className="block">
@@ -27,7 +27,7 @@ export default function UnitCard({ unit, website }: { unit: Unit; website?: stri
           href={website}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-auto pt-3 text-sm font-semibold text-(--red)! underline-offset-4 hover:underline"
+          className="mt-auto inline-flex min-h-11 items-center self-start pt-3 text-sm font-semibold text-(--red) underline-offset-4 hover:underline"
         >
           Visit our website →
         </a>

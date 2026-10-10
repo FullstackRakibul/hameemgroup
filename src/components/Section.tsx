@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
-/* Page section: white or mist, homepage padding, content in .wrap. */
+/* Page section: white or mist, section-y padding, content in .wrap with the
+   header-to-content gap between blocks. */
 export default function Section({
   children,
   tone = "white",
@@ -13,8 +14,8 @@ export default function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`${tone === "mist" ? "bg-(--mist)" : "bg-white"} py-24 md:py-28`}>
-      <div className={`wrap flex flex-col gap-12 md:gap-16 ${className}`}>{children}</div>
+    <section id={id} className={`${tone === "mist" ? "bg-(--mist)" : "bg-white"} section-y`}>
+      <div className={`wrap flex flex-col gap-section-head ${className}`}>{children}</div>
     </section>
   );
 }

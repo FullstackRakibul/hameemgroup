@@ -8,7 +8,7 @@ const COLS: Record<number, string> = {
 /* Awards row: year in red, the awarding body's logo, title and source. */
 export default function AwardGrid({ awards, className = "" }: { awards: Award[]; className?: string }) {
   return (
-    <div className={`grid grid-cols-1 ${COLS[awards.length] ?? "sm:grid-cols-2 lg:grid-cols-5"} border-t border-(--hair) ${className}`}>
+    <div data-reveal-stagger className={`grid grid-cols-1 ${COLS[awards.length] ?? "sm:grid-cols-2 lg:grid-cols-5"} border-t border-(--hair) ${className}`}>
       {awards.map((a) => (
         <div
           key={`${a.year}-${a.title}-${a.by}`}
