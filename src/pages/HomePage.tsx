@@ -460,8 +460,9 @@ export default function HomePage() {
                 <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
                   <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
                 </svg>
-                <span className="font-['Fira_Sans_Condensed']">FOUNDED IN {F.established}</span>
+                <span className="font-['Fira_Sans_Condensed'] font-black text-2xl ">FOUNDED IN {F.established}</span>
               </Eyebrow>
+              
               {/* The lead statement: a paragraph, not a heading */}
               <p className="max-w-[60ch] font-['Fira_Sans_Condensed'] text-lead font-black text-left text-pretty">
                 Ha-Meem Group is one of Bangladesh&apos;s largest{" "}
