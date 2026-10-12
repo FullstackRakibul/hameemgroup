@@ -684,15 +684,23 @@ export default function HomePage() {
     {steps.map((item, i) => (
       <button
         key={item.title}
-        className={`step-panel relative border-0 border-r-2 border-white text-white bg-transparent p-6 text-left bg-cover bg-center overflow-hidden cursor-pointer ${
+        className={`step-panel relative border-0 border-r-2 border-white text-white bg-transparent p-6 text-left overflow-hidden cursor-pointer ${
           step === i ? "step-open flex-[1_1_50%]" : "flex-[0_0_10%]"
         }`}
-        style={{
-          backgroundImage: `url("${media}${item.image}")`,
-        }}
         onClick={() => setStep(i)}
         onMouseEnter={() => setStep(i)}
       >
+        {/* Real image with object-cover: narrow collapsed panels crop the
+            centre of the photo instead of squashing the whole frame */}
+        <img
+          src={`${media}${item.image}`}
+          alt=""
+          aria-hidden="true"
+          className={`absolute inset-0 h-full w-full max-w-none object-cover object-center transition-transform duration-700 ease-out ${
+            step === i ? "scale-105" : "scale-100"
+          }`}
+        />
+
         {/* Overlay: Light for active (image clear), Darker for collapsed (60% opacity) */}
         <span
           className={`absolute inset-0 transition-all duration-500 ${
