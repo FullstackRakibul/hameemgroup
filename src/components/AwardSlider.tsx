@@ -21,7 +21,7 @@ function CardFace({ a }: { a: TimelineAward }) {
         src={`${media}${a.image}`}
         alt={`${a.title}, ${a.years}`}
         width={200}
-        height={270}
+        height={250}
         loading="lazy"
         decoding="async"
         draggable={false}
@@ -230,7 +230,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
           setHold("drag", false);
           go(Math.round(target.current));
         }}
-        className="relative h-[380px] cursor-grab touch-pan-y select-none overflow-x-clip pb-10 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [perspective:1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) active:cursor-grabbing md:h-[440px]"
+        className="relative h-95 cursor-grab touch-pan-y select-none overflow-x-clip pb-10 mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] perspective-[1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) active:cursor-grabbing md:h-110"
       >
         {AWARD_TIMELINE.map((t, i) => (
           <button
@@ -249,8 +249,8 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
               }
               go(i);
             }}
-            className={`absolute left-1/2 top-1/2 h-[205px] w-[150px] overflow-hidden rounded-2xl bg-white shadow-[0_18px_40px_rgba(17,20,24,0.14)] transition-[filter,box-shadow] duration-300 will-change-transform motion-reduce:transition-none md:h-[270px] md:w-[200px] ${
-              i === active ? "ring-2 ring-(--red) ring-offset-4 ring-offset-(--mist)" : "brightness-95 grayscale-[35%]"
+            className={`absolute left-1/2 top-1/2 h-51.25 w-37.5 overflow-hidden rounded-2xl bg-white shadow-[0_18px_40px_rgba(17,20,24,0.14)] transition-[filter,box-shadow] duration-300 will-change-transform motion-reduce:transition-none md:h-67.5 md:w-50
+              i === active ? "ring-2 ring-(--red) ring-offset-4 ring-offset-(--mist)" : "brightness-95 grayscale-35"
             }`}
           >
             <CardFace a={t} />
@@ -261,7 +261,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
       </div>
 
       {/* Details of the active award */}
-      <div aria-live="polite" className="relative z-10 mx-auto -mt-12 max-w-md rounded-2xl border border-(--hair) bg-white px-6 py-5 text-center shadow-sm">
+      <div aria-live="polite" className="relative z-10 mx-auto -mt-12 max-w-md px-6 py-5 text-center">
         <div
           key={active}
           className="animate-[awardIn_400ms_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none"
