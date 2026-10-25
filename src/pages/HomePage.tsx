@@ -963,7 +963,11 @@ export default function HomePage() {
         {/* ── RECOGNITION & AWARDS ── */}
         {/* Brand palette for this section: navy primary, brown accent. The
             eyebrow and other red accents inside pick up the navy. */}
-        <section id="recognition" className="bg-(--mist) section-y [--primary:#142E53] [--accent:#3A1C14] [--red:var(--primary)]">
+        <section id="recognition" className="relative isolate overflow-hidden bg-[linear-gradient(to_bottom,#fff_0%,var(--mist)_18%,var(--mist)_82%,var(--ink)_100%)] section-y [--primary:#142E53] [--accent:#3A1C14] [--red:var(--primary)]">
+          {/* Soft glows: warm gold behind the slider, red top-left, ink bottom-right */}
+          <div aria-hidden="true" className="glow-drift pointer-events-none absolute left-1/2 top-[55%] -z-10 -ml-[320px] -mt-[320px] size-[640px] rounded-full bg-[radial-gradient(circle,#c9a24a_0%,transparent_65%)] opacity-[0.10] blur-3xl motion-reduce:animate-none" style={{ animationDuration: "22s" }} />
+          <div aria-hidden="true" className="glow-drift pointer-events-none absolute -left-40 -top-40 -z-10 size-[520px] rounded-full bg-[radial-gradient(circle,var(--red)_0%,transparent_65%)] opacity-[0.06] blur-3xl motion-reduce:animate-none" style={{ animationDuration: "28s" }} />
+          <div aria-hidden="true" className="glow-drift pointer-events-none absolute -bottom-40 -right-40 -z-10 size-[480px] rounded-full bg-[radial-gradient(circle,var(--ink)_0%,transparent_65%)] opacity-[0.04] blur-3xl motion-reduce:animate-none" style={{ animationDuration: "34s" }} />
           <div className="wrap">
             <div data-reveal className="mx-auto max-w-3xl text-center">
               <Eyebrow className="flex items-center justify-center gap-3">
