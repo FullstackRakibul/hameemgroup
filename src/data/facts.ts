@@ -110,6 +110,35 @@ export const NATIONAL_AWARDS: Award[] = [
   { year: "2022", title: "National Export Trophy", by: "Government of Bangladesh · Refat Garments", logo: "flags/bd.svg" },
 ];
 
+/* ── Award timeline (home page gallery) ── */
+export type TimelineAward = {
+  years: string;
+  title: string;
+  text?: string;
+  by?: string;
+  image?: string; // award photo; when missing, show the fallback frame
+  logo?: string; // issuer logo, shown in the fallback frame
+  tint: string;
+};
+
+const PHOTO_AWARDS: TimelineAward[] = [
+  { years: "2017", title: "Kohl's Greatness Award 2017", text: "Recognized for exceptional product excellence and global collaboration.", by: "Kohl's", image: "awards/awards-2017.webp", logo: "buyers/kohls.png", tint: "#f3ece6" },
+  { years: "2018 – 2019", title: "National Export Trophy", text: "A testament to persistent growth and global trust.", image: "awards/awards-2018-2019.webp", logo: "flags/bd.svg", tint: "#eef0ec" },
+  { years: "2019 – 2020", title: "National Export Trophy", text: "Recognized for highest export earnings in the apparel sector.", image: "awards/awards-2019-2020.webp", logo: "flags/bd.svg", tint: "#ebeff2" },
+  { years: "2020 – 2021", title: "National Export Trophy (Gold)", text: "Honored for outstanding contribution to the national export economy.", image: "awards/awards-2020-2021.webp", logo: "flags/bd.svg", tint: "#f4efe2" },
+  { years: "2021 – 2022", title: "Bangabandhu Sheikh Mujib Export Trophy", text: "The winning exporters received Gold, Silver and Bronze awards: 28 firms Gold, 27 Silver and 21 Bronze.", by: "State Minister for Commerce", image: "awards/awards-2021-2022.webp", logo: "flags/bd.svg", tint: "#f5eaec" },
+];
+
+// Awards without photos come from the existing lists, so the data lives in one place.
+const toTimeline = (a: Award, tint: string): TimelineAward => ({ years: a.year, title: a.title, by: a.by, logo: a.logo, tint });
+
+/** Every award, oldest first. Ties keep source order. */
+export const AWARD_TIMELINE: TimelineAward[] = [
+  ...PHOTO_AWARDS,
+  ...NATIONAL_AWARDS.map((a) => toTimeline(a, "#eef0ec")),
+  ...BUYER_AWARDS.map((a) => toTimeline(a, "#f1efec")),
+].sort((a, b) => parseInt(a.years) - parseInt(b.years));
+
 export const CERTIFICATIONS = [
   { abbr: "GOTS", name: "Global Organic Textile Standard" },
   { abbr: "OCS", name: "Organic Content Standard" },

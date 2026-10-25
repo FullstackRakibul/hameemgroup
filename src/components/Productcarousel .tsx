@@ -1,3 +1,4 @@
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 /* ── Product carousel ──
@@ -545,9 +546,9 @@ function ProductCarousel({
             type="button"
             aria-label="Previous product"
             onClick={() => engineRef.current?.prev()}
-            className={roundBtn}
+            className={`group ${roundBtn}`}
           >
-            ←
+            <ChevronLeft size={18} strokeWidth={1.75} aria-hidden="true" className="group-hover:-translate-x-0.5 transition-transform duration-300 motion-reduce:transition-none" />
           </button>
           {!reduced && (
             <button
@@ -555,18 +556,18 @@ function ProductCarousel({
               aria-label={paused ? "Play slideshow" : "Pause slideshow"}
               aria-pressed={paused}
               onClick={() => setPaused((p) => !p)}
-              className={roundBtn}
+              className={`group ${roundBtn}`}
             >
-              {paused ? "▶" : "Ⅱ"}
+              {paused ? <Play size={16} strokeWidth={1.75} fill="currentColor" aria-hidden="true" /> : <Pause size={16} strokeWidth={1.75} aria-hidden="true" />}
             </button>
           )}
           <button
             type="button"
             aria-label="Next product"
             onClick={() => engineRef.current?.next()}
-            className={roundBtn}
+            className={`group ${roundBtn}`}
           >
-            →
+            <ChevronRight size={18} strokeWidth={1.75} aria-hidden="true" className="group-hover:translate-x-0.5 transition-transform duration-300 motion-reduce:transition-none" />
           </button>
         </div>
       </div>
