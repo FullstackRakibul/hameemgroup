@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Play, X } from "lucide-react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { ChevronLeft, ChevronRight, Move, Play, Rotate3d, X } from "lucide-react";
 import Eyebrow from "../components/Eyebrow";
 import usePageMeta from "../components/usePageMeta";
+import { VIRTUAL_TOUR_URL } from "../data/facts";
 import { GALLERY, GALLERY_CATEGORIES, GALLERY_VIDEO, type GalleryCategory, type GalleryItem } from "../data/gallery";
 
 const media = "/media/";
@@ -21,26 +22,41 @@ function imgProps(item: GalleryItem, sizes: string, large = false) {
     height,
   };
 }
-//image
 const pad = (n: number) => String(n).padStart(2, "0");
 const countOf = (c: GalleryCategory) => GALLERY.filter((g) => g.category === c).length;
 const smooth = () => (window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth");
 
-/* A photo card: image, and a caption that fades in on hover (always shown on touch) */
-function Card({ item, tall, eager = false, sizes, onOpen }: { item: GalleryItem; tall: boolean; eager?: boolean; sizes: string; onOpen: (el: HTMLButtonElement) => void }) {
+/* A photo card: image, and a caption that fades in on hover (always shown on
+   touch). Size, shape and motion come from the caller. */
+function Card({
+  item,
+  className = "",
+  eager = false,
+  sizes,
+  style,
+  onOpen,
+}: {
+  item: GalleryItem;
+  className?: string;
+  eager?: boolean;
+  sizes: string;
+  style?: CSSProperties;
+  onOpen: (el: HTMLButtonElement) => void;
+}) {
   return (
     <button
       type="button"
       onClick={(e) => onOpen(e.currentTarget)}
       aria-label={`Open ${item.title}`}
-      className={`group relative block w-full overflow-hidden rounded-sm bg-(--hair) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) ${tall ? "aspect-[3/4]" : "aspect-[4/3]"}`}
+      style={style}
+      className={`group relative block w-full overflow-hidden bg-(--hair) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) ${className}`}
     >
       <img
         {...imgProps(item, sizes)}
         alt={item.title}
         loading={eager ? "eager" : "lazy"}
         decoding="async"
-        className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
       />
       <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-linear-to-t from-(--ink)/70 to-transparent px-4 pb-3 pt-12 text-left text-sm text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none [@media(hover:none)]:opacity-100">
         <span className="font-semibold">{item.title}</span>
@@ -49,6 +65,28 @@ function Card({ item, tall, eager = false, sizes, onOpen }: { item: GalleryItem;
     </button>
   );
 }
+
+const TOURS: GalleryCategory = "Virtual tours";
+const PHOTOS = GALLERY.filter((g) => g.category !== TOURS);
+// Intro: four local photos scattered round the headline
+const INTRO = PHOTOS.filter((g) => !remote(g.src)).slice(0, 4);
+const INTRO_SPOTS = [
+  { pos: "left-[6%] top-[14%] w-[150px] aspect-[3/4]", dur: 9, delay: 0 },
+  { pos: "left-[2%] bottom-[8%] w-[230px] aspect-[3/4]", dur: 12, delay: -3 },
+  { pos: "right-[4%] top-[10%] w-[240px] aspect-[4/5]", dur: 11, delay: -6 },
+  { pos: "right-[16%] bottom-[6%] w-[140px] aspect-square", dur: 13, delay: -2 },
+];
+// The 360° icon is a badge, not a photo; the rest are tour cards
+const TOUR_ICON = GALLERY.find((g) => g.src.endsWith("tour-360"));
+const TOUR_ITEMS = GALLERY.filter((g) => g.category === TOURS && g !== TOUR_ICON);
+// Bento: a repeating 5-item pattern (wide, narrow, then three equal)
+const BENTO = [
+  "md:col-span-2 lg:col-span-4 lg:h-[440px]",
+  "lg:col-span-2 lg:h-[440px]",
+  "lg:col-span-2 lg:h-[320px]",
+  "lg:col-span-2 lg:h-[320px]",
+  "lg:col-span-2 lg:h-[320px]",
+];
 
 export default function GalleryPage() {
   usePageMeta(
@@ -64,8 +102,7 @@ export default function GalleryPage() {
   const openerRef = useRef<HTMLElement | null>(null);
   const swipeX = useRef<number | null>(null);
 
-  const filtered = category === "All" ? GALLERY : GALLERY.filter((g) => g.category === category);
-  const intro = GALLERY.slice(0, 6);
+  const filtered = category === "All" ? PHOTOS : PHOTOS.filter((g) => g.category === category);
 
   const openBox = (list: GalleryItem[], index: number, el: HTMLElement) => {
     openerRef.current = el;
@@ -90,13 +127,15 @@ export default function GalleryPage() {
     return () => window.removeEventListener("keydown", onKey);
   }, [box === null]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const scrollToId = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: smooth(), block: "start" });
   const pickCategory = (c: GalleryCategory) => {
+    // Virtual tours have their own section
+    if (c === TOURS) return scrollToId("tours");
     setCategory(c);
     wallRef.current?.scrollIntoView({ behavior: smooth(), block: "start" });
   };
 
   const current = box ? box.list[box.index] : null;
-  const cols = [filtered.filter((_, i) => i % 2 === 0), filtered.filter((_, i) => i % 2 === 1)];
 
   const marqueeRow = (copy: boolean) =>
     GALLERY_CATEGORIES.map((c, i) => {
@@ -126,14 +165,31 @@ export default function GalleryPage() {
 
   return (
     <>
-      {/* ── A. INTRO ── */}
-      <section className="relative isolate overflow-hidden bg-white pb-section pt-[calc(var(--header-h)+48px)]">
+      {/* ── A. INTRO: centred headline, photos scattered round it ── */}
+      <section className="relative isolate overflow-hidden bg-white pb-section pt-[calc(var(--header-h)+48px)] lg:min-h-[760px]">
         {/* Glow, top right */}
         <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 -z-10 size-120 rounded-full bg-[radial-gradient(var(--red)_0%,transparent_70%)] opacity-[0.08] blur-3xl" />
 
-        <div className="wrap grid gap-12 lg:grid-cols-[5fr_7fr] lg:gap-16">
-          <div data-reveal className="self-start lg:sticky lg:top-28">
-            <Eyebrow className="flex items-center gap-3">
+        {/* Scattered photos, lg and up */}
+        {INTRO.map((item, i) => (
+          <div
+            key={item.src}
+            className={`garment-float absolute hidden lg:block motion-reduce:animate-none ${INTRO_SPOTS[i].pos}`}
+            style={{ animationDuration: `${INTRO_SPOTS[i].dur}s`, animationDelay: `${INTRO_SPOTS[i].delay}s` }}
+          >
+            <Card
+              item={item}
+              eager={i < 2}
+              sizes="240px"
+              className="size-full rounded-xl ring-1 ring-(--hair) transition-transform duration-500 hover:-translate-y-1.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+              onOpen={(el) => openBox(INTRO, i, el)}
+            />
+          </div>
+        ))}
+
+        <div className="wrap">
+          <div data-reveal className="relative z-10 mx-auto max-w-xl text-center lg:pt-16">
+            <Eyebrow className="flex items-center justify-center gap-3">
               <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
                 <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
               </svg>
@@ -144,57 +200,42 @@ export default function GalleryPage() {
               <br />
               <span className="text-(--red)">Ha-Meem.</span>
             </h1>
-            <p className="mt-head-intro max-w-[42ch] text-pretty text-(--mute)">
+            <p className="mx-auto mt-head-intro max-w-[42ch] text-pretty text-(--mute)">
               From yarn and denim to sewing, washing and shipping: a look inside the factories, mills and people behind Ha-Meem Group.
             </p>
             <a
               href="#film"
               onClick={(e) => {
                 e.preventDefault();
-                document.getElementById("film")?.scrollIntoView({ behavior: smooth() });
+                scrollToId("film");
               }}
-              className="group mt-8 inline-flex items-center gap-4 text-xs font-semibold tracking-widest text-(--ink) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red)"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-(--red) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
             >
-              WATCH THE FILM
-              <span aria-hidden="true" className="flex items-center text-(--red)">
-                <span className="h-px w-16 bg-current transition-[width] duration-500 ease-out group-hover:w-22 motion-reduce:transition-none" />
-                <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" className="-ml-2" />
-              </span>
+              <Play size={14} strokeWidth={1.75} fill="currentColor" aria-hidden="true" />
+              Watch the film
             </a>
-            <ul className="mt-10 grid max-w-xs grid-cols-2 gap-x-6 gap-y-2 text-xs tracking-[0.14em] text-(--mute)">
-              {GALLERY_CATEGORIES.map((c) => (
-                <li key={c} className="flex justify-between border-b border-(--hair) pb-2">
-                  <span className="uppercase">{c}</span>
-                  <span className="tabular-nums text-(--ink)">{pad(countOf(c))}</span>
-                </li>
+            <p className="mt-8 text-xs uppercase tracking-[0.14em] text-(--mute)">
+              {GALLERY_CATEGORIES.map((c, i) => (
+                <span key={c}>
+                  {i > 0 && <span aria-hidden="true" className="mx-2">·</span>}
+                  {c} <span className="tabular-nums text-(--ink)">{pad(countOf(c))}</span>
+                </span>
               ))}
-            </ul>
+            </p>
           </div>
 
-          <div className="relative">
-            {/* Thin red arc across the bottom-left corner */}
-            <svg aria-hidden="true" viewBox="0 0 400 300" fill="none" className="pointer-events-none absolute -bottom-16 -left-20 -z-10 w-105">
-              <path d="M10 290 C 40 120, 220 20, 390 60" className="stroke-(--red)/50" strokeWidth="1" />
-            </svg>
-            <div data-reveal-stagger className="grid grid-cols-2 gap-4 md:gap-6">
-              {[0, 1].map((col) => (
-                <div key={col} className={`flex flex-col gap-4 md:gap-6 ${col ? "mt-24" : ""}`}>
-                  {intro
-                    .map((item, i) => ({ item, i }))
-                    .filter(({ i }) => i % 2 === col)
-                    .map(({ item, i }) => (
-                      <Card
-                        key={item.src}
-                        item={item}
-                        tall={Math.floor(i / 2) % 2 === col}
-                        eager={i < 2}
-                        sizes="(min-width: 1024px) 30vw, 50vw"
-                        onOpen={(el) => openBox(GALLERY, i, el)}
-                      />
-                    ))}
-                </div>
-              ))}
-            </div>
+          {/* Below lg: the same four photos as a 2×2 grid */}
+          <div className="mt-12 grid grid-cols-2 gap-4 lg:hidden">
+            {INTRO.map((item, i) => (
+              <Card
+                key={item.src}
+                item={item}
+                eager={i < 2}
+                sizes="50vw"
+                className="aspect-[4/5] rounded-xl"
+                onOpen={(el) => openBox(INTRO, i, el)}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -209,16 +250,19 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* ── C. PHOTO WALL ── */}
-      <section ref={wallRef} id="photos" className="scroll-mt-24 overflow-hidden bg-white section-y">
-        <div className="wrap grid gap-12 lg:grid-cols-[5fr_7fr] lg:gap-16">
-          <div data-reveal className="self-start lg:sticky lg:top-28">
-            <p className="flex items-start gap-3">
-              <span className="font-['Fira_Sans_Condensed'] text-[64px] font-black leading-none md:text-[96px]">{category}</span>
-              <span className="pt-2 text-xs tabular-nums text-(--mute)">{pad(filtered.length)}</span>
-            </p>
-            <div role="group" aria-label="Filter photos" className="mt-8 flex flex-wrap gap-2">
-              {(["All", ...GALLERY_CATEGORIES] as const).map((c) => (
+      {/* ── C. PHOTO WALL: bento grid ── */}
+      <section ref={wallRef} id="photos" className="scroll-mt-24 bg-white section-y">
+        <div className="wrap">
+          <div data-reveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <span className="inline-block rounded-full border border-(--hair) px-3 py-1 text-[11px] uppercase tracking-widest text-(--mute)">
+                Browse our image collection
+              </span>
+              <h2 className="mt-4 font-['Fira_Sans_Condensed'] text-h2 font-black">{category === "All" ? "All photos" : category}</h2>
+              <span key={category} aria-hidden="true" className="mt-4 block h-0.5 w-24 origin-left bg-(--red) animate-[autoFill_600ms_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none" />
+            </div>
+            <div role="group" aria-label="Filter photos" className="flex flex-wrap gap-2">
+              {(["All", ...GALLERY_CATEGORIES.filter((c) => c !== TOURS)] as const).map((c) => (
                 <button
                   key={c}
                   type="button"
@@ -231,26 +275,113 @@ export default function GalleryPage() {
                   {c.toUpperCase()}
                 </button>
               ))}
+              <button
+                type="button"
+                onClick={() => scrollToId("tours")}
+                className="min-h-10 rounded-full border border-(--hair) px-4 text-xs font-semibold tracking-widest text-(--ink) transition-colors duration-300 hover:border-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red) motion-reduce:transition-none"
+              >
+                360° TOURS ↓
+              </button>
             </div>
           </div>
 
-          <div key={category} className="gallery-in grid grid-cols-2 gap-4 md:gap-6 lg:py-10">
-            {cols.map((list, col) => (
-              <div key={col} className={`flex flex-col gap-4 md:gap-6 ${col ? "gallery-wall-down mt-12" : "gallery-wall-up"}`}>
-                {list.map((item, k) => {
-                  const index = k * 2 + col;
-                  return (
-                    <Card
-                      key={item.src}
-                      item={item}
-                      tall={(k + col) % 2 === 0}
-                      sizes="(min-width: 1024px) 30vw, 50vw"
-                      onOpen={(el) => openBox(filtered, index, el)}
-                    />
-                  );
-                })}
-              </div>
+          <div key={category} className="mt-section-head grid gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-6">
+            {filtered.map((item, i) => (
+              <Card
+                key={item.src}
+                item={item}
+                sizes={i % 5 === 0 ? "(min-width: 1024px) 66vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
+                className={`gallery-in aspect-[4/3] rounded-[24px] lg:aspect-auto ${BENTO[i % 5]}`}
+                style={{ animationDelay: `${i * 60}ms` }}
+                onOpen={(el) => openBox(filtered, i, el)}
+              />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 360° VIRTUAL TOURS ── */}
+      <section id="tours" className="scroll-mt-24 bg-(--mist) section-y">
+        <div className="wrap grid items-center gap-12 lg:grid-cols-[5fr_7fr] lg:gap-16">
+          <div data-reveal>
+            <Eyebrow className="flex items-center gap-3">
+              {TOUR_ICON && (
+                <img
+                  {...imgProps(TOUR_ICON, "28px")}
+                  alt=""
+                  width={28}
+                  height={28}
+                  loading="lazy"
+                  decoding="async"
+                  className="size-7 rounded-full bg-white object-cover ring-1 ring-(--hair)"
+                />
+              )}
+              <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
+                <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
+              </svg>
+              360° VIRTUAL TOURS
+            </Eyebrow>
+            <h2 className="mt-head-eyebrow font-['Fira_Sans_Condensed'] text-h2 font-black">
+              Walk our factories
+              <br />
+              <span className="text-(--red)">from anywhere.</span>
+            </h2>
+            <p className="mt-head-intro max-w-[44ch] text-pretty text-(--mute)">
+              Step inside the Textile and Tongi zones in 360°: production floors, mills and finishing, as our buyers see them on a visit.
+            </p>
+            {VIRTUAL_TOUR_URL ? (
+              <a
+                href={VIRTUAL_TOUR_URL}
+                target="_blank"
+                rel="noopener"
+                className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full bg-(--red) px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-(--ink) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
+              >
+                <Rotate3d size={16} strokeWidth={1.75} aria-hidden="true" />
+                Start the tour
+              </a>
+            ) : (
+              <span className="mt-8 inline-flex min-h-11 items-center rounded-full border border-(--hair) px-6 text-sm text-(--mute)">
+                Tours launching soon
+              </span>
+            )}
+          </div>
+
+          <div data-reveal-stagger className="flex flex-col gap-6">
+            {TOUR_ITEMS.map((item, i) => {
+              const inner = (
+                <>
+                  <img
+                    {...imgProps(item, "560px")}
+                    alt={item.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-full object-cover object-left transition-[object-position] duration-[8000ms] ease-linear group-hover:object-right motion-reduce:transition-none"
+                  />
+                  <span className="absolute inset-x-0 bottom-0 flex flex-col bg-linear-to-t from-(--ink)/75 to-transparent px-5 pb-4 pt-14 text-left text-white">
+                    <span className="font-['Fira_Sans_Condensed'] text-xl font-bold">{item.title}</span>
+                    <span className="mt-1 flex items-center gap-1.5 text-xs opacity-80">
+                      <Move size={14} strokeWidth={1.75} aria-hidden="true" />
+                      Drag to look around
+                    </span>
+                  </span>
+                  <span aria-hidden="true" className="absolute right-4 top-4 grid size-13 place-items-center rounded-full bg-white/90 text-xs font-bold text-(--ink)">
+                    <span className="gallery-spin absolute -inset-1 rounded-full border border-dashed border-white/70" />
+                    360°
+                  </span>
+                </>
+              );
+              const cls =
+                "group relative block aspect-[2/1] w-full max-w-[560px] overflow-hidden rounded-[24px] bg-white ring-1 ring-(--hair) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red)";
+              return VIRTUAL_TOUR_URL ? (
+                <a key={item.src} href={VIRTUAL_TOUR_URL} target="_blank" rel="noopener" aria-label={`${item.title} (opens the tour in a new tab)`} className={cls}>
+                  {inner}
+                </a>
+              ) : (
+                <button key={item.src} type="button" aria-label={`Open ${item.title}`} onClick={(e) => openBox(TOUR_ITEMS, i, e.currentTarget)} className={cls}>
+                  {inner}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
