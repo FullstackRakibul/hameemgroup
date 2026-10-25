@@ -32,8 +32,6 @@ const heroSlides = [
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00053.jpeg", alt: "Sewing floor at Ha-Meem garment factory" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00054.jpeg", alt: "Ha-Meem Group manufacturing facility" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00055.jpeg", alt: "Ha-Meem Group manufacturing facility" },
-  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00056.jpeg", alt: "Ha-Meem Group manufacturing facility" },
-  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00057.jpeg", alt: "Ha-Meem Group manufacturing facility" },
 ];
 
 

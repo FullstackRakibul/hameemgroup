@@ -129,7 +129,7 @@ export default function GalleryPage() {
       {/* ── A. INTRO ── */}
       <section className="relative isolate overflow-hidden bg-white pb-section pt-[calc(var(--header-h)+48px)]">
         {/* Glow, top right */}
-        <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 -z-10 size-[480px] rounded-full bg-[radial-gradient(var(--red)_0%,transparent_70%)] opacity-[0.08] blur-3xl" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 -z-10 size-120 rounded-full bg-[radial-gradient(var(--red)_0%,transparent_70%)] opacity-[0.08] blur-3xl" />
 
         <div className="wrap grid gap-12 lg:grid-cols-[5fr_7fr] lg:gap-16">
           <div data-reveal className="self-start lg:sticky lg:top-28">
@@ -173,7 +173,7 @@ export default function GalleryPage() {
 
           <div className="relative">
             {/* Thin red arc across the bottom-left corner */}
-            <svg aria-hidden="true" viewBox="0 0 400 300" fill="none" className="pointer-events-none absolute -bottom-16 -left-20 -z-10 w-[420px]">
+            <svg aria-hidden="true" viewBox="0 0 400 300" fill="none" className="pointer-events-none absolute -bottom-16 -left-20 -z-10 w-105">
               <path d="M10 290 C 40 120, 220 20, 390 60" className="stroke-(--red)/50" strokeWidth="1" />
             </svg>
             <div data-reveal-stagger className="grid grid-cols-2 gap-4 md:gap-6">
