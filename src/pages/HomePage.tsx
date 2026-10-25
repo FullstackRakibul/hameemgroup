@@ -460,8 +460,9 @@ export default function HomePage() {
                 <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
                   <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
                 </svg>
-                <span className="font-['Fira_Sans_Condensed']">FOUNDED IN {F.established}</span>
+                <span className="font-['Fira_Sans_Condensed'] font-black text-2xl ">FOUNDED IN {F.established}</span>
               </Eyebrow>
+              
               {/* The lead statement: a paragraph, not a heading */}
               <p className="max-w-[60ch] font-['Fira_Sans_Condensed'] text-lead font-black text-left text-pretty">
                 Ha-Meem Group is one of Bangladesh&apos;s largest{" "}
@@ -683,15 +684,23 @@ export default function HomePage() {
     {steps.map((item, i) => (
       <button
         key={item.title}
-        className={`step-panel relative border-0 border-r-2 border-white text-white bg-transparent p-6 text-left bg-cover bg-center overflow-hidden cursor-pointer ${
+        className={`step-panel relative border-0 border-r-2 border-white text-white bg-transparent p-6 text-left overflow-hidden cursor-pointer ${
           step === i ? "step-open flex-[1_1_50%]" : "flex-[0_0_10%]"
         }`}
-        style={{
-          backgroundImage: `url("${media}${item.image}")`,
-        }}
         onClick={() => setStep(i)}
         onMouseEnter={() => setStep(i)}
       >
+        {/* Real image with object-cover: narrow collapsed panels crop the
+            centre of the photo instead of squashing the whole frame */}
+        <img
+          src={`${media}${item.image}`}
+          alt=""
+          aria-hidden="true"
+          className={`absolute inset-0 h-full w-full max-w-none object-cover object-center transition-transform duration-700 ease-out ${
+            step === i ? "scale-105" : "scale-100"
+          }`}
+        />
+
         {/* Overlay: Light for active (image clear), Darker for collapsed (60% opacity) */}
         <span
           className={`absolute inset-0 transition-all duration-500 ${

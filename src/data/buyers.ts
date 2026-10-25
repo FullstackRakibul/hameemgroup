@@ -33,4 +33,5 @@ export const buyers: Buyer[] = [
   { id: "aeon", name: "Aeon" },
   { id: "timberland", name: "Timberland" },
   { id: "wrangler", name: "Wrangler" },
+  { id: "oshkosh", name: "Oshkosh" },
 ];
