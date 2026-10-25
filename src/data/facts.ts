@@ -63,7 +63,9 @@ export const splitUnit = (figure: string): [string, string] => {
 };
 
 /* Links that exist only once the company supplies them. Empty hides them. */
-export const VIRTUAL_TOUR_URL = "";
+/* The Tongi zone tour, the entry point for the nav and footer links. The full
+   set of four tours lives in VR_TOURS in ./gallery. */
+export const VIRTUAL_TOUR_URL = "https://360vr.hameemgroup.com/tongi/";
 export const DENIM_SITE_URL = "";
 
 /* ── Head office and enquiries ── */

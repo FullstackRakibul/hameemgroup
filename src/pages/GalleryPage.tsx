@@ -1,25 +1,19 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { ChevronLeft, ChevronRight, Move, Play, Rotate3d, X } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import Eyebrow from "../components/Eyebrow";
+import useLightHero from "../components/useLightHero";
 import usePageMeta from "../components/usePageMeta";
-import { VIRTUAL_TOUR_URL } from "../data/facts";
-import { GALLERY, GALLERY_CATEGORIES, GALLERY_VIDEO, type GalleryCategory, type GalleryItem } from "../data/gallery";
+import { GALLERY, GALLERY_CATEGORIES, GALLERY_VIDEO, VR_TOURS, type GalleryCategory, type GalleryItem, type VrTour } from "../data/gallery";
 
 const media = "/media/";
-const remote = (src: string) => src.startsWith("http");
 
-/** src, srcSet, sizes and dimensions for one gallery image */
-function imgProps(item: GalleryItem, sizes: string, large = false) {
-  const width = item.width ?? 1600;
-  const height = item.height ?? 1200;
-  if (remote(item.src)) return { src: item.src, width, height };
-  const base = `${media}${item.src}`;
+/** src, sizes and dimensions for one gallery or tour image */
+function imgProps(item: { src: string; width?: number; height?: number }, sizes: string) {
   return {
-    src: `${base}-${large ? 1600 : 800}.webp`,
-    srcSet: `${base}-800.webp 800w, ${base}-1600.webp 1600w`,
+    src: `${media}${item.src}`,
     sizes,
-    width,
-    height,
+    width: item.width ?? 1600,
+    height: item.height ?? 1200,
   };
 }
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -68,17 +62,14 @@ function Card({
 
 const TOURS: GalleryCategory = "Virtual tours";
 const PHOTOS = GALLERY.filter((g) => g.category !== TOURS);
-// Intro: four local photos scattered round the headline
-const INTRO = PHOTOS.filter((g) => !remote(g.src)).slice(0, 4);
+// Intro: the first four photos, scattered round the headline
+const INTRO = PHOTOS.slice(0, 4);
 const INTRO_SPOTS = [
   { pos: "left-[6%] top-[14%] w-[150px] aspect-[3/4]", dur: 9, delay: 0 },
   { pos: "left-[2%] bottom-[8%] w-[230px] aspect-[3/4]", dur: 12, delay: -3 },
   { pos: "right-[4%] top-[10%] w-[240px] aspect-[4/5]", dur: 11, delay: -6 },
   { pos: "right-[16%] bottom-[6%] w-[140px] aspect-square", dur: 13, delay: -2 },
 ];
-// The 360° icon is a badge, not a photo; the rest are tour cards
-const TOUR_ICON = GALLERY.find((g) => g.src.endsWith("tour-360"));
-const TOUR_ITEMS = GALLERY.filter((g) => g.category === TOURS && g !== TOUR_ICON);
 // Bento: a repeating 5-item pattern (wide, narrow, then three equal)
 const BENTO = [
   "md:col-span-2 lg:col-span-4 lg:h-[440px]",
@@ -88,11 +79,96 @@ const BENTO = [
   "lg:col-span-2 lg:h-[320px]",
 ];
 
+/* One 360° tour card. The link opens the tour in a new tab on the click itself
+   (no preventDefault, so popup blockers stay quiet); `data-opening` runs a short
+   confirmation animation alongside it. */
+function TourCard({ tour }: { tour: VrTour }) {
+  const [opening, setOpening] = useState(false);
+  const timer = useRef<number | undefined>(undefined);
+
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  return (
+    <a
+      href={tour.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open the ${tour.name} 360° tour in a new tab`}
+      data-opening={opening ? "" : undefined}
+      onClick={() => {
+        setOpening(true);
+        window.clearTimeout(timer.current);
+        timer.current = window.setTimeout(() => setOpening(false), 900);
+      }}
+      className="group block"
+    >
+      <div className="tour-frame relative aspect-[16/9] overflow-hidden rounded-[24px] bg-white ring-1 ring-(--hair) group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-(--red)">
+        <img
+          {...imgProps({ src: tour.image, width: tour.width, height: tour.height }, "(min-width: 768px) 46vw, 100vw")}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="size-full object-cover [object-position:50%_50%] transition-[transform,object-position] duration-[1200ms] ease-out group-hover:scale-[1.06] group-hover:[object-position:60%_50%] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        />
+
+        {/* Red wash on hover, plus a permanent bottom gradient so the text reads */}
+        <span aria-hidden="true" className="absolute inset-0 bg-(--red)/0 transition-colors duration-500 group-hover:bg-(--red)/15 motion-reduce:transition-none" />
+        <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-(--ink)/80 to-transparent" />
+
+        {/* The 360 mark, centred */}
+        <span
+          aria-hidden="true"
+          className="tour-badge absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-transform duration-500 group-hover:scale-[1.08] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        >
+          <span className="font-['Fira_Sans_Condensed'] text-4xl font-black text-white drop-shadow-[0_2px_12px_rgba(17,20,24,0.55)] md:text-5xl">360°</span>
+          <svg viewBox="0 0 120 40" width="96" height="32" fill="none" className="mt-1 overflow-visible">
+            <path
+              d="M60 6C88 6 112 13 112 22s-24 16-52 16S8 31 8 22 32 6 60 6"
+              pathLength={1}
+              className="tour-draw stroke-white"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <path d="M16 13l-8 9 11 4" className="stroke-white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+
+        {/* Ripple out of the centre while the tab opens */}
+        {opening && (
+          <span
+            aria-hidden="true"
+            className="tour-ripple pointer-events-none absolute left-1/2 top-1/2 size-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
+          />
+        )}
+
+        {/* Top-right chip: on hover, and always on touch */}
+        <span className="absolute right-4 top-4 inline-flex -translate-y-1.5 items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-(--ink) opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 motion-reduce:transition-none [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
+          Enter tour
+          <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
+        </span>
+
+        {/* Bottom-left caption */}
+        <span className="absolute inset-x-0 bottom-0 flex flex-col items-start p-5 transition-transform duration-500 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 md:p-6">
+          {tour.company && <span className="text-[11px] uppercase tracking-[0.18em] text-white/70">[ {tour.company} ]</span>}
+          <span className="mt-1 max-w-[34ch] text-xs font-semibold uppercase tracking-[0.12em] text-white md:text-sm">{tour.units}</span>
+        </span>
+      </div>
+
+      <p className="mt-4 text-center font-['Fira_Sans_Condensed'] text-xl font-black uppercase tracking-[0.04em] text-(--ink) transition-colors duration-300 group-hover:text-(--red) motion-reduce:transition-none md:text-2xl">
+        {tour.name}
+      </p>
+      <span aria-hidden="true" className="mx-auto mt-1 block h-0.5 w-0 bg-(--red) transition-[width] duration-500 group-hover:w-12 motion-reduce:transition-none" />
+    </a>
+  );
+}
+
 export default function GalleryPage() {
   usePageMeta(
     "Gallery",
     "Photos and film from inside Ha-Meem Group: denim mills, garment factories, virtual tours and the people behind the group.",
   );
+  // This page opens white, so the header starts in ink rather than white
+  useLightHero();
 
   const [category, setCategory] = useState<GalleryCategory | "All">("All");
   const [box, setBox] = useState<{ list: GalleryItem[]; index: number } | null>(null);
@@ -302,86 +378,26 @@ export default function GalleryPage() {
 
       {/* ── 360° VIRTUAL TOURS ── */}
       <section id="tours" className="scroll-mt-24 bg-(--mist) section-y">
-        <div className="wrap grid items-center gap-12 lg:grid-cols-[5fr_7fr] lg:gap-16">
-          <div data-reveal>
-            <Eyebrow className="flex items-center gap-3">
-              {TOUR_ICON && (
-                <img
-                  {...imgProps(TOUR_ICON, "28px")}
-                  alt=""
-                  width={28}
-                  height={28}
-                  loading="lazy"
-                  decoding="async"
-                  className="size-7 rounded-full bg-white object-cover ring-1 ring-(--hair)"
-                />
-              )}
+        <div className="wrap">
+          <div data-reveal className="mx-auto max-w-2xl text-center">
+            <Eyebrow className="flex items-center justify-center gap-3">
               <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
                 <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
               </svg>
               360° VIRTUAL TOURS
             </Eyebrow>
-            <h2 className="mt-head-eyebrow font-['Fira_Sans_Condensed'] text-h2 font-black">
-              Walk our factories
-              <br />
-              <span className="text-(--red)">from anywhere.</span>
+            <h2 className="mt-head-eyebrow font-['Fira_Sans_Condensed'] text-h2 font-black uppercase">
+              Ha-Meem Group <span className="text-(--red)">360°</span> VR tour
             </h2>
-            <p className="mt-head-intro max-w-[44ch] text-pretty text-(--mute)">
-              Step inside the Textile and Tongi zones in 360°: production floors, mills and finishing, as our buyers see them on a visit.
+            <p className="mt-head-intro text-pretty text-(--mute)">
+              Walk through our factories from anywhere: sewing, denim, knitwear and outerwear units, filmed in 360°.
             </p>
-            {VIRTUAL_TOUR_URL ? (
-              <a
-                href={VIRTUAL_TOUR_URL}
-                target="_blank"
-                rel="noopener"
-                className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full bg-(--red) px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-(--ink) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
-              >
-                <Rotate3d size={16} strokeWidth={1.75} aria-hidden="true" />
-                Start the tour
-              </a>
-            ) : (
-              <span className="mt-8 inline-flex min-h-11 items-center rounded-full border border-(--hair) px-6 text-sm text-(--mute)">
-                Tours launching soon
-              </span>
-            )}
           </div>
 
-          <div data-reveal-stagger className="flex flex-col gap-6">
-            {TOUR_ITEMS.map((item, i) => {
-              const inner = (
-                <>
-                  <img
-                    {...imgProps(item, "560px")}
-                    alt={item.title}
-                    loading="lazy"
-                    decoding="async"
-                    className="size-full object-cover object-left transition-[object-position] duration-[8000ms] ease-linear group-hover:object-right motion-reduce:transition-none"
-                  />
-                  <span className="absolute inset-x-0 bottom-0 flex flex-col bg-linear-to-t from-(--ink)/75 to-transparent px-5 pb-4 pt-14 text-left text-white">
-                    <span className="font-['Fira_Sans_Condensed'] text-xl font-bold">{item.title}</span>
-                    <span className="mt-1 flex items-center gap-1.5 text-xs opacity-80">
-                      <Move size={14} strokeWidth={1.75} aria-hidden="true" />
-                      Drag to look around
-                    </span>
-                  </span>
-                  <span aria-hidden="true" className="absolute right-4 top-4 grid size-13 place-items-center rounded-full bg-white/90 text-xs font-bold text-(--ink)">
-                    <span className="gallery-spin absolute -inset-1 rounded-full border border-dashed border-white/70" />
-                    360°
-                  </span>
-                </>
-              );
-              const cls =
-                "group relative block aspect-[2/1] w-full max-w-[560px] overflow-hidden rounded-[24px] bg-white ring-1 ring-(--hair) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red)";
-              return VIRTUAL_TOUR_URL ? (
-                <a key={item.src} href={VIRTUAL_TOUR_URL} target="_blank" rel="noopener" aria-label={`${item.title} (opens the tour in a new tab)`} className={cls}>
-                  {inner}
-                </a>
-              ) : (
-                <button key={item.src} type="button" aria-label={`Open ${item.title}`} onClick={(e) => openBox(TOUR_ITEMS, i, e.currentTarget)} className={cls}>
-                  {inner}
-                </button>
-              );
-            })}
+          <div data-reveal-stagger className="mx-auto mt-section-head grid max-w-6xl gap-6 md:grid-cols-2 md:gap-8">
+            {VR_TOURS.map((tour) => (
+              <TourCard key={tour.id} tour={tour} />
+            ))}
           </div>
         </div>
       </section>
@@ -402,7 +418,7 @@ export default function GalleryPage() {
             ) : (
               <>
                 <img
-                  {...imgProps({ src: GALLERY_VIDEO.poster, title: "", category: "Denim", width: 1600, height: 900 }, "(min-width: 1024px) 58vw, 100vw")}
+                  {...imgProps({ src: GALLERY_VIDEO.poster, width: 2200, height: 1200 }, "(min-width: 1024px) 58vw, 100vw")}
                   alt=""
                   loading="lazy"
                   decoding="async"
@@ -457,7 +473,7 @@ export default function GalleryPage() {
 
             <img
               key={box.index}
-              {...imgProps(current, "90vw", true)}
+              {...imgProps(current, "90vw")}
               alt={current.title}
               decoding="async"
               className="gallery-in max-h-[80vh] w-auto max-w-full rounded-md object-contain"

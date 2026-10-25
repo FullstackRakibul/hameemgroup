@@ -189,6 +189,9 @@
   background-color: #fff;
   box-shadow: 0 8px 24px rgba(17, 20, 24, 0.06);
 }
+/* Pages that open on a light band (useLightHero): the transparent header's
+   white text would vanish, so it starts in ink and keeps the red stitch. */
+[data-light-hero] .header-wrapper:not(.is-solid) { color: var(--ink); }
 .header-bar {
   height: var(--header-h);
   border-bottom: 1px solid transparent;
@@ -241,14 +244,17 @@
   transform: translateX(120%);
   transition: transform 0.7s ease;
 }
-.is-solid .logo-pill {
+.is-solid .logo-pill,
+[data-light-hero] .header-wrapper:not(.is-solid) .logo-pill {
   background-color: var(--mist);
   border-color: transparent;
   box-shadow: none;
   backdrop-filter: none;
 }
 .is-solid .site-logo:hover .logo-pill,
-.is-solid .site-logo:focus-visible .logo-pill {
+.is-solid .site-logo:focus-visible .logo-pill,
+[data-light-hero] .header-wrapper:not(.is-solid) .site-logo:hover .logo-pill,
+[data-light-hero] .header-wrapper:not(.is-solid) .site-logo:focus-visible .logo-pill {
   background-color: #fff;
   box-shadow: 0 0 0 1px var(--hair), 0 6px 16px rgba(17, 20, 24, 0.08);
 }
@@ -283,6 +289,7 @@
    under mega-menu rows on hover or focus, and under mobile-menu rows on tap. */
 .header-wrapper { --nav-stitch: #fff; }
 .header-wrapper.is-solid { --nav-stitch: var(--red); }
+[data-light-hero] .header-wrapper:not(.is-solid) { --nav-stitch: var(--red); }
 .nav-text,
 .row-stitch,
 .row-stitch-tap { position: relative; }
@@ -710,7 +717,11 @@ footer[id] { scroll-margin-top: var(--header-h); }
 @media (prefers-reduced-motion: reduce) {
   .orbit-spin, .orbit-counter, .orbit-spin-reverse, .soft-pulse,
   .gallery-marquee, .gallery-in, .gallery-ring, .gallery-spin,
-  .garment-float { animation: none; }
+  .garment-float,
+  [data-opening] .tour-frame, [data-opening] .tour-badge,
+  .tour-ripple, .group:hover .tour-draw { animation: none; }
+  /* With the animation off the ripple would sit there as a solid disc */
+  .tour-ripple { display: none; }
 }
 
 /* ── Gallery page ── */
@@ -727,6 +738,26 @@ footer[id] { scroll-margin-top: var(--header-h); }
 /* Reuses the founded orbit's spin */
 .gallery-spin { animation: orbitSpin 12s linear infinite; }
 dialog.gallery-lightbox::backdrop { background: rgb(17 20 24 / 0.96); }
+
+/* ── Gallery: the 360° tour cards confirm the new tab is opening ── */
+@keyframes tourPress {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.97); }
+}
+@keyframes tourSpin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+@keyframes tourRipple {
+  from { transform: scale(0); opacity: 0.35; }
+  to { transform: scale(3); opacity: 0; }
+}
+[data-opening] .tour-frame { animation: tourPress 400ms var(--ease-out, ease-out); }
+[data-opening] .tour-badge { animation: tourSpin 800ms ease-in-out; }
+.tour-ripple { animation: tourRipple 800ms var(--ease-out, ease-out) forwards; }
+/* The badge's ellipse redraws on hover; at rest, and on touch, it is fully drawn */
+.tour-draw { stroke-dasharray: 1; stroke-dashoffset: 0; }
+@media (hover: hover) {
+  .group:hover .tour-draw { animation: tourDraw 900ms var(--ease-out, ease-out) both; }
+}
+@keyframes tourDraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 
 /* ── Awards: the autoplay timer ── */
 @keyframes autoFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }

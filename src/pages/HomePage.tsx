@@ -983,13 +983,13 @@ export default function HomePage() {
                 <span className="text-(--ink)">Ha-Meem Group&apos;s export performance, product quality and technical excellence</span>
                 <span className="text-(--mute)"> since 2009.</span>
               </p>
-              <SmartLink
+              {/* <SmartLink
                 href="/about"
                 className="group mt-cta inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(17,20,24,0.18)] transition-colors duration-300 hover:bg-(--red) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
               >
                 About Ha-Meem Group
                 <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" />
-              </SmartLink>
+              </SmartLink> */}
             </div>
             <AwardSlider className="mt-section-head" />
             {/* Accreditations & certifications */}
