@@ -310,7 +310,7 @@ export default function HomePage() {
           if the copy needs it: the copy sits in flow at the foot. */}
       <section
         id="top"
-        className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden text-white bg-(--ink) [--ring:#fff]"
+        className="relative flex min-h-svh flex-col justify-end overflow-hidden text-white bg-(--ink) [--ring:#fff]"
       >
         {/* Isolated, so the slides' z-index stays under the shade layers */}
         <div className="absolute inset-0 isolate">

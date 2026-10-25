@@ -209,10 +209,11 @@
 .logo-pill {
   position: relative;
   display: flex;
+  place-items: center;
   align-items: center;
   height: 3rem;
   padding-inline: 0.25rem;
-  border-radius: 0.5rem;
+  border-radius: 9999px; 
   overflow: hidden;
   isolation: isolate;
   background-color: rgba(255, 255, 255, 0.08);
