@@ -707,8 +707,30 @@ footer[id] { scroll-margin-top: var(--header-h); }
 .orbit-spin-reverse { animation: orbitSpin 60s linear infinite reverse; }
 .soft-pulse { animation: softPulse 4s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .orbit-spin, .orbit-counter, .orbit-spin-reverse, .soft-pulse { animation: none; }
+  .orbit-spin, .orbit-counter, .orbit-spin-reverse, .soft-pulse,
+  .gallery-marquee, .gallery-wall-up, .gallery-wall-down, .gallery-in, .gallery-ring, .gallery-spin { animation: none; }
 }
+
+/* ── Gallery page ── */
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes wallUp { from { transform: translateY(0); } to { transform: translateY(-40px); } }
+@keyframes wallDown { from { transform: translateY(0); } to { transform: translateY(40px); } }
+@keyframes galleryIn { from { opacity: 0; transform: translateY(16px); } }
+@keyframes ringPulse {
+  from { transform: scale(1); opacity: 0.5; }
+  to { transform: scale(1.4); opacity: 0; }
+}
+.gallery-marquee { animation: marquee 40s linear infinite; }
+.gallery-marquee:hover { animation-play-state: paused; }
+@media (min-width: 64rem) {
+  .gallery-wall-up { animation: wallUp 12s ease-in-out infinite alternate; }
+  .gallery-wall-down { animation: wallDown 12s ease-in-out infinite alternate; }
+}
+.gallery-in { animation: galleryIn 600ms var(--ease-out, ease-out) both; }
+.gallery-ring { animation: ringPulse 2s ease-out infinite; }
+/* Reuses the founded orbit's spin */
+.gallery-spin { animation: orbitSpin 12s linear infinite; }
+dialog.gallery-lightbox::backdrop { background: rgb(17 20 24 / 0.96); }
 
 /* ── Award gallery: the featured award and its year settle in ── */
 @keyframes awardIn {

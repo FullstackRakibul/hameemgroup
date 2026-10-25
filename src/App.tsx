@@ -20,6 +20,7 @@ import SweaterPage from "./pages/SweaterPage";
 import DesignStudioPage from "./pages/DesignStudioPage";
 import EmbroideryPage from "./pages/EmbroideryPage";
 import AncillaryPage from "./pages/AncillaryPage";
+import GalleryPage from "./pages/GalleryPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -219,6 +220,7 @@ export default function App() {
           <Route path="businesses/design-studio" element={<DesignStudioPage />} />
           <Route path="businesses/embroidery-printing-accessories" element={<EmbroideryPage />} />
           <Route path="businesses/ancillary" element={<AncillaryPage />} />
+          <Route path="gallery" element={<GalleryPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
