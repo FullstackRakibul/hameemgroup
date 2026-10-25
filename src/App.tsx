@@ -3,6 +3,7 @@ import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router-
 import Preloader from "./Preloader";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./components/SiteFooter";
+import GarmentBackdrop from "./components/GarmentBackdrop";
 import useReveal from "./components/useReveal";
 import { AiAssistant } from "./features/ai-assistant";
 import { megaMenuData } from "./data/navigation";
@@ -194,6 +195,7 @@ function Shell() {
         <SiteHeader menus={megaMenuData} />
         <div ref={pageRef} className="page">
           <main>
+            <GarmentBackdrop />
             <Outlet />
           </main>
           <SiteFooter />

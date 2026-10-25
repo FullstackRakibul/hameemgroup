@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import { Award, ChevronLeft, ChevronRight } from "lucide-react";
+import { Award, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { AWARD_TIMELINE, type TimelineAward } from "../data/facts";
 
 const media = "/media/";
@@ -9,8 +9,9 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
 const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const pad = (n: number) => String(n).padStart(2, "0");
 
-// Open on the newest award that has a photo
-const START = AWARD_TIMELINE.reduce((last, a, i) => (a.image ? i : last), N - 1);
+// Open on the first award photo, Kohl's Greatness Award 2017
+const START = Math.max(0, AWARD_TIMELINE.findIndex((a) => a.years === "2017"));
+const AUTO_MS = 4500;
 
 /* One award card: its photo, or a stitched fallback with the issuer */
 function CardFace({ a }: { a: TimelineAward }) {
@@ -58,6 +59,18 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
   const spacing = useRef(210);
   const drag = useRef<{ x: number; t: number; lastX: number; lastTime: number; v: number; moved: boolean } | null>(null);
   const suppressClick = useRef(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [paused, setPaused] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const [canAuto, setCanAuto] = useState(false);
+  // Temporary pauses: hover, focus, drag, off-screen, hidden tab
+  const hold = useRef(false);
+  const holds = useRef({ hover: false, focus: false, drag: false, offscreen: false });
+  const setHold = useCallback((k: keyof typeof holds.current, v: boolean) => {
+    holds.current[k] = v;
+    hold.current = Object.values(holds.current).some(Boolean) || document.visibilityState === "hidden";
+    wrapRef.current?.toggleAttribute("data-held", hold.current);
+  }, []);
 
   // Write every card's transform for the current position: no React render per frame
   const paint = useCallback(() => {
@@ -130,12 +143,46 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
     };
   }, [go]);
 
+  // Off-screen and hidden-tab holds; autoplay is off under reduced motion
+  useEffect(() => {
+    setCanAuto(!reduced());
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setHold("offscreen", !e.isIntersecting), { threshold: 0.25 });
+    io.observe(el);
+    const onVis = () => setHold("hover", holds.current.hover);
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [setHold]);
+
+  // Autoplay: one timeout, re-armed by every move; while held it just retries
+  useEffect(() => {
+    if (paused || !canAuto) return;
+    const id = window.setTimeout(() => {
+      if (!hold.current) go(active === N - 1 ? 0 : active + 1);
+      else setRetry((t) => t + 1);
+    }, AUTO_MS);
+    return () => clearTimeout(id);
+  }, [active, paused, retry, go, canAuto]);
+
   const navBtn =
     "group grid size-11 place-items-center rounded-full border border-(--hair) bg-white text-(--ink) transition-colors duration-300 hover:border-(--red) disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red) motion-reduce:transition-none";
   const a = AWARD_TIMELINE[active];
 
   return (
-    <div className={className}>
+    <div
+      ref={wrapRef}
+      className={`group/slider ${className}`}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHold("hover", true)}
+      onPointerLeave={() => setHold("hover", false)}
+      onFocus={() => setHold("focus", true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setHold("focus", false);
+      }}
+    >
       <div
         ref={stageRef}
         tabIndex={0}
@@ -151,6 +198,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
         }}
         onPointerDown={(e) => {
           if (e.pointerType === "mouse" && e.button !== 0) return;
+          setHold("drag", true);
           drag.current = { x: e.clientX, t: target.current, lastX: e.clientX, lastTime: e.timeStamp, v: 0, moved: false };
         }}
         onPointerMove={(e) => {
@@ -171,6 +219,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
         onPointerUp={() => {
           const g = drag.current;
           drag.current = null;
+          setHold("drag", false);
           if (!g?.moved) return;
           suppressClick.current = true;
           // A flick carries on a card or two, by velocity (px/ms)
@@ -178,9 +227,10 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
         }}
         onPointerCancel={() => {
           drag.current = null;
+          setHold("drag", false);
           go(Math.round(target.current));
         }}
-        className="relative h-[380px] cursor-grab touch-pan-y select-none overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [perspective:1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) active:cursor-grabbing md:h-[440px]"
+        className="relative h-[380px] cursor-grab touch-pan-y select-none overflow-x-clip pb-10 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [perspective:1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) active:cursor-grabbing md:h-[440px]"
       >
         {AWARD_TIMELINE.map((t, i) => (
           <button
@@ -211,7 +261,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
       </div>
 
       {/* Details of the active award */}
-      <div aria-live="polite" className="relative z-10 mx-auto -mt-6 max-w-md rounded-2xl border border-(--hair) bg-white px-6 py-5 text-center shadow-sm">
+      <div aria-live="polite" className="relative z-10 mx-auto -mt-12 max-w-md rounded-2xl border border-(--hair) bg-white px-6 py-5 text-center shadow-sm">
         <div
           key={active}
           className="animate-[awardIn_400ms_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none"
@@ -232,6 +282,17 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
         <span className="min-w-16 text-center text-sm tabular-nums tracking-widest text-(--mute)">
           <b className="font-semibold text-(--ink)">{pad(active + 1)}</b> / {pad(N)}
         </span>
+        {canAuto && (
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            aria-label={paused ? "Play slideshow" : "Pause slideshow"}
+            aria-pressed={paused}
+            className={navBtn}
+          >
+            {paused ? <Play size={16} strokeWidth={1.75} fill="currentColor" aria-hidden="true" /> : <Pause size={16} strokeWidth={1.75} aria-hidden="true" />}
+          </button>
+        )}
         <button type="button" onClick={() => go(active + 1)} disabled={active === N - 1} aria-label="Next award" className={navBtn}>
           <ChevronRight size={18} strokeWidth={1.75} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none" />
         </button>
@@ -243,6 +304,13 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
           className="absolute top-1/2 h-0.5 w-6 -translate-y-1/2 bg-(--red) transition-[left] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
           style={{ left: `calc(${active / (N - 1)} * (100% - 1.5rem))` }}
         />
+        {/* Autoplay timer: fills over one slide, frozen while held */}
+        {canAuto && !paused && (
+          <span
+            key={active}
+            className="absolute inset-x-0 top-1.5 h-px origin-left bg-(--red)/50 animate-[autoFill_4500ms_linear_both] group-data-held/slider:[animation-play-state:paused] motion-reduce:hidden"
+          />
+        )}
       </div>
     </div>
   );

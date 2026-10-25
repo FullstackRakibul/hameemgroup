@@ -12,7 +12,7 @@ export default function Gallery({ images, label }: { images: GalleryImage[]; lab
   return (
     <ul data-reveal-stagger aria-label={label} className={`grid grid-cols-1 gap-grid ${COLS[images.length] ?? "sm:grid-cols-2 lg:grid-cols-3"}`}>
       {images.map((img) => (
-        <li key={img.src} className="group aspect-[4/3] overflow-hidden bg-(--mist)">
+        <li key={img.src} className="group aspect-4/3 overflow-hidden bg-(--mist)">
           <img
             src={`/media/${img.src}`}
             alt={img.alt}
