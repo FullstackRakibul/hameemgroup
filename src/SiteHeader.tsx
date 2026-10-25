@@ -36,7 +36,7 @@ function Logo() {
     <Link to="/" className="site-logo flex shrink-0 items-center" aria-label="Ha-Meem Group — home">
       <span className="logo-pill">
         <img
-          src="/group-logo.png"
+          src="/hameem-group-round-logo.jpg"
           alt=""
           className="h-10 w-auto rounded-sm object-contain"
           draggable={false}
