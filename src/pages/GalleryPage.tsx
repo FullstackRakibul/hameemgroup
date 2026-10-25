@@ -21,7 +21,7 @@ function imgProps(item: GalleryItem, sizes: string, large = false) {
     height,
   };
 }
-
+//image
 const pad = (n: number) => String(n).padStart(2, "0");
 const countOf = (c: GalleryCategory) => GALLERY.filter((g) => g.category === c).length;
 const smooth = () => (window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth");
