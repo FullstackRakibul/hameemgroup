@@ -709,3 +709,8 @@ footer[id] { scroll-margin-top: var(--header-h); }
 @media (prefers-reduced-motion: reduce) {
   .orbit-spin, .orbit-counter, .orbit-spin-reverse, .soft-pulse { animation: none; }
 }
+
+/* ── Award gallery: the featured award and its year settle in ── */
+@keyframes awardIn {
+  from { opacity: 0; transform: var(--award-from, translateY(12px)); }
+}

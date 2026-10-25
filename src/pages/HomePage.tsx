@@ -6,17 +6,15 @@ import Productcarousel from "../components/Productcarousel ";
 import Eyebrow from "../components/Eyebrow";
 import SectionHeader from "../components/SectionHeader";
 import BuyerGrid from "../components/BuyerGrid";
-import AwardGrid from "../components/AwardGrid";
+import AwardGallery from "../components/AwardGallery";
 import ContactCta from "../components/ContactCta";
 import GarmentIcons from "../components/GarmentIcons";
 import FoundedOrbit from "../components/FoundedOrbit";
 import usePageMeta from "../components/usePageMeta";
 import {
-  BUYER_AWARDS,
   CERTIFICATIONS,
   F,
   GROUP_STATS,
-  NATIONAL_AWARDS,
   SUSTAINABILITY_STATS,
   VIRTUAL_TOUR_URL,
   splitUnit,
@@ -171,8 +169,6 @@ const businesses = [
     to: "/about#other-businesses",
   },
 ];
-
-const awards = [...NATIONAL_AWARDS, ...BUYER_AWARDS];
 
 const newsItems = [
   {
@@ -966,7 +962,9 @@ export default function HomePage() {
 </section>
 
         {/* ── RECOGNITION & AWARDS ── */}
-        <section id="recognition" className="bg-(--mist) section-y">
+        {/* Brand palette for this section: navy primary, brown accent. The
+            eyebrow and other red accents inside pick up the navy. */}
+        <section id="recognition" className="bg-(--mist) section-y [--primary:#142E53] [--accent:#3A1C14] [--red:var(--primary)]">
           <div className="wrap">
             <SectionHeader
               eyebrow="RECOGNITION"
@@ -984,7 +982,9 @@ export default function HomePage() {
                 season.
               </p>
             </SectionHeader>
-            <AwardGrid awards={awards} className="mt-section-head" />
+            <div data-reveal>
+              <AwardGallery className="mt-section-head" />
+            </div>
             {/* Accreditations & certifications */}
             <div className="border-t border-(--hair) mt-9 pt-10 grid md:grid-cols-[260px_1fr] gap-6">
               <Eyebrow>
