@@ -34,6 +34,13 @@ This project uses **Tailwind CSS v4** through the `@tailwindcss/vite` plugin con
 
 `src/main.tsx` imports `src/index.css`, so global font wiring belongs in `src/index.css`. Keep CSS `@import` statements first, then add any `@font-face` rules and font-family defaults there.
 
+## Icons
+
+- Use `lucide-react` for all UI icons (arrows, chevrons, play/pause, close, menu, external link, check, etc.). Don't hand-write SVG paths or use text glyphs like ← → ▶ for UI icons.
+- Import named icons only: `import { ChevronRight } from "lucide-react"`.
+- Defaults: `size={18}`, `strokeWidth={1.75}`, `aria-hidden="true"`. The button carries the `aria-label`. Colour comes from `currentColor`, so set it with Tailwind text classes.
+- Decorative brand graphics (stitches, selvedge lines, logos, illustrations) stay as custom SVG.
+
 ## Code quality
 
 - Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings. An unescaped apostrophe in a single-quoted string breaks the build.

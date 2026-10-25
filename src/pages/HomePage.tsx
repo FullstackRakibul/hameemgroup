@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { ChevronDown, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import WorldRoutes from "../WorldRoutes";
 import Productcarousel from "../components/Productcarousel ";
 import Eyebrow from "../components/Eyebrow";
@@ -403,39 +404,27 @@ export default function HomePage() {
 
               <div className="flex items-center gap-3">
                 {[
-                  { id: "prev", label: "Previous slide", onClick: prevSlide, icon: <path d="M10 3.5L5.5 8l4.5 4.5" /> },
+                  { id: "prev", label: "Previous slide", onClick: prevSlide, icon: <ChevronLeft size={18} strokeWidth={1.75} aria-hidden="true" className="group-hover:-translate-x-0.5 transition-transform duration-300 motion-reduce:transition-none" /> },
                   {
                     id: "toggle",
                     label: heroPaused ? "Play slideshow" : "Pause slideshow",
                     onClick: togglePause,
                     icon: heroPaused ? (
-                      <path d="M5.5 3.5v9l7-4.5z" fill="currentColor" stroke="none" />
+                      <Play size={16} strokeWidth={1.75} fill="currentColor" aria-hidden="true" />
                     ) : (
-                      <path d="M6 3.5v9M10 3.5v9" />
+                      <Pause size={16} strokeWidth={1.75} aria-hidden="true" />
                     ),
                   },
-                  { id: "next", label: "Next slide", onClick: nextSlide, icon: <path d="M6 3.5l4.5 4.5L6 12.5" /> },
+                  { id: "next", label: "Next slide", onClick: nextSlide, icon: <ChevronRight size={18} strokeWidth={1.75} aria-hidden="true" className="group-hover:translate-x-0.5 transition-transform duration-300 motion-reduce:transition-none" /> },
                 ].map((c) => (
                   <button
                     key={c.id}
                     type="button"
                     onClick={c.onClick}
                     aria-label={c.label}
-                    className="btn-ring grid size-11 place-items-center rounded-full border border-white/50 bg-[#11141826] text-white backdrop-blur-sm transition-colors duration-300 hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+                    className="group btn-ring grid size-11 place-items-center rounded-full border border-white/50 bg-[#11141826] text-white backdrop-blur-sm transition-colors duration-300 hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
                   >
-                    <svg
-                      aria-hidden="true"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      {c.icon}
-                    </svg>
+                    {c.icon}
                   </button>
                 ))}
               </div>
@@ -801,17 +790,9 @@ export default function HomePage() {
             <span className="relative z-1 flex-1 font-['Fira_Sans_Condensed'] text-[22px] font-bold leading-tight text-white">
               {item.title}
             </span>
-            <svg
-              aria-hidden="true"
-              width="14"
-              height="8"
-              viewBox="0 0 14 8"
-              className={`relative z-1 shrink-0 text-white transition-transform duration-300 motion-reduce:transition-none ${
+            <ChevronDown size={18} strokeWidth={1.75} aria-hidden="true" className={`relative z-1 shrink-0 text-white transition-transform duration-300 motion-reduce:transition-none ${
                 open ? "rotate-180" : ""
-              }`}
-            >
-              <path d="M1 1l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="1.6" />
-            </svg>
+              }`} />
           </button>
 
           {/* Grid rows 0fr → 1fr animates to the content's natural height */}
