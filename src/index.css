@@ -710,7 +710,7 @@ footer[id] { scroll-margin-top: var(--header-h); }
 @media (prefers-reduced-motion: reduce) {
   .orbit-spin, .orbit-counter, .orbit-spin-reverse, .soft-pulse,
   .gallery-marquee, .gallery-wall-up, .gallery-wall-down, .gallery-in, .gallery-ring, .gallery-spin,
-  .glow-drift, .garment-float { animation: none; }
+  .garment-float { animation: none; }
 }
 
 /* ── Gallery page ── */
@@ -734,10 +734,8 @@ footer[id] { scroll-margin-top: var(--header-h); }
 .gallery-spin { animation: orbitSpin 12s linear infinite; }
 dialog.gallery-lightbox::backdrop { background: rgb(17 20 24 / 0.96); }
 
-/* ── Awards: drifting glows and the autoplay timer ── */
-@keyframes glowDrift { to { transform: translate(40px, -30px); } }
+/* ── Awards: the autoplay timer ── */
 @keyframes autoFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.glow-drift { animation: glowDrift 22s ease-in-out infinite alternate; }
 
 /* ── Award gallery: the featured award and its year settle in ── */
 @keyframes awardIn {

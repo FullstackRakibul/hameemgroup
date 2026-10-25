@@ -13,24 +13,27 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const START = Math.max(0, AWARD_TIMELINE.findIndex((a) => a.years === "2017"));
 const AUTO_MS = 4500;
 
+// Outer cards shrink: 1 → .84 → .68 → .62
+const scaleAt = (k: number) => Math.max(0.62, 1 - Math.min(k, 3) * 0.16);
+
 /* One award card: its photo, or a stitched fallback with the issuer */
-function CardFace({ a }: { a: TimelineAward }) {
+function CardFace({ a, active }: { a: TimelineAward; active: boolean }) {
   if (a.image)
     return (
       <img
         src={`${media}${a.image}`}
         alt={`${a.title}, ${a.years}`}
-        width={200}
-        height={250}
+        width={220}
+        height={294}
         loading="lazy"
         decoding="async"
         draggable={false}
-        className="size-full object-cover"
+        className={`size-full object-cover object-center transition-transform duration-700 ease-out motion-reduce:transition-none ${active ? "group-hover/card:scale-[1.04]" : ""}`}
       />
     );
   return (
-    <span className="relative flex size-full flex-col items-center justify-center gap-3 bg-[linear-gradient(160deg,#fff,var(--mist))]">
-      <Award size={40} strokeWidth={1.5} aria-hidden="true" className="text-(--red)" />
+    <span className="relative flex size-full flex-col items-center justify-center gap-3 bg-white">
+      <Award size={36} strokeWidth={1.5} aria-hidden="true" className="text-(--red)" />
       {a.logo && (
         <img
           src={`${media}${a.logo}`}
@@ -40,11 +43,11 @@ function CardFace({ a }: { a: TimelineAward }) {
           loading="lazy"
           decoding="async"
           draggable={false}
-          className="max-h-8 w-auto object-contain opacity-70 grayscale"
+          className="max-h-7 w-auto object-contain opacity-70 grayscale"
         />
       )}
       <span className="font-['Fira_Sans_Condensed'] text-lg font-semibold text-(--mute)">{firstYear(a)}</span>
-      <span aria-hidden="true" className="pointer-events-none absolute inset-2.5 rounded-xl border border-dashed border-(--ink)/15" />
+      <span aria-hidden="true" className="pointer-events-none absolute inset-3 rounded-[14px] border border-dashed border-(--ink)/12" />
     </span>
   );
 }
@@ -56,7 +59,8 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
   const pos = useRef(START);
   const target = useRef(START);
   const raf = useRef(0);
-  const spacing = useRef(210);
+  // Card width and gap by breakpoint; `step` is one card's px for drag and wheel
+  const spacing = useRef({ cardW: 220, gap: 28, step: 220 * 0.92 + 28 });
   const drag = useRef<{ x: number; t: number; lastX: number; lastTime: number; v: number; moved: boolean } | null>(null);
   const suppressClick = useRef(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -78,18 +82,25 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
       if (!el) return;
       const d = i - pos.current;
       const ad = Math.abs(d);
-      const scale = 1 + Math.min(ad, 3) * 0.16;
-      const rot = clamp(d, -3, 3) * -14;
-      el.style.transform = `translate(-50%,-50%) translateX(${d * spacing.current}px) rotateY(${rot}deg) scale(${scale})`;
+      const scale = scaleAt(ad);
+      const rot = clamp(d, -3, 3) * -10;
+      // No overlap: each step moves by the scaled widths of both cards plus a gap
+      const { cardW, gap } = spacing.current;
+      const stepAt = (k: number) => (cardW * (scaleAt(k) + scaleAt(k + 1))) / 2 + gap;
+      const whole = Math.floor(ad);
+      let offset = (ad - whole) * stepAt(whole);
+      for (let k = 0; k < whole; k++) offset += stepAt(k);
+      const x = Math.sign(d) * offset;
+      el.style.transform = `translate(-50%,-50%) translateX(${x}px) rotateY(${rot}deg) scale(${scale})`;
       el.style.zIndex = String(100 - Math.round(ad * 10));
-      el.style.opacity = ad > 3.5 ? "0" : "1";
-      el.style.visibility = ad > 4 ? "hidden" : "visible";
+      el.style.opacity = String(ad > 3.2 ? 0 : 1 - Math.min(ad, 3) * 0.18);
+      el.style.visibility = ad > 3.6 ? "hidden" : "visible";
     });
   }, []);
 
   const tick = useCallback(() => {
-    pos.current += (target.current - pos.current) * 0.12;
-    if (Math.abs(target.current - pos.current) < 0.001) {
+    pos.current += (target.current - pos.current) * 0.085;
+    if (Math.abs(target.current - pos.current) < 0.0005) {
       pos.current = target.current;
       raf.current = 0;
     } else raf.current = requestAnimationFrame(tick);
@@ -112,7 +123,9 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
   useLayoutEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const update = () => {
-      spacing.current = mq.matches ? 210 : 160;
+      const cardW = mq.matches ? 220 : 160;
+      const gap = mq.matches ? 28 : 16;
+      spacing.current = { cardW, gap, step: cardW * 0.92 + gap };
       paint();
     };
     update();
@@ -132,7 +145,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
     const onWheel = (e: WheelEvent) => {
       if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
       e.preventDefault();
-      go(target.current + e.deltaX / spacing.current, false);
+      go(target.current + e.deltaX / spacing.current.step, false);
       clearTimeout(snap);
       snap = window.setTimeout(() => go(Math.round(target.current)), 150);
     };
@@ -169,7 +182,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
   }, [active, paused, retry, go, canAuto]);
 
   const navBtn =
-    "group grid size-11 place-items-center rounded-full border border-(--hair) bg-white text-(--ink) transition-colors duration-300 hover:border-(--red) disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red) motion-reduce:transition-none";
+    "group grid size-11 place-items-center rounded-full border border-(--hair) bg-white text-(--ink) transition-colors duration-300 hover:border-(--ink) disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red) motion-reduce:transition-none";
   const a = AWARD_TIMELINE[active];
 
   return (
@@ -214,7 +227,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
           if (dt > 0) g.v = (e.clientX - g.lastX) / dt;
           g.lastX = e.clientX;
           g.lastTime = e.timeStamp;
-          go(g.t - dx / spacing.current, false);
+          go(g.t - dx / spacing.current.step, false);
         }}
         onPointerUp={() => {
           const g = drag.current;
@@ -230,7 +243,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
           setHold("drag", false);
           go(Math.round(target.current));
         }}
-        className="relative h-95 cursor-grab touch-pan-y select-none overflow-x-clip pb-10 mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] perspective-[1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) active:cursor-grabbing md:h-110"
+        className="relative h-[340px] cursor-grab touch-pan-y select-none overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [perspective:1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) active:cursor-grabbing md:h-[400px]"
       >
         {AWARD_TIMELINE.map((t, i) => (
           <button
@@ -249,19 +262,34 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
               }
               go(i);
             }}
-            className={`absolute left-1/2 top-1/2 h-51.25 w-37.5 overflow-hidden rounded-2xl bg-white shadow-[0_18px_40px_rgba(17,20,24,0.14)] transition-[filter,box-shadow] duration-300 will-change-transform motion-reduce:transition-none md:h-67.5 md:w-50
-              i === active ? "ring-2 ring-(--red) ring-offset-4 ring-offset-(--mist)" : "brightness-95 grayscale-35"
-            }`}
+            className="group/card absolute left-1/2 top-1/2 h-[214px] w-[160px] will-change-transform md:h-[294px] md:w-[220px]"
           >
-            <CardFace a={t} />
+            <span
+              className={`block size-full overflow-hidden rounded-[20px] bg-white transition-[filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
+                i === active
+                  ? "blur-0 ring-2 ring-(--red) ring-offset-[6px] ring-offset-white grayscale-0 saturate-100"
+                  : Math.abs(i - active) === 1
+                    ? "ring-1 ring-(--hair) blur-[1.5px] grayscale-[30%]"
+                    : "ring-1 ring-(--hair) blur-[3px] grayscale-[50%]"
+              }`}
+            >
+              <CardFace a={t} active={i === active} />
+            </span>
+            {/* Year chip under the active card */}
+            <span
+              aria-hidden="true"
+              className={`absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-(--red) px-3 py-1 text-[10px] font-semibold tracking-[0.16em] text-white transition-[opacity,translate] duration-300 motion-reduce:transition-none ${
+                i === active ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"
+              }`}
+            >
+              {t.years}
+            </span>
           </button>
         ))}
-        {/* Centre marker */}
-        <span aria-hidden="true" className="absolute bottom-3 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-(--red)" />
       </div>
 
       {/* Details of the active award */}
-      <div aria-live="polite" className="relative z-10 mx-auto -mt-12 max-w-md px-6 py-5 text-center">
+      <div aria-live="polite" className="mx-auto mt-8 max-w-xl text-center">
         <div
           key={active}
           className="animate-[awardIn_400ms_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none"
@@ -298,19 +326,35 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
         </button>
       </div>
 
-      {/* Progress track */}
-      <div aria-hidden="true" className="relative mx-auto mt-5 h-px w-40 bg-(--hair)">
-        <span
-          className="absolute top-1/2 h-0.5 w-6 -translate-y-1/2 bg-(--red) transition-[left] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
-          style={{ left: `calc(${active / (N - 1)} * (100% - 1.5rem))` }}
-        />
-        {/* Autoplay timer: fills over one slide, frozen while held */}
-        {canAuto && !paused && (
-          <span
-            key={active}
-            className="absolute inset-x-0 top-1.5 h-px origin-left bg-(--red)/50 animate-[autoFill_4500ms_linear_both] group-data-held/slider:[animation-play-state:paused] motion-reduce:hidden"
-          />
-        )}
+      {/* Positions, then the progress track */}
+      <div className="mx-auto mt-5 flex w-48 flex-col gap-1">
+        <div className="flex justify-between">
+          {AWARD_TIMELINE.map((t, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => go(i)}
+              aria-label={`Go to ${t.title}, ${t.years}`}
+              className="-mx-2.5 grid size-6 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-(--red)"
+            >
+              <span className={`size-1 rounded-full transition-colors duration-300 ${i === active ? "bg-(--red)" : "bg-(--hair)"}`} />
+            </button>
+          ))}
+        </div>
+        <div aria-hidden="true" className="h-[2px] overflow-hidden rounded-full bg-(--hair)">
+          {canAuto && !paused ? (
+            // Autoplay timer: fills over one slide, frozen while held
+            <span
+              key={active}
+              className="block h-full origin-left bg-(--red) animate-[autoFill_4500ms_linear_both] group-data-held/slider:[animation-play-state:paused]"
+            />
+          ) : (
+            <span
+              className="block h-full origin-left bg-(--red) transition-transform duration-500 motion-reduce:transition-none"
+              style={{ transform: `scaleX(${(active + 1) / N})` }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
