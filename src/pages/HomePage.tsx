@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import WorldRoutes from "../WorldRoutes";
 import Productcarousel from "../components/Productcarousel ";
 import Eyebrow from "../components/Eyebrow";
 import SectionHeader from "../components/SectionHeader";
 import BuyerGrid from "../components/BuyerGrid";
-import AwardGallery from "../components/AwardGallery";
+import AwardSlider from "../components/AwardSlider";
+import SmartLink from "../components/SmartLink";
 import ContactCta from "../components/ContactCta";
 import GarmentIcons from "../components/GarmentIcons";
 import FoundedOrbit from "../components/FoundedOrbit";
@@ -964,25 +965,33 @@ export default function HomePage() {
             eyebrow and other red accents inside pick up the navy. */}
         <section id="recognition" className="bg-(--mist) section-y [--primary:#142E53] [--accent:#3A1C14] [--red:var(--primary)]">
           <div className="wrap">
-            <SectionHeader
-              eyebrow="RECOGNITION"
-              title={
-                <>
-                  Judged by the people
-                  <br />
-                  who buy from us.
-                </>
-              }
-            >
-              <p>
-                Two national export trophies in a row, and quality and
-                technical awards from the retailers whose audits we pass every
-                season.
+            <div data-reveal className="mx-auto max-w-3xl text-center">
+              <Eyebrow className="flex items-center justify-center gap-3">
+                <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
+                  <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
+                </svg>
+                RECOGNITION &amp; AWARDS
+              </Eyebrow>
+              <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-h2 font-black uppercase leading-[0.95] tracking-[-0.01em]">
+                Award-winning apparel
+                <br />
+                manufacturing <span className="text-(--red)">in Bangladesh</span>
+              </h2>
+              <p className="mx-auto mt-head-intro max-w-[60ch] text-pretty text-intro">
+                <span className="text-(--ink)">National Export Trophies from the Government of Bangladesh</span>
+                <span className="text-(--mute)"> and quality awards from global retailers including Kohl&apos;s and JCPenney recognise </span>
+                <span className="text-(--ink)">Ha-Meem Group&apos;s export performance, product quality and technical excellence</span>
+                <span className="text-(--mute)"> since 2009.</span>
               </p>
-            </SectionHeader>
-            <div data-reveal>
-              <AwardGallery className="mt-section-head" />
+              <SmartLink
+                href="/about"
+                className="group mt-cta inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(17,20,24,0.18)] transition-colors duration-300 hover:bg-(--red) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
+              >
+                About Ha-Meem Group
+                <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" />
+              </SmartLink>
             </div>
+            <AwardSlider className="mt-section-head" />
             {/* Accreditations & certifications */}
             <div className="border-t border-(--hair) mt-9 pt-10 grid md:grid-cols-[260px_1fr] gap-6">
               <Eyebrow>
