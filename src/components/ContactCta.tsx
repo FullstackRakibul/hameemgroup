@@ -2,7 +2,7 @@ import { EMAIL } from "../data/facts";
 import Eyebrow from "./Eyebrow";
 
 const pill =
-  "btn-ring inline-flex min-h-12 items-center rounded-full border border-white px-8 text-[11px] font-semibold tracking-widest transition-colors duration-300";
+  "btn-ring inline-flex min-h-12 items-center rounded-full border border-white px-8 text-xs font-semibold tracking-widest transition-colors duration-300";
 
 /* Dark closing band: "Sourcing from Bangladesh?" with the two pill buttons. */
 export default function ContactCta({ id }: { id?: string }) {

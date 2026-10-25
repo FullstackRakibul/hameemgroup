@@ -18,7 +18,7 @@ export default function FactList({ rows }: { rows: FactRow[] }) {
             {r.to && (
               <SmartLink
                 href={r.to}
-                className="inline-flex min-h-11 shrink-0 items-center text-sm font-semibold whitespace-nowrap text-(--mute) transition-colors hover:text-(--red)"
+                className="inline-flex min-h-11 shrink-0 items-center text-sm font-semibold whitespace-nowrap text-(--mute) transition-colors hover:text-(--red) md:min-h-0"
               >
                 {r.linkText ?? "More"} →
               </SmartLink>

@@ -142,6 +142,13 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
   };
 
   const menu = activeMenu ? menus[activeMenu] : null;
+
+  // One header item carries the current-route stitch: the plain link for this
+  // page, or else the first menu that lists it (Products repeats some business pages).
+  const onPlainLink = PLAIN_LINKS.some((l) => isCurrentPage(l.href, location.pathname));
+  const currentMenu = onPlainLink
+    ? null
+    : MENU_KEYS.find((key) => menus[key].links.some((l) => isCurrentPage(l.href, location.pathname)));
   const gridMenu = menu?.gridCols === 3;
 
   // The mobile menu lists the business pages once, under Businesses.
@@ -174,7 +181,7 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                 }}
                 type="button"
                 className={`nav-link flex items-center gap-1.5 ${activeMenu === key ? "is-active" : ""} ${
-                  menus[key].links.some((l) => isCurrentPage(l.href, location.pathname)) ? "is-current" : ""
+                  currentMenu === key ? "is-current" : ""
                 }`}
                 aria-expanded={activeMenu === key}
                 aria-controls={`mega-${key}`}
