@@ -682,3 +682,30 @@ footer[id] { scroll-margin-top: var(--header-h); }
   .biz-card:hover .biz-img,
   .news-card:hover .news-img { transform: none; }
 }
+
+/* ── Company section: garment icons drifting at the edges ── */
+@keyframes garmentFloat {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-14px) rotate(4deg); }
+}
+.garment-float {
+  animation: garmentFloat 9s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .garment-float { animation: none; }
+}
+
+/* ── Company section: founded orbit ── */
+@keyframes orbitSpin { to { transform: rotate(360deg); } }
+@keyframes orbitCounter { to { transform: rotate(-360deg); } }
+@keyframes softPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+.orbit-spin { animation: orbitSpin 40s linear infinite; }
+.orbit-counter { animation: orbitCounter 40s linear infinite; }
+.orbit-spin-reverse { animation: orbitSpin 60s linear infinite reverse; }
+.soft-pulse { animation: softPulse 4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .orbit-spin, .orbit-counter, .orbit-spin-reverse, .soft-pulse { animation: none; }
+}

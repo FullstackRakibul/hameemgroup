@@ -7,6 +7,8 @@ import SectionHeader from "../components/SectionHeader";
 import BuyerGrid from "../components/BuyerGrid";
 import AwardGrid from "../components/AwardGrid";
 import ContactCta from "../components/ContactCta";
+import GarmentIcons from "../components/GarmentIcons";
+import FoundedOrbit from "../components/FoundedOrbit";
 import usePageMeta from "../components/usePageMeta";
 import {
   BUYER_AWARDS,
@@ -445,33 +447,39 @@ export default function HomePage() {
       {/* ═══ RAISED CONTENT ═══ */}
       <div className="relative z-3 shadow-[0_-35px_70px_#00000040]">
         {/* ── FOUNDED IN 1984 ── */}
-        <section id="company" className="relative bg-white section-y">
+        <section id="company" className="relative bg-(--mist) section-y">
+          <GarmentIcons />
+          {/* Faint dot grid */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--hair)_1px,transparent_1px)] bg-size-[24px_24px] opacity-60" />
           {/* Selvedge: the red-line edge of a roll of denim, with a stitch just inside it */}
           <div aria-hidden="true" className="absolute inset-x-0 top-0">
             <div className="h-1 bg-(--red)" />
             <div className="mt-2 border-t border-dashed border-(--ink)/25" />
           </div>
 
-          <div className="wrap">
-            {/* Eyebrow in its own column on wide screens, level with the
-                statement's first line; the statement reads left-aligned */}
-            <div data-reveal className="grid gap-head-eyebrow lg:grid-cols-[240px_1fr] lg:items-start lg:gap-16">
-              <Eyebrow className="flex items-center gap-3 lg:pt-4">
-                <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
-                  <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
-                </svg>
-                <span className="font-['Fira_Sans_Condensed'] font-black text-2xl ">FOUNDED IN {F.established}</span>
-              </Eyebrow>
-              
-              {/* The lead statement: a paragraph, not a heading */}
-              <p className="max-w-[60ch] font-['Fira_Sans_Condensed'] text-lead font-black text-left text-pretty">
-                Ha-Meem Group is one of Bangladesh&apos;s largest{" "}
-                {/* Red topstitch under the key phrase */}
-                <span className="box-decoration-clone bg-[repeating-linear-gradient(90deg,var(--red)_0_7px,transparent_7px_11px)] bg-size-[100%_2px] bg-bottom-left bg-no-repeat pb-0.5">
-                  vertically integrated
-                </span>{" "}
-                apparel manufacturers.{" "}
-                <span className="text-(--mute)">
+          <div className="wrap relative z-10">
+            {/* Founded orbit beside the statement; stacked and centred below lg */}
+            <div className="grid gap-head-eyebrow lg:grid-cols-[320px_1fr] lg:items-center lg:gap-16">
+              <div data-reveal className="flex justify-center">
+                <FoundedOrbit />
+              </div>
+
+              {/* The lead statement: a paragraph, not a heading. Label and
+                  sentences fade up one after another. */}
+              <p data-reveal-stagger className="max-w-[60ch] font-['Fira_Sans_Condensed'] text-lead font-bold leading-tight text-left text-pretty lg:max-w-[34ch]">
+                <span className="mb-4 flex items-center gap-3 font-sans text-xs font-semibold tracking-[0.18em] text-(--red)">
+                  <span aria-hidden="true" className="h-0.5 w-6 bg-(--red)" />
+                  ABOUT THE GROUP
+                </span>
+                <span className="block text-(--ink)">
+                  <span className="text-(--red)">Ha-Meem Group</span> is one of Bangladesh&apos;s largest{" "}
+                  {/* Soft highlight plus red topstitch under the key phrase */}
+                  <span className="box-decoration-clone bg-[repeating-linear-gradient(90deg,var(--red)_0_7px,transparent_7px_11px),linear-gradient(transparent_60%,color-mix(in_srgb,var(--red)_12%,transparent)_60%)] bg-size-[100%_2px,100%_100%] bg-position-[bottom_left,0_0] bg-no-repeat pb-0.5">
+                    vertically integrated
+                  </span>{" "}
+                  apparel manufacturers.
+                </span>
+                <span className="mt-2 block font-semibold text-(--mute)">
                   From our own yarn and denim to sewing, washing, trims and
                   shipping, we make bottoms, tops, denim and sweaters for the
                   world&apos;s leading retailers.
@@ -481,11 +489,11 @@ export default function HomePage() {
 
             {/* The group at a glance. Hairline grid: the 1px gaps show the
                 container's tint, so rows and columns line up on every width. */}
-            <ul data-reveal-stagger className="mt-section-head grid grid-cols-2 gap-px border border-(--hair) bg-(--hair) lg:grid-cols-3">
+            <ul data-reveal-stagger className="mt-section-head grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-(--hair) bg-(--hair) lg:grid-cols-3">
               {GROUP_STATS.map((s, i) => (
                 <li
                   key={s.label}
-                  className="group relative flex flex-col bg-white px-4 py-7 transition-colors duration-300 hover:bg-(--mist) motion-reduce:transition-none sm:px-6 md:px-8 md:py-10"
+                  className="group relative flex flex-col bg-white/90 backdrop-blur-[2px] px-4 py-7 transition-colors duration-300 hover:bg-(--mist) motion-reduce:transition-none sm:px-6 md:px-8 md:py-10"
                 >
                   {/* Stitched seam, sewn round the tile on hover; always shown on touch screens */}
                   <svg
