@@ -29,7 +29,7 @@ export const F = {
   laboratory: "In-house accredited laboratory",
 
   /* From the 2018 site, unconfirmed */
-  productionLines: "300",
+  productionLines: "400",
   locations: "six",
   merchandisers: "250",
   washingPlants: "7",

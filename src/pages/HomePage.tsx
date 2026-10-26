@@ -558,11 +558,14 @@ export default function HomePage() {
                 </>
               }
             >
-              <p>
+              {/* <p>
                 Every factory sits within an hour of Dhaka, with sourcing
                 offices in Hong Kong and Shanghai. Around ninety-five percent
                 of what we make ships to the United States, the rest to
                 Europe, Japan and India.
+              </p> */}
+              <p>
+                Every factory sits within an hour of Dhaka, connected directly to a streamlined global supply chain. Our garments ship globally—to the United States, China, all over Europe, Japan, and India.
               </p>
             </SectionHeader>
             <WorldRoutes className="mt-section-head" />
