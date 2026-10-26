@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProp
 import { Award, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { AWARD_TIMELINE, type TimelineAward } from "../data/facts";
 
-const media = "./media/";
+const media = "/media/";
 const N = AWARD_TIMELINE.length;
 const firstYear = (a: TimelineAward) => a.years.match(/\d{4}/)?.[0] ?? a.years;
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
@@ -341,7 +341,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
             </button>
           ))}
         </div>
-        <div aria-hidden="true" className="h-[2px] overflow-hidden rounded-full bg-(--hair)">
+        <div aria-hidden="true" className="h-0.5 overflow-hidden rounded-full bg-(--hair)">
           {canAuto && !paused ? (
             // Autoplay timer: fills over one slide, frozen while held
             <span
