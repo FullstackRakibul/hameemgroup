@@ -243,7 +243,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
           setHold("drag", false);
           go(Math.round(target.current));
         }}
-        className="relative h-[340px] cursor-grab touch-pan-y select-none overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [perspective:1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) active:cursor-grabbing md:h-[400px]"
+        className="relative h-85 cursor-grab touch-pan-y select-none overflow-x-clip mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] perspective-[1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) active:cursor-grabbing md:h-100"
       >
         {AWARD_TIMELINE.map((t, i) => (
           <button
@@ -262,15 +262,15 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
               }
               go(i);
             }}
-            className="group/card absolute left-1/2 top-1/2 h-[214px] w-[160px] will-change-transform md:h-[294px] md:w-[220px]"
+            className="group/card absolute left-1/2 top-1/2 h-53.5 w-40 will-change-transform md:h-73.5 md:w-55"
           >
             <span
               className={`block size-full overflow-hidden rounded-[20px] bg-white transition-[filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
                 i === active
                   ? "blur-0 ring-2 ring-(--red) ring-offset-[6px] ring-offset-white grayscale-0 saturate-100"
                   : Math.abs(i - active) === 1
-                    ? "ring-1 ring-(--hair) blur-[1.5px] grayscale-[30%]"
-                    : "ring-1 ring-(--hair) blur-[3px] grayscale-[50%]"
+                    ? "ring-1 ring-(--hair) blur-[1.5px] grayscale-30"
+                    : "ring-1 ring-(--hair) blur-[3px] grayscale-50"
               }`}
             >
               <CardFace a={t} active={i === active} />
