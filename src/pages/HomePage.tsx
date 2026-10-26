@@ -437,7 +437,7 @@ export default function HomePage() {
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--hair)_1px,transparent_1px)] bg-size-[24px_24px] opacity-60" />
           {/* Selvedge: the red-line edge of a roll of denim, with a stitch just inside it */}
           <div aria-hidden="true" className="absolute inset-x-0 top-0">
-            <div className="h-1 bg-(--red)" />
+            <div className="h-1 bg-(--navy)" />
             <div className="mt-2 border-t border-dashed border-(--ink)/25" />
           </div>
 
@@ -451,14 +451,14 @@ export default function HomePage() {
               {/* The lead statement: a paragraph, not a heading. Label and
                   sentences fade up one after another. */}
               <p data-reveal-stagger className="max-w-[60ch] font-['Fira_Sans_Condensed'] text-lead font-bold leading-tight text-left text-pretty lg:max-w-[34ch]">
-                <span className="mb-4 flex items-center gap-3 font-sans text-xs font-semibold tracking-[0.18em] text-(--red)">
-                  <span aria-hidden="true" className="h-0.5 w-6 bg-(--red)" />
+                <span className="mb-4 flex items-center gap-3 font-sans text-xs font-semibold tracking-[0.18em] text-(--navy)">
+                  <span aria-hidden="true" className="h-0.5 w-6 bg-(--navy)" />
                   ABOUT THE GROUP
                 </span>
                 <span className="block text-(--ink)">
-                  <span className="text-(--red)">Ha-Meem Group</span> is one of Bangladesh&apos;s largest{" "}
+                  <span className="text-(--navy)">Ha-Meem Group</span> is one of Bangladesh&apos;s largest{" "}
                   {/* Soft highlight plus red topstitch under the key phrase */}
-                  <span className="box-decoration-clone bg-[repeating-linear-gradient(90deg,var(--red)_0_7px,transparent_7px_11px),linear-gradient(transparent_60%,color-mix(in_srgb,var(--red)_12%,transparent)_60%)] bg-size-[100%_2px,100%_100%] bg-position-[bottom_left,0_0] bg-no-repeat pb-0.5">
+                  <span className="box-decoration-clone bg-[repeating-linear-gradient(90deg,var(--navy)_0_7px,transparent_7px_11px),linear-gradient(transparent_60%,color-mix(in_srgb,var(--navy)_12%,transparent)_60%)] bg-size-[100%_2px,100%_100%] bg-position-[bottom_left,0_0] bg-no-repeat pb-0.5">
                     vertically integrated
                   </span>{" "}
                   apparel manufacturers.
@@ -517,7 +517,7 @@ export default function HomePage() {
                   <div data-reveal className="flex flex-col">
                     {/* Figure, with a tag-style index in the corner */}
                     <span className="flex items-start justify-between gap-3">
-                      <b className="font-['Fira_Sans_Condensed'] text-[38px] font-black leading-none text-(--ink) transition-colors duration-300 group-hover:text-(--red) sm:text-[46px] md:text-[56px]">
+                      <b className="font-['Fira_Sans_Condensed'] text-[38px] font-black leading-none text-(--ink) transition-colors duration-300 group-hover:text-(--navy) sm:text-[46px] md:text-[56px]">
                         {s.value}
                       </b>
                       <span className="pt-1 text-[11px] font-semibold tabular-nums tracking-widest text-(--mute)">
@@ -527,9 +527,9 @@ export default function HomePage() {
                     {/* Red rule that stretches on hover, as on the business cards */}
                     <span
                       aria-hidden="true"
-                      className="mt-5 h-0.5 w-6 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
+                      className="mt-5 h-0.5 w-6 bg-(--navy) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
                     />
-                    <span className="mt-4 text-[10px] font-semibold tracking-[0.14em] text-(--red) sm:text-[11px]">
+                    <span className="mt-4 text-[10px] font-semibold tracking-[0.14em] text-(--navy) sm:text-[11px]">
                       {s.label}
                     </span>
                     {s.sub && (
@@ -576,9 +576,9 @@ export default function HomePage() {
                 {F.denimYardsMonth} yards a month.
               </p>
             <div className="flex flex-wrap gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--red)">
+                <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--navy)">
                   <span
-                    className="inline-block size-2 rounded-full bg-(--red)"
+                    className="inline-block size-2 rounded-full bg-(--navy)"
                     aria-hidden="true"
                   />
                   BANGLADESH
@@ -711,7 +711,7 @@ export default function HomePage() {
 
           {step === i ? (
             <span className="step-body absolute left-10 right-12 bottom-4 flex flex-col">
-              <em className="text-(--red) not-italic text-xs font-semibold tracking-widest">
+              <em className="text-(--navy) not-italic text-xs font-semibold tracking-widest">
                 STEP {String(i + 1).padStart(2, "0")} OF 6
               </em>
               <strong className="font-['Fira_Sans_Condensed'] text-[32px] md:text-[40px] my-4">
@@ -861,7 +861,7 @@ export default function HomePage() {
       <Link
         to={b.to}
         key={b.title}
-        className="biz-card group relative block h-74.5 overflow-hidden p-6 text-white transition-all duration-350 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
+        className="biz-card group relative block h-74.5 overflow-hidden p-6 text-white transition-all duration-350 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
       >
         <img
           src={`${media}${b.image}`}
@@ -945,7 +945,7 @@ export default function HomePage() {
           {/* A short red rule that grows on hover: the eyebrow's colour, used once */}
           <span
             aria-hidden="true"
-            className="mt-2 mb-3 h-0.5 w-8 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-16 group-focus-visible:w-16 motion-reduce:transition-none"
+            className="mt-2 mb-3 h-0.5 w-8 bg-(--navy) transition-[width] duration-500 ease-out group-hover:w-16 group-focus-visible:w-16 motion-reduce:transition-none"
           />
           <small className="line-clamp-3 text-sm leading-snug text-white/80 transition-colors duration-300 group-hover:text-white">
             {b.text}
@@ -963,19 +963,19 @@ export default function HomePage() {
         {/* ── RECOGNITION & AWARDS ── */}
         {/* Brand palette for this section: navy primary, brown accent. The
             eyebrow and other red accents inside pick up the navy. */}
-        <section id="recognition" className="relative isolate bg-white section-y [--primary:#142E53] [--accent:#3A1C14] [--red:var(--primary)]">
+        <section id="recognition" className="relative isolate bg-white section-y [--primary:#142E53] [--accent:#3A1C14] [--navy:var(--primary)]">
           <div className="wrap">
             <div data-reveal className="mx-auto max-w-3xl text-center">
               <Eyebrow className="flex items-center justify-center gap-3">
                 <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
-                  <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
+                  <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--navy)" strokeWidth="2" strokeDasharray="5 4" />
                 </svg>
                 RECOGNITION &amp; AWARDS
               </Eyebrow>
               <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-h2 font-black uppercase leading-[0.95] tracking-[-0.01em]">
                 Award-winning apparel
                 <br />
-                manufacturing <span className="text-(--red)">in Bangladesh</span>
+                manufacturing <span className="text-(--navy)">in Bangladesh</span>
               </h2>
               <p className="mx-auto mt-head-intro max-w-[60ch] text-pretty text-intro">
                 <span className="text-(--ink)">National Export Trophies from the Government of Bangladesh</span>
@@ -985,7 +985,7 @@ export default function HomePage() {
               </p>
               {/* <SmartLink
                 href="/about"
-                className="group mt-cta inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(17,20,24,0.18)] transition-colors duration-300 hover:bg-(--red) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
+                className="group mt-cta inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(17,20,24,0.18)] transition-colors duration-300 hover:bg-(--navy) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
               >
                 About Ha-Meem Group
                 <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" />
@@ -995,7 +995,7 @@ export default function HomePage() {
             {/* Accreditations & certifications */}
             <div className="border-t border-(--hair) mt-9 pt-10 grid md:grid-cols-[260px_1fr] gap-6">
               <Eyebrow>
-                Accreditations &amp; certifications<sup className="text-(--red)">*</sup>
+                Accreditations &amp; certifications<sup className="text-(--navy)">*</sup>
               </Eyebrow>
               <div className="flex flex-wrap gap-3">
                 {CERTIFICATIONS.map((c) => (
@@ -1112,7 +1112,7 @@ export default function HomePage() {
               {/* Red rule that stretches on hover, as on the business cards */}
               <span
                 aria-hidden="true"
-                className="mt-4 h-0.5 w-6 bg-(--red) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
+                className="mt-4 h-0.5 w-6 bg-(--navy) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
               />
               <span className="mt-4 max-w-[24ch] text-balance text-[13px] font-semibold uppercase leading-snug tracking-[0.12em] text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
                 {s.label}
@@ -1133,7 +1133,7 @@ export default function HomePage() {
     <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-h2 font-black">
       {F.employeesText}
       <br />
-      people.<sup className="text-(--red)">*</sup>
+      people.<sup className="text-(--navy)">*</sup>
     </h2>
     <p className="mt-head-intro max-w-107.5 text-pretty text-intro text-(--mute)">
       Most of our {F.employeesText} people joined as machine operators.
@@ -1152,7 +1152,7 @@ export default function HomePage() {
         <li key={item.title} className="group relative border-b border-(--hair) py-4 pl-5">
           <span
             aria-hidden="true"
-            className="absolute left-0 top-4 bottom-4 w-0.5 origin-top scale-y-50 bg-(--red) transition-transform duration-300 group-hover:scale-y-100 motion-reduce:transition-none"
+            className="absolute left-0 top-4 bottom-4 w-0.5 origin-top scale-y-50 bg-(--navy) transition-transform duration-300 group-hover:scale-y-100 motion-reduce:transition-none"
           />
           <b className="block font-['Fira_Sans_Condensed'] text-[20px] font-bold leading-tight text-(--ink)">
             {item.title}
@@ -1164,7 +1164,7 @@ export default function HomePage() {
 
     <Link
       to="/#careers"
-      className="btn-ring group/cta mt-cta inline-flex min-h-12 items-center gap-3 self-start rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
+      className="btn-ring group/cta mt-cta inline-flex min-h-12 items-center gap-3 self-start rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
     >
       WORK WITH US
       <span
@@ -1313,7 +1313,7 @@ export default function HomePage() {
               </strong>
               <span
                 aria-hidden="true"
-                className="mt-4 h-0.5 w-16 origin-left scale-x-50 bg-(--red) transition-[scale] duration-500 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100 motion-reduce:transition-none"
+                className="mt-4 h-0.5 w-16 origin-left scale-x-50 bg-(--navy) transition-[scale] duration-500 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100 motion-reduce:transition-none"
               />
               {linked && (
                 <span className="mt-5 flex items-center justify-between gap-4 border-t border-white/20 pt-4">
@@ -1347,7 +1347,7 @@ export default function HomePage() {
             href={n.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`news-card group ${cardClass} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red)`}
+            className={`news-card group ${cardClass} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy)`}
           >
             {body}
             <span className="sr-only"> (opens the report on {n.source} in a new tab)</span>

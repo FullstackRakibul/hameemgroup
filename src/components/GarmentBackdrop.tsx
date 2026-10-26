@@ -23,7 +23,7 @@ export default function GarmentBackdrop() {
         <span key={i} className="absolute" style={{ left: `${left}%`, top: `${top}%`, transform: `rotate(${rot}deg)`, "--s": `${size}px` } as CSSProperties}>
           <span
             className="garment-float block motion-reduce:animate-none"
-            style={{ color: red ? "var(--red)" : "var(--ink)", opacity: op, animationDuration: `${dur}s`, animationDelay: `${delay}s` }}
+            style={{ color: red ? "var(--navy)" : "var(--ink)", opacity: op, animationDuration: `${dur}s`, animationDelay: `${delay}s` }}
           >
             <Icon className="block size-(--s)" />
           </span>

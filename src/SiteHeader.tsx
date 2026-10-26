@@ -244,13 +244,13 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
         >
           <div className="wrap grid gap-10 py-10 lg:grid-cols-12">
             <div className="lg:col-span-3">
-              <p className="nav-label text-(--red)">{menu.eyebrow}</p>
+              <p className="nav-label text-(--navy)">{menu.eyebrow}</p>
               <div className="mt-3 max-w-[16ch] text-balance font-['Fira_Sans_Condensed'] text-[24px] font-bold leading-[1.375] tracking-[-0.01em] text-(--ink)">
                 {menu.headline}
               </div>
               {menu.cta && (
                 <SmartLink href={menu.cta.href} className="group mt-4 inline-block" onClick={closeMenus}>
-                  <span className="text-[0.85rem] font-medium text-(--mute) transition-colors group-hover:text-(--red)">
+                  <span className="text-[0.85rem] font-medium text-(--mute) transition-colors group-hover:text-(--navy)">
                     {menu.cta.text} →
                   </span>
                 </SmartLink>
@@ -267,7 +267,7 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                       onClick={closeMenus}
                       className="mega-row row-stitch group flex h-full flex-col justify-center border-b border-(--hair) py-3.5"
                     >
-                      <span className="font-['Fira_Sans_Condensed'] text-[1.15rem] font-bold leading-tight text-(--ink) transition-colors group-hover:text-(--red) group-focus-visible:text-(--red) group-aria-[current=page]:text-(--red)">
+                      <span className="font-['Fira_Sans_Condensed'] text-[1.15rem] font-bold leading-tight text-(--ink) transition-colors group-hover:text-(--navy) group-focus-visible:text-(--navy) group-aria-[current=page]:text-(--navy)">
                         {link.title}
                       </span>
                       <span className="mt-0.5 text-[0.78rem] leading-relaxed text-(--mute)">{link.sub}</span>
@@ -279,14 +279,14 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                       className="mega-row row-stitch group flex items-center justify-between gap-6 border-b border-(--hair) py-4"
                     >
                       <span>
-                        <span className="block text-[0.98rem] font-semibold leading-relaxed text-(--ink) transition-colors group-hover:text-(--red) group-focus-visible:text-(--red) group-aria-[current=page]:text-(--red)">
+                        <span className="block text-[0.98rem] font-semibold leading-relaxed text-(--ink) transition-colors group-hover:text-(--navy) group-focus-visible:text-(--navy) group-aria-[current=page]:text-(--navy)">
                           {link.title}
                         </span>
                         <span className="mt-0.5 block text-[0.78rem] leading-relaxed text-(--mute)">{link.sub}</span>
                       </span>
                       <span
                         aria-hidden="true"
-                        className="text-(--mute) transition-[translate,color] duration-300 group-hover:translate-x-1 group-hover:text-(--red) group-focus-visible:translate-x-1 group-focus-visible:text-(--red)"
+                        className="text-(--mute) transition-[translate,color] duration-300 group-hover:translate-x-1 group-hover:text-(--navy) group-focus-visible:translate-x-1 group-focus-visible:text-(--navy)"
                       >
                         →
                       </span>
@@ -329,7 +329,7 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
                       onClick={closeMenus}
                       className="row-stitch-tap group flex items-center justify-between border-b border-(--hair) py-3"
                     >
-                      <span className="text-[1.1rem] font-medium leading-[1.6] text-(--ink) group-aria-[current=page]:text-(--red)">
+                      <span className="text-[1.1rem] font-medium leading-[1.6] text-(--ink) group-aria-[current=page]:text-(--navy)">
                         {link.title}
                       </span>
                       <span aria-hidden="true" className="text-base text-(--mute)">

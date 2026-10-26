@@ -25,10 +25,10 @@ export default function FoundedOrbit() {
       </div>
 
       {/* Inner ring, turning the other way */}
-      <div aria-hidden="true" className="orbit-spin-reverse absolute inset-[14%] rounded-full border border-dashed border-(--red)/30 motion-reduce:animate-none" />
+      <div aria-hidden="true" className="orbit-spin-reverse absolute inset-[14%] rounded-full border border-dashed border-(--navy)/30 motion-reduce:animate-none" />
 
       {/* Centre disc */}
-      <div className="soft-pulse absolute inset-[26%] flex flex-col items-center justify-center rounded-full bg-(--red) text-center text-white shadow-[0_12px_30px_rgba(155,0,43,0.25)] motion-reduce:animate-none">
+      <div className="soft-pulse absolute inset-[26%] flex flex-col items-center justify-center rounded-full bg-(--navy) text-center text-white shadow-[0_12px_30px_rgba(155,0,43,0.25)] motion-reduce:animate-none">
         <span className="text-[10px] font-semibold tracking-[0.2em] text-white/80">FOUNDED IN</span>
         <span className="font-['Fira_Sans_Condensed'] text-5xl font-black leading-none">{F.established}</span>
         <span className="mt-1 text-[9px] tracking-[0.18em] text-white/70">· BANGLADESH ·</span>

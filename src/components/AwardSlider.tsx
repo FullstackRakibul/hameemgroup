@@ -33,7 +33,7 @@ function CardFace({ a, active }: { a: TimelineAward; active: boolean }) {
     );
   return (
     <span className="relative flex size-full flex-col items-center justify-center gap-3 bg-white">
-      <Award size={36} strokeWidth={1.5} aria-hidden="true" className="text-(--red)" />
+      <Award size={36} strokeWidth={1.5} aria-hidden="true" className="text-(--navy)" />
       {a.logo && (
         <img
           src={`${media}${a.logo}`}
@@ -182,7 +182,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
   }, [active, paused, retry, go, canAuto]);
 
   const navBtn =
-    "group grid size-11 place-items-center rounded-full border border-(--hair) bg-white text-(--ink) transition-colors duration-300 hover:border-(--ink) disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red) motion-reduce:transition-none";
+    "group grid size-11 place-items-center rounded-full border border-(--hair) bg-white text-(--ink) transition-colors duration-300 hover:border-(--ink) disabled:pointer-events-none disabled:opacity-35 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--navy) motion-reduce:transition-none";
   const a = AWARD_TIMELINE[active];
 
   return (
@@ -243,7 +243,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
           setHold("drag", false);
           go(Math.round(target.current));
         }}
-        className="relative h-85 cursor-grab touch-pan-y select-none overflow-x-clip mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] perspective-[1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) active:cursor-grabbing md:h-100"
+        className="relative h-85 cursor-grab touch-pan-y select-none overflow-x-clip mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] perspective-[1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) active:cursor-grabbing md:h-100"
       >
         {AWARD_TIMELINE.map((t, i) => (
           <button
@@ -267,7 +267,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
             <span
               className={`block size-full overflow-hidden rounded-[20px] bg-white transition-[filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
                 i === active
-                  ? "blur-0 ring-2 ring-(--red) ring-offset-[6px] ring-offset-white grayscale-0 saturate-100"
+                  ? "blur-0 ring-2 ring-(--navy) ring-offset-[6px] ring-offset-white grayscale-0 saturate-100"
                   : Math.abs(i - active) === 1
                     ? "ring-1 ring-(--hair) blur-[1.5px] grayscale-30"
                     : "ring-1 ring-(--hair) blur-[3px] grayscale-50"
@@ -278,7 +278,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
             {/* Year chip under the active card */}
             <span
               aria-hidden="true"
-              className={`absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-(--red) px-3 py-1 text-[10px] font-semibold tracking-[0.16em] text-white transition-[opacity,translate] duration-300 motion-reduce:transition-none ${
+              className={`absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-(--navy) px-3 py-1 text-[10px] font-semibold tracking-[0.16em] text-white transition-[opacity,translate] duration-300 motion-reduce:transition-none ${
                 i === active ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"
               }`}
             >
@@ -295,7 +295,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
           className="animate-[awardIn_400ms_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none"
           style={{ "--award-from": "translateY(8px)" } as CSSProperties}
         >
-          <p className="text-xs font-semibold tracking-[0.18em] text-(--red)">{a.years}</p>
+          <p className="text-xs font-semibold tracking-[0.18em] text-(--navy)">{a.years}</p>
           <h3 className="mt-1 font-['Fira_Sans_Condensed'] text-2xl font-bold text-(--ink)">{a.title}</h3>
           {a.text && <p className="mt-2 text-pretty text-sm text-(--mute)">{a.text}</p>}
           {a.by && <p className="mt-2 text-xs text-(--mute)">Issued by {a.by}</p>}
@@ -335,9 +335,9 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
               type="button"
               onClick={() => go(i)}
               aria-label={`Go to ${t.title}, ${t.years}`}
-              className="-mx-2.5 grid size-6 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-(--red)"
+              className="-mx-2.5 grid size-6 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-(--navy)"
             >
-              <span className={`size-1 rounded-full transition-colors duration-300 ${i === active ? "bg-(--red)" : "bg-(--hair)"}`} />
+              <span className={`size-1 rounded-full transition-colors duration-300 ${i === active ? "bg-(--navy)" : "bg-(--hair)"}`} />
             </button>
           ))}
         </div>
@@ -346,11 +346,11 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
             // Autoplay timer: fills over one slide, frozen while held
             <span
               key={active}
-              className="block h-full origin-left bg-(--red) animate-[autoFill_4500ms_linear_both] group-data-held/slider:[animation-play-state:paused]"
+              className="block h-full origin-left bg-(--navy) animate-[autoFill_4500ms_linear_both] group-data-held/slider:[animation-play-state:paused]"
             />
           ) : (
             <span
-              className="block h-full origin-left bg-(--red) transition-transform duration-500 motion-reduce:transition-none"
+              className="block h-full origin-left bg-(--navy) transition-transform duration-500 motion-reduce:transition-none"
               style={{ transform: `scaleX(${(active + 1) / N})` }}
             />
           )}

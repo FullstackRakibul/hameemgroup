@@ -43,7 +43,7 @@ function Card({
       onClick={(e) => onOpen(e.currentTarget)}
       aria-label={`Open ${item.title}`}
       style={style}
-      className={`group relative block w-full overflow-hidden bg-(--hair) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) ${className}`}
+      className={`group relative block w-full overflow-hidden bg-(--hair) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) ${className}`}
     >
       <img
         {...imgProps(item, sizes)}
@@ -102,7 +102,7 @@ function TourCard({ tour }: { tour: VrTour }) {
       }}
       className="group block"
     >
-      <div className="tour-frame relative aspect-[16/9] overflow-hidden rounded-[24px] bg-white ring-1 ring-(--hair) group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-(--red)">
+      <div className="tour-frame relative aspect-[16/9] overflow-hidden rounded-[24px] bg-white ring-1 ring-(--hair) group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-(--navy)">
         <img
           {...imgProps({ src: tour.image, width: tour.width, height: tour.height }, "(min-width: 768px) 46vw, 100vw")}
           alt=""
@@ -112,7 +112,7 @@ function TourCard({ tour }: { tour: VrTour }) {
         />
 
         {/* Red wash on hover, plus a permanent bottom gradient so the text reads */}
-        <span aria-hidden="true" className="absolute inset-0 bg-(--red)/0 transition-colors duration-500 group-hover:bg-(--red)/15 motion-reduce:transition-none" />
+        <span aria-hidden="true" className="absolute inset-0 bg-(--navy)/0 transition-colors duration-500 group-hover:bg-(--navy)/15 motion-reduce:transition-none" />
         <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-(--ink)/80 to-transparent" />
 
         {/* The 360 mark, centred */}
@@ -154,10 +154,10 @@ function TourCard({ tour }: { tour: VrTour }) {
         </span>
       </div>
 
-      <p className="mt-4 text-center font-['Fira_Sans_Condensed'] text-xl font-black uppercase tracking-[0.04em] text-(--ink) transition-colors duration-300 group-hover:text-(--red) motion-reduce:transition-none md:text-2xl">
+      <p className="mt-4 text-center font-['Fira_Sans_Condensed'] text-xl font-black uppercase tracking-[0.04em] text-(--ink) transition-colors duration-300 group-hover:text-(--navy) motion-reduce:transition-none md:text-2xl">
         {tour.name}
       </p>
-      <span aria-hidden="true" className="mx-auto mt-1 block h-0.5 w-0 bg-(--red) transition-[width] duration-500 group-hover:w-12 motion-reduce:transition-none" />
+      <span aria-hidden="true" className="mx-auto mt-1 block h-0.5 w-0 bg-(--navy) transition-[width] duration-500 group-hover:w-12 motion-reduce:transition-none" />
     </a>
   );
 }
@@ -222,9 +222,9 @@ export default function GalleryPage() {
           type="button"
           onClick={() => pickCategory(c)}
           tabIndex={copy ? -1 : undefined}
-          className="group flex shrink-0 items-center gap-4 px-6 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) md:gap-6 md:px-10"
+          className="group flex shrink-0 items-center gap-4 px-6 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) md:gap-6 md:px-10"
         >
-          <span className="font-['Fira_Sans_Condensed'] text-[64px] font-light leading-none text-(--ink) transition-colors duration-300 group-hover:text-(--red) motion-reduce:transition-none md:text-[110px]">
+          <span className="font-['Fira_Sans_Condensed'] text-[64px] font-light leading-none text-(--ink) transition-colors duration-300 group-hover:text-(--navy) motion-reduce:transition-none md:text-[110px]">
             {c}
           </span>
           <span className="text-xs tabular-nums text-(--mute)">{pad(countOf(c))}</span>
@@ -242,9 +242,9 @@ export default function GalleryPage() {
   return (
     <>
       {/* ── A. INTRO: centred headline, photos scattered round it ── */}
-      <section className="relative isolate overflow-hidden bg-white pb-section pt-[calc(var(--header-h)+48px)] lg:min-h-[760px]">
+      <section className="relative isolate overflow-hidden bg-white pb-section pt-[calc(var(--header-h)+48px)] lg:min-h-190">
         {/* Glow, top right */}
-        <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 -z-10 size-120 rounded-full bg-[radial-gradient(var(--red)_0%,transparent_70%)] opacity-[0.08] blur-3xl" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 -z-10 size-120 rounded-full bg-[radial-gradient(var(--navy)_0%,transparent_70%)] opacity-[0.08] blur-3xl" />
 
         {/* Scattered photos, lg and up */}
         {INTRO.map((item, i) => (
@@ -267,14 +267,14 @@ export default function GalleryPage() {
           <div data-reveal className="relative z-10 mx-auto max-w-xl text-center lg:pt-16">
             <Eyebrow className="flex items-center justify-center gap-3">
               <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
-                <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
+                <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--navy)" strokeWidth="2" strokeDasharray="5 4" />
               </svg>
               GALLERY
             </Eyebrow>
             <h1 tabIndex={-1} className="mt-head-eyebrow font-['Fira_Sans_Condensed'] text-[56px] font-black leading-[0.95] outline-none md:text-[88px]">
               Inside
               <br />
-              <span className="text-(--red)">Ha-Meem.</span>
+              <span className="text-(--navy)">Ha-Meem.</span>
             </h1>
             <p className="mx-auto mt-head-intro max-w-[42ch] text-pretty text-(--mute)">
               From yarn and denim to sewing, washing and shipping: a look inside the factories, mills and people behind Ha-Meem Group.
@@ -285,7 +285,7 @@ export default function GalleryPage() {
                 e.preventDefault();
                 scrollToId("film");
               }}
-              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-(--red) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-(--navy) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
             >
               <Play size={14} strokeWidth={1.75} fill="currentColor" aria-hidden="true" />
               Watch the film
@@ -335,7 +335,7 @@ export default function GalleryPage() {
                 Browse our image collection
               </span>
               <h2 className="mt-4 font-['Fira_Sans_Condensed'] text-h2 font-black">{category === "All" ? "All photos" : category}</h2>
-              <span key={category} aria-hidden="true" className="mt-4 block h-0.5 w-24 origin-left bg-(--red) animate-[autoFill_600ms_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none" />
+              <span key={category} aria-hidden="true" className="mt-4 block h-0.5 w-24 origin-left bg-(--navy) animate-[autoFill_600ms_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none" />
             </div>
             <div role="group" aria-label="Filter photos" className="flex flex-wrap gap-2">
               {(["All", ...GALLERY_CATEGORIES.filter((c) => c !== TOURS)] as const).map((c) => (
@@ -344,7 +344,7 @@ export default function GalleryPage() {
                   type="button"
                   onClick={() => setCategory(c)}
                   aria-pressed={category === c}
-                  className={`min-h-10 rounded-full px-4 text-xs font-semibold tracking-widest transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red) motion-reduce:transition-none ${
+                  className={`min-h-10 rounded-full px-4 text-xs font-semibold tracking-widest transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--navy) motion-reduce:transition-none ${
                     category === c ? "bg-(--ink) text-white" : "border border-(--hair) text-(--ink) hover:border-(--ink)"
                   }`}
                 >
@@ -354,7 +354,7 @@ export default function GalleryPage() {
               <button
                 type="button"
                 onClick={() => scrollToId("tours")}
-                className="min-h-10 rounded-full border border-(--hair) px-4 text-xs font-semibold tracking-widest text-(--ink) transition-colors duration-300 hover:border-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red) motion-reduce:transition-none"
+                className="min-h-10 rounded-full border border-(--hair) px-4 text-xs font-semibold tracking-widest text-(--ink) transition-colors duration-300 hover:border-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--navy) motion-reduce:transition-none"
               >
                 360° TOURS ↓
               </button>
@@ -382,12 +382,12 @@ export default function GalleryPage() {
           <div data-reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow className="flex items-center justify-center gap-3">
               <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
-                <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--red)" strokeWidth="2" strokeDasharray="5 4" />
+                <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--navy)" strokeWidth="2" strokeDasharray="5 4" />
               </svg>
               360° VIRTUAL TOURS
             </Eyebrow>
             <h2 className="mt-head-eyebrow font-['Fira_Sans_Condensed'] text-h2 font-black uppercase">
-              Ha-Meem Group <span className="text-(--red)">360°</span> VR tour
+              Ha-Meem Group <span className="text-(--navy)">360°</span> VR tour
             </h2>
             <p className="mt-head-intro text-pretty text-(--mute)">
               Walk through our factories from anywhere: sewing, denim, knitwear and outerwear units, filmed in 360°.
@@ -428,7 +428,7 @@ export default function GalleryPage() {
                   type="button"
                   onClick={() => setPlaying(true)}
                   aria-label={`Play film: ${GALLERY_VIDEO.title}`}
-                  className="absolute left-1/2 top-1/2 grid size-18 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-(--red) text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                  className="absolute left-1/2 top-1/2 grid size-18 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-(--navy) text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
                 >
                   <span aria-hidden="true" className="gallery-ring absolute inset-0 rounded-full border-2 border-white" />
                   <Play size={24} strokeWidth={1.75} fill="currentColor" aria-hidden="true" className="ml-1" />

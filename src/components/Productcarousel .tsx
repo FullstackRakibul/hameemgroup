@@ -8,7 +8,7 @@ import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
    off-screen, and supports drag, swipe, arrow keys and the stitch pagination.
 
    Styling is Tailwind only and uses the site tokens from index.css
-   (--ink, --red, --mist, --hair, --mute). No extra CSS file is needed. */
+   (--ink, --navy, --mist, --hair, --mute). No extra CSS file is needed. */
 
 export type CarouselItem = {
   title: string;
@@ -69,7 +69,7 @@ type Engine = {
 };
 
 const roundBtn =
-  "btn-ring grid place-items-center size-11 rounded-full border border-(--ink) bg-transparent text-(--ink) transition-colors duration-300 hover:bg-(--ink) hover:text-white! focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--red)";
+  "btn-ring grid place-items-center size-11 rounded-full border border-(--ink) bg-transparent text-(--ink) transition-colors duration-300 hover:bg-(--ink) hover:text-white! focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--navy)";
 
 /* Stitch dash, same 8 / 6 rhythm as the page's stitch scrollbar. */
 const stitchRest =
@@ -77,7 +77,7 @@ const stitchRest =
 const stitchActive =
   "bg-[repeating-linear-gradient(90deg,var(--ink)_0_8px,transparent_8px_14px)]";
 const stitchLive =
-  "bg-[repeating-linear-gradient(90deg,var(--red)_0_8px,transparent_8px_14px)]";
+  "bg-[repeating-linear-gradient(90deg,var(--navy)_0_8px,transparent_8px_14px)]";
 
 function ProductCarousel({
   items,
@@ -446,7 +446,7 @@ function ProductCarousel({
       <div
         ref={viewportRef}
         tabIndex={0}
-        className="relative isolate overflow-hidden select-none touch-pan-y cursor-grab data-dragging:cursor-grabbing focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--red)"
+        className="relative isolate overflow-hidden select-none touch-pan-y cursor-grab data-dragging:cursor-grabbing focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--navy)"
       >
         <div
           aria-live={paused || reduced ? "polite" : "off"}
@@ -522,7 +522,7 @@ function ProductCarousel({
                 aria-label={`Show ${item.title}`}
                 aria-current={isActive ? "true" : undefined}
                 onClick={() => engineRef.current?.goTo(i)}
-                className="group/dot relative h-11 w-11 sm:w-9 md:w-16 border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-(--red)"
+                className="group/dot relative h-11 w-11 sm:w-9 md:w-16 border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-(--navy)"
               >
                 <span
                   className={`absolute inset-x-2 top-1/2 h-0.5 -translate-y-1/2 sm:inset-x-0 ${

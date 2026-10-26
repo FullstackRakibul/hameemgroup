@@ -11,7 +11,7 @@ export default function PersonCard({ person, tone = "white" }: { person: Person;
       {person.email && (
         <a
           href={`mailto:${person.email}`}
-          className="mt-auto inline-flex min-h-11 items-center self-start break-all pt-3 text-sm font-medium text-(--red) underline-offset-4 hover:underline"
+          className="mt-auto inline-flex min-h-11 items-center self-start break-all pt-3 text-sm font-medium text-(--navy) underline-offset-4 hover:underline"
         >
           {person.email}
         </a>

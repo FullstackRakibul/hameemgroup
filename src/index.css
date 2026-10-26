@@ -3,12 +3,16 @@
 
 /* ── Brand tokens ── */
 :root {
-  --ink: #111418;
+  /* --ink: #111418; */
+  /* --ink: #5D2E24; */
+  --ink: #5C2E23;
+  
   --red: #9b002b;
   --mist: #f6f6f4;
   --mute: #61646a;
   --hair: #d9d9d6;
-  --navy: #1f2352;
+  --navy: #1b3243;
+  
   --header-h: 88px;
   font-family: "Fira Sans", sans-serif;
   color: var(--ink);
@@ -259,7 +263,7 @@
   box-shadow: 0 0 0 1px var(--hair), 0 6px 16px rgba(17, 20, 24, 0.08);
 }
 .site-logo:focus-visible { outline: none; }
-.site-logo:focus-visible .logo-pill { outline: 2px solid var(--red); outline-offset: 2px; }
+.site-logo:focus-visible .logo-pill { outline: 2px solid var(--navy); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .logo-pill::after { display: none; }
   .site-logo:hover .logo-pill,
@@ -288,8 +292,8 @@
    Under the header labels (white over the hero, red once the header is solid),
    under mega-menu rows on hover or focus, and under mobile-menu rows on tap. */
 .header-wrapper { --nav-stitch: #fff; }
-.header-wrapper.is-solid { --nav-stitch: var(--red); }
-[data-light-hero] .header-wrapper:not(.is-solid) { --nav-stitch: var(--red); }
+.header-wrapper.is-solid { --nav-stitch: var(--navy); }
+[data-light-hero] .header-wrapper:not(.is-solid) { --nav-stitch: var(--navy); }
 .nav-text,
 .row-stitch,
 .row-stitch-tap { position: relative; }
@@ -301,7 +305,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: repeating-linear-gradient(90deg, var(--stitch, var(--red)) 0 6px, transparent 6px 10px);
+  background: repeating-linear-gradient(90deg, var(--stitch, var(--navy)) 0 6px, transparent 6px 10px);
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0.25s var(--ease-out);
   pointer-events: none;
@@ -416,7 +420,7 @@
   stroke-dasharray: 8 6;
 }
 .stitch-progress {
-  stroke: var(--red);
+  stroke: var(--navy);
   stroke-dasharray: 8 6;
   transition: stroke-dashoffset 0.1s linear;
 }
@@ -430,7 +434,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--red);
+  background: var(--navy);
   color: #fff;
   border: none;
   font-size: 20px;
@@ -461,7 +465,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--red);
+  background: var(--navy);
   color: #fff;
   border: none;
   font-size: 20px;
@@ -533,7 +537,7 @@ body:has(.hm-assist-panel) .back-to-top {
 .product-btn.active b {
   color: var(--ink);
   text-decoration: underline;
-  text-decoration-color: var(--red);
+  text-decoration-color: var(--navy);
   text-underline-offset: 9px;
 }
 
