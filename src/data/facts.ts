@@ -150,7 +150,7 @@ export const CERTIFICATIONS = [
 ];
 
 /* ── Stat rows ── */
-export type Stat = { value: string; label: string; sub?: string };
+export type Stat = { value: string; label: string; sub?: string; detail?: string; points?: string[] };
 
 /** The group at a glance: homepage stats row and the About page. */
 export const GROUP_STATS: Stat[] = [
@@ -167,8 +167,28 @@ export const GROUP_STATS: Stat[] = [
 ];
 
 export const SUSTAINABILITY_STATS: Stat[] = [
-  { value: F.solar, label: "Solar capacity" },
-  { value: F.waterRecycling, label: "Water recycling" },
-  { value: F.powerCogeneration, label: "Power co-generation" },
-  { value: F.fiberRecyclingDay, label: "Fiber recycled a day" },
+  {
+    value: F.solar,
+    label: "Solar capacity",
+    detail: "Rooftop solar plants across our factories feed clean power straight into production.",
+    points: ["Rooftop plants on group factories", "Power used on site, cutting grid demand"],
+  },
+  {
+    value: F.waterRecycling,
+    label: "Water recycling",
+    detail: "Biological effluent treatment lets our mills clean and reuse most of their process water.",
+    points: ["Biological effluent treatment plants", "Treated water reused in production"],
+  },
+  {
+    value: F.powerCogeneration,
+    label: "Power co-generation",
+    detail: "Waste heat from our power plants is recovered and reused to run dyeing and finishing.",
+    points: ["Heat recovered from generation", "Less fuel per metre of fabric"],
+  },
+  {
+    value: F.fiberRecyclingDay,
+    label: "Fiber recycled a day",
+    detail: "Our recycling plant turns cutting waste and used fibre back into yarn.",
+    points: ["Post-industrial waste back into yarn", "Less virgin cotton per garment"],
+  },
 ];

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import type { CSSProperties } from "react";
+import { ChevronDown, ChevronLeft, ChevronRight, Droplets, Pause, Play, Recycle, Sun, Zap } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import WorldRoutes from "../WorldRoutes";
 import Productcarousel from "../components/Productcarousel ";
 import Eyebrow from "../components/Eyebrow";
@@ -22,6 +24,14 @@ import {
 } from "../data/facts";
 
 const media = "/media/";
+
+// Sustainability cards: icon, accent, photo and watermark motion per topic
+const ECO_LOOK: Record<string, { Icon: LucideIcon; accent: string; image: string; motion: string }> = {
+  "Solar capacity": { Icon: Sun, accent: "#f5a524", image: "sustain/solar.gif", motion: "animate-[ecoSpin_40s_linear_infinite]" },
+  "Water recycling": { Icon: Droplets, accent: "#4fb3d9", image: "sustain/water.gif", motion: "animate-[ecoBob_6s_ease-in-out_infinite]" },
+  "Power co-generation": { Icon: Zap, accent: "#f2c94c", image: "sustain/fiber.gif", motion: "animate-[ecoFlicker_4s_ease-in-out_infinite]" },
+  "Fiber recycled a day": { Icon: Recycle, accent: "#6fbf73", image: "sustain/recycle.gif", motion: "animate-[ecoSpin_30s_linear_infinite]" },
+};
 
 export const HOME_TITLE = "Ha-Meem Group | Leading Wholesale Clothing Manufacturer";
 export const HOME_DESCRIPTION = `Ha-Meem Group is a leading wholesale clothing manufacturer in Bangladesh. Established in ${F.established}, we make denim fabrics and apparel, and employ ${F.employeesText} people.`;
@@ -1023,45 +1033,114 @@ export default function HomePage() {
           />
           {/* Overlay: a lighter wash so the campus shows (no blur), and a scrim that
       stays dark behind the heading and intro */}
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[rgba(10,14,18,0.5)]" />
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[rgba(10,14,18,0.23)]" />
           <div
             aria-hidden="true"
             className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_75%_55%_at_50%_30%,rgba(10,14,18,0.6)_0%,rgba(10,14,18,0.35)_60%,transparent_100%)]"
           />
 
           <div className="wrap flex flex-col items-center section-y text-center">
-            <div data-reveal className="flex flex-col items-center">
-              <Eyebrow className="text-white!">SUSTAINABILITY</Eyebrow>
+            <div className="flex flex-col items-center">
+              <div data-reveal>
+                <Eyebrow className="text-white!">SUSTAINABILITY</Eyebrow>
+              </div>
 
+              {/* Three lines, each with its own treatment. Gradient and outlined words
+                  use drop-shadow, since a text-shadow would show through them. */}
               <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-statement font-black [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]">
-                Cleaner water.
-                <br />
-                Cleaner power.
-                <br />
-                <span className="text-[#c5c6c8]">Measured.</span>
+                <span data-reveal className="block" style={{ animationDelay: "0ms" }}>
+                  Cleaner{" "}
+                  <span className="bg-[linear-gradient(90deg,#9fdcf2,#4fb3d9)] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] text-shadow-none">
+                    water.
+                  </span>
+                </span>
+                <span data-reveal className="block" style={{ animationDelay: "120ms" }}>
+                  Cleaner{" "}
+                  <span className="bg-[linear-gradient(90deg,#ffd27a,#f5a524)] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] text-shadow-none">
+                    power.
+                  </span>
+                </span>
+                <span data-reveal className="block" style={{ animationDelay: "240ms" }}>
+                  <span className="relative inline-block text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] [-webkit-text-stroke:1.5px_rgba(255,255,255,0.85)] text-shadow-none">
+                    Measured.
+                    {/* Stitch underline: drawn by a mask whose dashoffset runs 1 → 0 once
+                        the line is revealed (data-reveal="shown"); fully drawn otherwise */}
+                    <svg aria-hidden="true" className="absolute -bottom-2 left-0 h-2 w-full overflow-visible" preserveAspectRatio="none">
+                      <defs>
+                        <mask id="eco-underline" maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+                          <line
+                            x1="0"
+                            y1="50%"
+                            x2="100%"
+                            y2="50%"
+                            pathLength={1}
+                            stroke="white"
+                            strokeWidth="6"
+                            className="[stroke-dasharray:1] [stroke-dashoffset:0] transition-[stroke-dashoffset] delay-500 duration-1000 ease-out in-data-[reveal=hidden]:[stroke-dashoffset:1] motion-reduce:transition-none"
+                          />
+                        </mask>
+                      </defs>
+                      <line x1="0" y1="50%" x2="100%" y2="50%" strokeWidth="2" strokeDasharray="8 6" mask="url(#eco-underline)" className="stroke-white/60" />
+                    </svg>
+                  </span>
+                </span>
               </h2>
 
-              <p className="mt-head-intro max-w-[52ch] text-pretty text-intro text-[#d5d6d7] [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
+              <p data-reveal className="mt-head-intro max-w-[52ch] text-pretty text-intro text-[#d5d6d7] [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
                 Our mills treat effluent biologically, recover process chemicals
                 and put solar on factory roofs, working toward net-zero by{" "}
                 {F.netZeroBy}.
               </p>
             </div>
 
-            {/* Four measured results. Hairline grid: the 1px gaps show the
-        container's tint, so rows and columns line up on every width. */}
-            <ul data-reveal-stagger className="mt-section-head grid w-full max-w-5xl auto-rows-fr grid-cols-2 gap-px border border-white/15 bg-white/15 lg:grid-cols-4">
+            {/* Four measured results. On wide screens the hovered or focused tile
+                widens (flex-grow transitions) and reveals its detail; the others
+                narrow and dim. Touch screens keep a grid with details open. */}
+            <ul
+              data-reveal-stagger
+              className="group/eco mt-section-head grid w-full max-w-6xl grid-cols-1 gap-3 text-left sm:grid-cols-2 lg:flex lg:h-105 lg:gap-3 lg:[@media(hover:none)]:grid lg:[@media(hover:none)]:h-auto"
+            >
               {SUSTAINABILITY_STATS.map((s, i) => {
                 const [num, unit] = splitUnit(s.value);
+                const look = ECO_LOOK[s.label] ?? ECO_LOOK["Solar capacity"];
                 return (
                   <li
                     key={s.label}
-                    className="group relative flex flex-col items-center justify-center bg-[rgba(10,14,18,0.55)] px-3 py-10 transition-colors duration-300 hover:bg-[rgba(255,255,255,0.06)] motion-reduce:transition-none sm:px-6 md:py-12"
+                    tabIndex={0}
+                    style={{ "--accent": look.accent } as CSSProperties}
+                    className="group relative min-h-75 overflow-hidden rounded-[22px] border border-transparent text-left backdrop-blur-md [background:linear-gradient(rgba(10,14,18,.62),rgba(10,14,18,.62))_padding-box,linear-gradient(160deg,rgba(255,255,255,.28),rgba(255,255,255,.04)_45%,var(--accent)_120%)_border-box] transition-[flex-grow,opacity] duration-700 ease-[cubic-bezier(.22,1,.36,1)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none lg:min-h-0 lg:flex-1 lg:group-hover/eco:opacity-70 lg:hover:flex-[2.4] lg:hover:opacity-100! lg:focus:flex-[2.4] lg:focus-within:flex-[2.4]"
                   >
-                    {/* Stitched seam, sewn round the tile on hover; always shown on touch screens */}
+                    {/* a) Topic photo; hidden if the file is missing */}
+                    <img
+                      src={`${media}${look.image}`}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      onError={(e) => (e.currentTarget.style.display = "none")}
+                      className="pointer-events-none absolute inset-0 size-full scale-105 object-cover opacity-[0.14] mix-blend-luminosity grayscale-30 transition-[opacity,scale] duration-1000 ease-out group-hover:scale-100 group-hover:opacity-[0.28] group-focus:scale-100 group-focus:opacity-[0.28] motion-reduce:transition-none"
+                    />
+                    {/* b) Accent glow */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -right-16 -bottom-16 size-65 rounded-full bg-[radial-gradient(var(--accent),transparent_70%)] opacity-[0.18] blur-2xl transition-opacity duration-700 group-hover:opacity-[0.32] group-focus:opacity-[0.32] motion-reduce:transition-none"
+                    />
+                    {/* c) Watermark icon with a slow per-topic motion */}
+                    <look.Icon
+                      size={160}
+                      strokeWidth={1}
+                      aria-hidden="true"
+                      className={`eco-motion pointer-events-none absolute -right-6 -bottom-6 text-white opacity-[0.06] motion-reduce:animate-none ${look.motion}`}
+                    />
+                    {/* d) Top sheen */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.06),transparent_40%)]"
+                    />
+
+                    {/* Stitched seam, sewn round the tile on hover or focus; always shown on touch screens */}
                     <svg
                       aria-hidden="true"
-                      className="pointer-events-none absolute inset-2 h-[calc(100%-16px)] w-[calc(100%-16px)] overflow-visible"
+                      className="pointer-events-none absolute inset-2 z-10 h-[calc(100%-16px)] w-[calc(100%-16px)] overflow-visible"
                     >
                       <defs>
                         <mask id={`eco-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
@@ -1070,11 +1149,13 @@ export default function HomePage() {
                             y="0"
                             width="100%"
                             height="100%"
+                            rx="16"
+                            ry="16"
                             pathLength={1}
                             fill="none"
                             stroke="white"
                             strokeWidth="6"
-                            className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-900 motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
+                            className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-900 group-focus:[stroke-dashoffset:0] motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
                           />
                         </mask>
                       </defs>
@@ -1083,6 +1164,8 @@ export default function HomePage() {
                         y="0"
                         width="100%"
                         height="100%"
+                        rx="16"
+                        ry="16"
                         fill="none"
                         stroke="white"
                         strokeOpacity="0.7"
@@ -1092,26 +1175,52 @@ export default function HomePage() {
                       />
                     </svg>
 
-                    {/* The tile stays; its content reveals */}
-                    <div data-reveal className="flex flex-col items-center">
-                      <div className="flex flex-wrap items-baseline justify-center gap-x-1.5 transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
-                        <span className="font-['Fira_Sans_Condensed'] text-[40px] font-black leading-none sm:text-[52px]">
-                          {num}
+                    {/* Content grows upward from the bottom, never past it */}
+                    <div data-reveal className="relative z-10 flex h-full flex-col p-6 md:p-7">
+                      <span className="flex items-center justify-between">
+                        <span className="text-[11px] tabular-nums tracking-widest text-white/50">{String(i + 1).padStart(2, "0")}</span>
+                        <span className="grid size-9 place-items-center rounded-full border border-white/15 bg-white/5 transition-colors duration-300 group-hover:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] group-focus:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] motion-reduce:transition-none">
+                          <look.Icon size={18} strokeWidth={1.5} aria-hidden="true" style={{ color: look.accent }} />
                         </span>
-                        {unit && (
-                          <span className="text-[15px] font-medium text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
-                            {unit}
+                      </span>
+
+                      <div className="mt-auto pt-8">
+                        <div className="flex flex-wrap items-baseline gap-x-1.5">
+                          <span className="font-['Fira_Sans_Condensed'] text-[48px] font-black leading-none text-white transition-[text-shadow] duration-500 group-hover:[text-shadow:0_0_24px_color-mix(in_srgb,var(--accent)_35%,transparent)] group-focus:[text-shadow:0_0_24px_color-mix(in_srgb,var(--accent)_35%,transparent)] motion-reduce:transition-none sm:text-[60px]">
+                            {num}
                           </span>
+                          {unit && <span className="text-[15px] font-medium text-white/70">{unit}</span>}
+                        </div>
+                        <span
+                          aria-hidden="true"
+                          className="mt-4 block h-0.5 w-6 bg-(--accent) transition-[width] duration-500 ease-out group-hover:w-12 group-focus:w-12 motion-reduce:transition-none"
+                        />
+                        <span className="mt-4 block text-[12px] font-semibold uppercase leading-snug tracking-[0.14em] text-white/75 transition-colors duration-300 group-hover:text-white group-focus:text-white motion-reduce:transition-none">
+                          {s.label}
+                        </span>
+
+                        {/* Detail: grid rows 0fr → 1fr. The content has a fixed width on
+                            lg, so it doesn't reflow while the tile widens. */}
+                        {s.detail && (
+                          <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:grid-rows-[1fr] group-focus:grid-rows-[1fr] group-focus-within:grid-rows-[1fr] motion-reduce:grid-rows-[1fr] motion-reduce:transition-none [@media(hover:none)]:grid-rows-[1fr]">
+                            <div className="min-h-0 overflow-hidden">
+                              <div className="translate-y-2 pt-4 opacity-0 transition-[opacity,translate] delay-150 duration-500 group-hover:translate-y-0 group-hover:opacity-100 group-focus:translate-y-0 group-focus:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none lg:w-[34ch] [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100 lg:[@media(hover:none)]:w-auto">
+                                <p className="line-clamp-3 text-sm leading-relaxed text-white/85">{s.detail}</p>
+                                {s.points && (
+                                  <ul className="mt-3 flex flex-col gap-1.5 text-xs text-white/70">
+                                    {s.points.slice(0, 2).map((pt) => (
+                                      <li key={pt} className="flex gap-2">
+                                        <span aria-hidden="true" className="mt-1.5 size-1 shrink-0 rounded-full bg-(--accent)" />
+                                        {pt}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            </div>
+                          </div>
                         )}
                       </div>
-                      {/* Red rule that stretches on hover, as on the business cards */}
-                      <span
-                        aria-hidden="true"
-                        className="mt-4 h-0.5 w-6 bg-(--navy) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
-                      />
-                      <span className="mt-4 max-w-[24ch] text-balance text-[13px] font-semibold uppercase leading-snug tracking-[0.12em] text-[#c5c6c8] transition-colors duration-300 group-hover:text-white">
-                        {s.label}
-                      </span>
                     </div>
                   </li>
                 );
