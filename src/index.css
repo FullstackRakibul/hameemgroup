@@ -781,3 +781,37 @@ dialog.gallery-lightbox::backdrop { background: rgb(17 20 24 / 0.96); }
 @keyframes awardIn {
   from { opacity: 0; transform: var(--award-from, translateY(12px)); }
 }
+
+/* ── Eyebrow scroll ribbon ──
+   Before [data-play] the paper is rolled up at its centre, the curls are
+   wound in and the letters wait; useInViewOnce sets data-play once. The
+   stitch is revealed by clip-path, since its dasharray draws the dashes. */
+.eyebrow-ribbon .ribbon-body { transition: clip-path 550ms cubic-bezier(.22,1,.36,1); }
+.eyebrow-ribbon .ribbon-curl { transition: opacity 600ms cubic-bezier(.22,1,.36,1), transform 600ms cubic-bezier(.22,1,.36,1); }
+.eyebrow-ribbon .ribbon-curl-left { transform-origin: right center; }
+.eyebrow-ribbon .ribbon-curl-right { transform-origin: left center; }
+.eyebrow-ribbon .ribbon-letter {
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+  transition-delay: calc(300ms + var(--i, 0) * 22ms);
+}
+.eyebrow-ribbon .ribbon-stitch { transition: clip-path 500ms ease-out 700ms; }
+
+.eyebrow-ribbon:not([data-play]) .ribbon-body { clip-path: inset(0 50% 0 50%); }
+.eyebrow-ribbon:not([data-play]) .ribbon-curl { opacity: 0; transform: scale(.4) rotate(-200deg); }
+.eyebrow-ribbon:not([data-play]) .ribbon-letter { opacity: 0; transform: translateY(6px); }
+.eyebrow-ribbon:not([data-play]) .ribbon-stitch { clip-path: inset(0 100% 0 0); }
+.eyebrow-ribbon[data-play] .ribbon-body,
+.eyebrow-ribbon[data-play] .ribbon-stitch { clip-path: inset(0 0 0 0); }
+
+@keyframes ribbonWiggle {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(-8deg); }
+}
+.eyebrow-ribbon[data-play]:hover .ribbon-curl { animation: ribbonWiggle 600ms ease-in-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow-ribbon .ribbon-body, .eyebrow-ribbon .ribbon-curl,
+  .eyebrow-ribbon .ribbon-letter, .eyebrow-ribbon .ribbon-stitch {
+    transition: none; animation: none; opacity: 1; transform: none; clip-path: none;
+  }
+}

@@ -265,10 +265,7 @@ export default function GalleryPage() {
 
         <div className="wrap">
           <div data-reveal className="relative z-10 mx-auto max-w-xl text-center lg:pt-16">
-            <Eyebrow className="flex items-center justify-center gap-3">
-              <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
-                <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--navy)" strokeWidth="2" strokeDasharray="5 4" />
-              </svg>
+            <Eyebrow>
               GALLERY
             </Eyebrow>
             <h1 tabIndex={-1} className="mt-head-eyebrow font-['Fira_Sans_Condensed'] text-[56px] font-black leading-[0.95] outline-none md:text-[88px]">
@@ -380,10 +377,7 @@ export default function GalleryPage() {
       <section id="tours" className="scroll-mt-24 bg-(--mist) section-y">
         <div className="wrap">
           <div data-reveal className="mx-auto max-w-2xl text-center">
-            <Eyebrow className="flex items-center justify-center gap-3">
-              <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
-                <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--navy)" strokeWidth="2" strokeDasharray="5 4" />
-              </svg>
+            <Eyebrow>
               360° VIRTUAL TOURS
             </Eyebrow>
             <h2 className="mt-head-eyebrow font-['Fira_Sans_Condensed'] text-h2 font-black uppercase">

@@ -971,10 +971,7 @@ export default function HomePage() {
         <section id="recognition" className="relative isolate bg-white section-y [--primary:#142E53] [--accent:#3A1C14] [--navy:var(--primary)]">
           <div className="wrap">
             <div data-reveal className="mx-auto max-w-3xl text-center">
-              <Eyebrow className="flex items-center justify-center gap-3">
-                <svg aria-hidden="true" width="28" height="2" className="shrink-0 overflow-visible">
-                  <line x1="0" y1="1" x2="28" y2="1" className="stroke-(--navy)" strokeWidth="2" strokeDasharray="5 4" />
-                </svg>
+              <Eyebrow>
                 RECOGNITION &amp; AWARDS
               </Eyebrow>
               <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-h2 font-black uppercase leading-[0.95] tracking-[-0.01em]">
@@ -1338,7 +1335,7 @@ export default function HomePage() {
           <div className="wrap">
             <SectionHeader eyebrow="NEWSROOM" title="Latest from the group.">
               {newsItems.some((n) => n.url) && (
-                <Eyebrow className="text-(--mute)!">LINKS OPEN THE ORIGINAL REPORT</Eyebrow>
+                <Eyebrow plain className="text-(--mute)!">LINKS OPEN THE ORIGINAL REPORT</Eyebrow>
               )}
             </SectionHeader>
 
