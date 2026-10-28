@@ -146,14 +146,6 @@ html.lenis body { height: auto; }
 .font-headline { font-family: "Fira Sans Condensed", sans-serif; }
 
 /* ── Keyframes (can't be inlined via Tailwind) ── */
-@keyframes megaFadeIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes menuIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 @keyframes chainFadeIn {
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: translateY(0); }
@@ -208,13 +200,9 @@ html.lenis body { height: auto; }
 .is-solid .header-bar { border-bottom-color: var(--hair); }
 .site-header { height: 100%; }
 
-/* Opening a menu turns the header white in the same frame as the panel. */
-.header-wrapper.is-mega-open,
-.header-wrapper.is-mega-open .header-bar,
-.header-wrapper.is-mega-open .site-logo *,
-.header-wrapper.is-mobile-open,
-.header-wrapper.is-mobile-open .header-bar,
-.header-wrapper.is-mobile-open .site-logo * { transition-duration: 0s; }
+/* With the sheet open the bar and the sheet are one surface: the bar's own
+   drop shadow gives way to the sheet's, which sits under the whole thing. */
+.header-wrapper.is-mega-open { box-shadow: none; }
 
 /* Logo pill: frosted glass over the hero, mist chip when solid */
 .logo-pill {
@@ -340,16 +328,113 @@ html.lenis body { height: auto; }
 .nav-chevron.is-open { transform: rotate(180deg); }
 .menu-btn { color: inherit; background: none; border: 0; padding: 0; }
 
-/* Mega panel: sits under the header bar, whose hairline it shares */
-.mega-panel {
+/* ── The sliding indicator: one dashed line that follows the open trigger ──
+   While it shows, the mega triggers' own ::after stitch steps aside so the
+   two don't double up. Plain links keep theirs. */
+.nav-rail { position: relative; }
+.nav-indicator {
+  position: absolute;
+  left: 0;
+  top: calc(50% + 8px);
+  width: 0;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--nav-stitch) 0 6px, transparent 6px 10px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
+    width 0.35s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.25s ease;
+}
+.nav-indicator[data-open="true"] { opacity: 1; }
+.is-mega-open .nav-link.is-mega-trigger .nav-text::after { opacity: 0; }
+
+/* ── Mega sheet: one surface, always mounted, that morphs between menus ──
+   --mega-h is written by a ResizeObserver on .mega-inner, so opening,
+   closing and switching menus are all the same height transition. */
+.mega-sheet {
+  height: 0;
+  overflow: hidden;
   background: #fff;
   color: var(--ink);
+  box-shadow: none;
+  transition: height 0.45s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.25s ease;
+}
+.mega-sheet[data-open="true"] {
+  height: var(--mega-h, auto);
+  box-shadow: 0 24px 48px rgba(17, 20, 24, 0.1);
+}
+.mega-inner {
   max-height: calc(100dvh - var(--header-h));
   overflow-y: auto;
-  animation: megaFadeIn 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  overscroll-behavior: contain;
 }
 
-/* Mobile and tablet menu: fills the screen under the header */
+/* Content: fades in with the open, crossfades with a short slide on a swap,
+   and fades out while the height collapses. */
+.mega-content { animation: megaContentIn 0.32s cubic-bezier(0.32, 0.72, 0, 1) both; }
+.mega-sheet[data-open="false"] .mega-content {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  animation: none;
+}
+.mega-aside { animation: megaAsideIn 0.4s cubic-bezier(0.32, 0.72, 0, 1) 0.12s both; }
+.mega-item { animation: megaRowIn 0.4s cubic-bezier(0.32, 0.72, 0, 1) both; }
+@keyframes megaContentIn {
+  from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 16px)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes megaAsideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes megaRowIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* The page behind the open sheet */
+.mega-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--ink);
+  opacity: 0;
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mega-scrim[data-open="true"] {
+  opacity: 0.2;
+  pointer-events: auto;
+}
+
+/* ── The menu button's burger, which folds into an X ── */
+.burger {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 14px;
+}
+.burger span {
+  position: absolute;
+  left: 0;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s ease, width 0.3s ease;
+}
+.burger span:nth-child(1) { top: 0; width: 100%; }
+.burger span:nth-child(2) { top: 6.25px; width: 100%; }
+.burger span:nth-child(3) { top: 12.5px; width: 64%; }
+.burger[data-open="true"] span:nth-child(1) { transform: translateY(6.25px) rotate(45deg); }
+.burger[data-open="true"] span:nth-child(2) { opacity: 0; }
+.burger[data-open="true"] span:nth-child(3) {
+  width: 100%;
+  transform: translateY(-6.25px) rotate(-45deg);
+}
+
+/* ── Mobile and tablet menu: fills the screen under the header ──
+   It reveals downward from the bar, and stays mounted to animate back up. */
 .mobile-menu {
   position: fixed;
   top: var(--header-h);
@@ -359,12 +444,43 @@ html.lenis body { height: auto; }
   overscroll-behavior: contain;
   background: #fff;
   color: var(--ink);
-  animation: menuIn 0.2s ease-out;
+  animation: mobileSheetIn 0.45s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.mobile-menu[data-open="false"] {
+  animation: mobileSheetOut 0.3s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.mobile-item { animation: megaRowIn 0.4s cubic-bezier(0.32, 0.72, 0, 1) both; }
+.mobile-menu[data-open="false"] .mobile-item { animation: none; }
+@keyframes mobileSheetIn {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes mobileSheetOut {
+  from { clip-path: inset(0 0 0 0); }
+  to { clip-path: inset(0 0 100% 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mega-panel,
-  .mobile-menu { animation-name: fadeIn; }
+  /* No height morph: the sheet simply shows and hides with a short fade. */
+  .mega-sheet {
+    transition: opacity 0.15s ease;
+    height: auto;
+    opacity: 0;
+    max-height: 0;
+  }
+  .mega-sheet[data-open="true"] {
+    opacity: 1;
+    max-height: calc(100dvh - var(--header-h));
+  }
+  .mega-content,
+  .mega-aside,
+  .mega-item,
+  .mobile-item { animation: none; }
+  .mega-sheet[data-open="false"] .mega-content { transition: none; }
+  .mobile-menu,
+  .mobile-menu[data-open="false"] { animation-name: fadeIn; }
+  .nav-indicator,
+  .burger span,
   .nav-chevron,
   .nav-text::after,
   .row-stitch::after,
