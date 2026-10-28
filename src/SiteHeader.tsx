@@ -301,7 +301,7 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
 
       {/* Mobile and tablet menu */}
       {mobileOpen && (
-        <div id="mobile-menu" ref={mobilePanelRef} className="mobile-menu lg:hidden">
+        <div id="mobile-menu" ref={mobilePanelRef} data-lenis-prevent className="mobile-menu lg:hidden">
           <nav aria-label="Mobile" className="wrap pt-6 pb-16">
             {[...PLAIN_LINKS, { title: "Businesses", href: "/#businesses" }].map((link) => (
               <SmartLink

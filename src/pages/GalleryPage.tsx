@@ -3,6 +3,7 @@ import { ArrowUpRight, ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import Eyebrow from "../components/Eyebrow";
 import useLightHero from "../components/useLightHero";
 import usePageMeta from "../components/usePageMeta";
+import { scrollToTarget } from "../lib/scroll";
 import { GALLERY, GALLERY_CATEGORIES, GALLERY_VIDEO, VR_TOURS, type GalleryCategory, type GalleryItem, type VrTour } from "../data/gallery";
 
 const media = "/media/";
@@ -18,7 +19,6 @@ function imgProps(item: { src: string; width?: number; height?: number }, sizes:
 }
 const pad = (n: number) => String(n).padStart(2, "0");
 const countOf = (c: GalleryCategory) => GALLERY.filter((g) => g.category === c).length;
-const smooth = () => (window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth");
 
 /* A photo card: image, and a caption that fades in on hover (always shown on
    touch). Size, shape and motion come from the caller. */
@@ -203,12 +203,15 @@ export default function GalleryPage() {
     return () => window.removeEventListener("keydown", onKey);
   }, [box === null]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const scrollToId = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: smooth(), block: "start" });
+  const scrollToId = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) scrollToTarget(el);
+  };
   const pickCategory = (c: GalleryCategory) => {
     // Virtual tours have their own section
     if (c === TOURS) return scrollToId("tours");
     setCategory(c);
-    wallRef.current?.scrollIntoView({ behavior: smooth(), block: "start" });
+    if (wallRef.current) scrollToTarget(wallRef.current);
   };
 
   const current = box ? box.list[box.index] : null;
@@ -448,6 +451,7 @@ export default function GalleryPage() {
           swipeX.current = null;
           if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
         }}
+        data-lenis-prevent
         className="gallery-lightbox fixed inset-0 m-0 h-full max-h-none w-full max-w-none bg-(--ink)/96 p-0 text-white"
       >
         {box && current && (

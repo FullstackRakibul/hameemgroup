@@ -192,3 +192,63 @@ export const SUSTAINABILITY_STATS: Stat[] = [
     points: ["Post-industrial waste back into yarn", "Less virgin cotton per garment"],
   },
 ];
+
+/* ── People programmes ──
+   One card each in the home page's PEOPLE accordion. `image` is a path under
+   public/media; swap that one field to change a card's photo. */
+export type PeopleProgram = {
+  id: string;
+  title: string;
+  summary: string;
+  points: string[];
+  image: string;
+  imageAlt: string;
+};
+
+export const PEOPLE_PROGRAMS: PeopleProgram[] = [
+  {
+    id: "schools",
+    title: "Schools we founded",
+    summary: "The group has established schools for its workers' children and the wider community.",
+    points: ["M. A. Aziz High School", "M. A. Aziz Primary School", "Nurul Islam High School", "Refat Kowmi Madrasa"],
+    image: "biz/gate.jpg",
+    imageAlt: "Entrance to a Ha-Meem campus",
+  },
+  {
+    id: "scholarships",
+    title: "Scholarships",
+    summary: "Ha-Meem Group funds scholarships for its workers' children.",
+    points: ["For workers' children", "Funded by the group"],
+    image: "people-knit.jpg",
+    imageAlt: "A knitting technician programming a Stoll machine",
+  },
+  {
+    id: "higher-ed",
+    title: "Dreams Beyond the Factory Floor",
+    summary: "A higher-education pathway with the Asian University for Women.",
+    points: ["Partnership with the Asian University for Women"],
+    image: "chain-sewing.jpg",
+    imageAlt: "Sewing line at a Ha-Meem factory",
+  },
+  {
+    id: "careers",
+    title: "Careers & universities",
+    summary: "We take part in career fairs and work with clubs at universities across Bangladesh.",
+    points: ["University career fairs", "Student clubs and programmes"],
+    image: "cine/sewing.jpg",
+    imageAlt: "Workers on a production floor",
+  },
+  {
+    id: "environment",
+    title: "Environment",
+    summary: "Saving power, cleaning water and choosing cleaner materials across our sites.",
+    points: [
+      "LED lighting and solar panels to save electricity",
+      "Our own effluent treatment plant (ETP) to cut water waste",
+      "Organic raw materials: fewer pesticides, less water",
+      "Tree plantation drives across the country",
+    ],
+    image: "sustain-campus.jpg",
+    imageAlt: "Green campus of Ha-Meem Textiles at Mawna, Bangladesh",
+  },
+];

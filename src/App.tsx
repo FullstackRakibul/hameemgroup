@@ -1,10 +1,12 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import Preloader from "./Preloader";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./components/SiteFooter";
 import GarmentBackdrop from "./components/GarmentBackdrop";
 import useReveal from "./components/useReveal";
+import SmoothScroll from "./components/SmoothScroll";
+import { scrollToTarget } from "./lib/scroll";
 import { AiAssistant } from "./features/ai-assistant";
 import { megaMenuData } from "./data/navigation";
 import gsap from "gsap";
@@ -96,7 +98,7 @@ function RouteEffects() {
           if (frames++ < 60) requestAnimationFrame(tryScroll);
           return;
         }
-        target.scrollIntoView({ behavior: samePage && !reducedMotion() ? "smooth" : "instant" });
+        scrollToTarget(target, { immediate: !samePage || reducedMotion() });
         if (!firstLoad) {
           if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
           target.focus({ preventScroll: true });
@@ -107,7 +109,7 @@ function RouteEffects() {
     }
 
     if (firstLoad) return;
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    scrollToTarget(0, { offset: 0, immediate: true });
     document.querySelector<HTMLElement>("main h1")?.focus({ preventScroll: true });
   }, [location.key, location.hash, location.pathname]);
 
@@ -121,19 +123,33 @@ function Shell() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // The preloader plays once per browser session, never on route changes.
+  // The preloader plays once per browser session, never on route changes. It
+  // ends when its own timeline does (onDone) and the fonts are ready, whichever
+  // is later, so the page appears already set; a 4s safety net ends it anyway.
+  const finishedRef = useRef(false);
+  const finishPreloader = useCallback(() => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
+    setLoading(false);
+    try {
+      sessionStorage.setItem(PRELOADER_KEY, "1");
+    } catch {
+      /* storage blocked: the preloader simply plays again next load */
+    }
+  }, []);
+
   useEffect(() => {
     if (!loading) return;
-    const timer = setTimeout(() => {
-      setLoading(false);
-      try {
-        sessionStorage.setItem(PRELOADER_KEY, "1");
-      } catch {
-        /* storage blocked: the preloader simply plays again next load */
-      }
-    }, 2800);
-    return () => clearTimeout(timer);
-  }, [loading]);
+    const safety = setTimeout(finishPreloader, 4000);
+    return () => clearTimeout(safety);
+  }, [loading, finishPreloader]);
+
+  // onDone from the timeline, held until the fonts have loaded
+  const onPreloaderDone = useCallback(() => {
+    const fonts = document.fonts?.ready;
+    if (fonts) fonts.then(finishPreloader).catch(finishPreloader);
+    else finishPreloader();
+  }, [finishPreloader]);
 
   // Scroll handler: back-to-top + scroll progress (header state lives in SiteHeader).
   // Re-measured on route change, since the new page has a different height.
@@ -166,11 +182,12 @@ function Shell() {
 
   useReveal(pathname, !loading);
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: reducedMotion() ? "instant" : "smooth" });
+  const scrollToTop = () => scrollToTarget(0, { offset: 0, immediate: reducedMotion() });
 
   return (
     <>
-      {loading && <Preloader />}
+      {loading && <Preloader onDone={onPreloaderDone} />}
+      <SmoothScroll />
       <RouteEffects />
 
       <StitchScrollbar progress={scrollProgress} />

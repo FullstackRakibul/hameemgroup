@@ -13,6 +13,7 @@ import SmartLink from "../components/SmartLink";
 import ContactCta from "../components/ContactCta";
 import GarmentIcons from "../components/GarmentIcons";
 import FoundedOrbit from "../components/FoundedOrbit";
+import PeopleSection from "../components/PeopleSection";
 import usePageMeta from "../components/usePageMeta";
 import {
   CERTIFICATIONS,
@@ -348,7 +349,7 @@ export default function HomePage() {
         />
 
         {/* Copy and controls: left-aligned at the foot, on the page grid */}
-        <div className="relative z-2 pt-[calc(var(--header-h)+32px)] pb-9 md:pb-14">
+        <div className="relative z-2 pt-[calc(var(--header-h)+24px)] pb-8 md:pb-10">
           <div className="wrap">
             <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/95 [text-shadow:0_1px_2px_rgba(0,0,0,0.35)] md:text-xs">
               <svg aria-hidden="true" width="32" height="2" className="shrink-0 overflow-visible">
@@ -452,7 +453,7 @@ export default function HomePage() {
 
           <div className="wrap relative z-10">
             {/* Founded orbit beside the statement; stacked and centred below lg */}
-            <div className="grid gap-head-eyebrow lg:grid-cols-[320px_1fr] lg:items-center lg:gap-16">
+            <div className="grid gap-head-eyebrow lg:grid-cols-[320px_1fr] lg:items-center lg:gap-12">
               <div data-reveal className="flex justify-center">
                 <FoundedOrbit />
               </div>
@@ -866,7 +867,7 @@ export default function HomePage() {
                 <Link
                   to={b.to}
                   key={b.title}
-                  className="biz-card group relative block h-74.5 overflow-hidden p-6 text-white transition-all duration-350 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
+                  className="biz-card group relative block h-74.5 overflow-hidden p-4 text-white transition-all duration-350 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
                 >
                   <img
                     src={`${media}${b.image}`}
@@ -995,7 +996,7 @@ export default function HomePage() {
             </div>
             <AwardSlider className="mt-section-head" />
             {/* Accreditations & certifications */}
-            <div className="border-t border-(--hair) mt-9 pt-10 grid md:grid-cols-[260px_1fr] gap-6">
+            <div className="border-t border-(--hair) mt-8 pt-8 grid md:grid-cols-[260px_1fr] gap-6">
               <Eyebrow>
                 Accreditations &amp; certifications<sup className="text-(--navy)">*</sup>
               </Eyebrow>
@@ -1229,102 +1230,7 @@ export default function HomePage() {
 
 
         {/* ── PEOPLE ── */}
-        <section id="people" className="grid bg-(--mist) md:min-h-184 md:grid-cols-2">
-          {/* The text starts on the page's content edge, like every other section */}
-          <div data-reveal className="flex flex-col justify-center section-y pl-gutter pr-gutter md:pr-[7vw]">
-            <Eyebrow>PEOPLE</Eyebrow>
-            <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-h2 font-black">
-              {F.employeesText}
-              <br />
-              people.<sup className="text-(--navy)">*</sup>
-            </h2>
-            <p className="mt-head-intro max-w-107.5 text-pretty text-intro text-(--mute)">
-              The core engine of our vertically integrated system. We invest heavily in human capital through rigorous training and skill management, supported by dedicated schools, scholarships.
-            </p>
-
-            {/* The three programmes, one per row, so they can be scanned */}
-            <ul className="mt-8 max-w-107.5 border-t border-(--hair)">
-              {[
-                { title: "Three schools", text: "Founded by the group for its workers' children." },
-                { title: "Scholarships", text: "Funded by the group." },
-                {
-                  title: "Dreams Beyond the Factory Floor",
-                  text: "A higher-education pathway with the Asian University for Women.",
-                },
-              ].map((item) => (
-                <li key={item.title} className="group relative border-b border-(--hair) py-4 pl-5">
-                  <span
-                    aria-hidden="true"
-                    className="absolute left-0 top-4 bottom-4 w-0.5 origin-top scale-y-50 bg-(--navy) transition-transform duration-300 group-hover:scale-y-100 motion-reduce:transition-none"
-                  />
-                  <b className="block font-['Fira_Sans_Condensed'] text-[20px] font-bold leading-tight text-(--ink)">
-                    {item.title}
-                  </b>
-                  <span className="mt-1 block text-sm leading-snug text-(--mute)">{item.text}</span>
-                </li>
-              ))}
-            </ul>
-
-            <Link
-              to="/#careers"
-              className="btn-ring group/cta mt-cta inline-flex min-h-12 items-center gap-3 self-start rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
-            >
-              WORK WITH US
-              <span
-                aria-hidden="true"
-                className="transition-transform duration-300 group-hover/cta:translate-x-1 motion-reduce:transition-none"
-              >
-                →
-              </span>
-            </Link>
-          </div>
-
-          <figure className="group relative m-0 min-h-100 overflow-hidden md:min-h-0">
-            <img
-              src={`${media}people-knit.jpg`}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-            />
-            {/* Stitched seam, sewn round the photo on hover; always shown on touch screens */}
-            <svg
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-4 h-[calc(100%-32px)] w-[calc(100%-32px)] overflow-visible md:inset-6 md:h-[calc(100%-48px)] md:w-[calc(100%-48px)]"
-            >
-              <defs>
-                <mask id="people-stitch" maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    pathLength={1}
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="6"
-                    className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-700 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-1200 motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
-                  />
-                </mask>
-              </defs>
-              <rect
-                x="0"
-                y="0"
-                width="100%"
-                height="100%"
-                fill="none"
-                stroke="white"
-                strokeOpacity="0.85"
-                strokeWidth="1.5"
-                strokeDasharray="8 6"
-                mask="url(#people-stitch)"
-              />
-            </svg>
-            <figcaption className="absolute bottom-8 left-8 right-8 md:bottom-10 md:left-10 md:right-auto">
-              <span className="inline-block bg-[rgba(17,20,24,0.78)] px-3 py-2 text-xs leading-snug text-white backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none">
-                A knitting technician programming a Stoll machine
-              </span>
-            </figcaption>
-          </figure>
-        </section>
+        <PeopleSection />
 
 
         {/* ── NEWSROOM ── */}

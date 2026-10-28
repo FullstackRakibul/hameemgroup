@@ -24,7 +24,7 @@
 @layer base {
   * { box-sizing: border-box; }
   html {
-    scroll-behavior: smooth;
+    /* No scroll-behavior: Lenis drives every programmatic scroll (see lib/scroll.ts) */
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -41,21 +41,25 @@
   a { text-decoration: none; }
   button { cursor: pointer; }
   h1, h2, h3, p { margin: 0; }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-  }
 }
+
+/* ── Lenis smooth scrolling (components/SmoothScroll.tsx) ── */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
 
 /* ── Spacing and type scale ──
    One definition, three steps: phone (<768px), tablet (768–1023px), desktop
    (≥1024px). Used through the utilities below, never as raw numbers. */
 :root {
-  --section-y: 72px;
-  --section-head: 40px;
+  --section-y: 56px;
+  --section-head: 28px;
   --head-eyebrow: 16px;
-  --head-intro: 20px;
+  --head-intro: 16px;
   --grid-gap: 16px;
-  --cta-gap: 32px;
+  --cta-gap: 24px;
 
   --fs-hero: clamp(44px, 11vw, 56px);
   --fs-h2: 36px;
@@ -71,11 +75,11 @@
 }
 @media (width >= 768px) {
   :root {
-    --section-y: 96px;
-    --section-head: 48px;
-    --head-intro: 24px;
+    --section-y: 72px;
+    --section-head: 36px;
+    --head-intro: 18px;
     --grid-gap: 20px;
-    --cta-gap: 40px;
+    --cta-gap: 28px;
     --fs-hero: clamp(56px, 8vw, 72px);
     --fs-h2: 46px;
     --fs-statement: 58px;
@@ -91,9 +95,9 @@
 }
 @media (width >= 1024px) {
   :root {
-    --section-y: 112px;
-    --section-head: 64px;
-    --head-eyebrow: 20px;
+    --section-y: 88px;
+    --section-head: 44px;
+    --head-eyebrow: 16px;
     --fs-hero: clamp(72px, 7vw, 98px);
     --fs-h2: 56px;
     --fs-statement: 68px;
@@ -815,3 +819,78 @@ dialog.gallery-lightbox::backdrop { background: rgb(17 20 24 / 0.96); }
     transition: none; animation: none; opacity: 1; transform: none; clip-path: none;
   }
 }
+
+/* ── People section ──
+   An accordion of cards in the Sustainability cards' idiom: light and closed,
+   dark glass when open. The gradient hairline border is the same
+   padding-box/border-box trick. Colour is ink, white and navy only: navy
+   carries the small signals (the chip when open, the bullets, the glow). The photo
+   panel beside the list is sticky, so there is no scroll-linked parallax here;
+   the giant word still drifts where the browser supports it. */
+.people-card {
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(160deg, color-mix(in srgb, var(--navy) 22%, transparent), var(--hair) 45%, color-mix(in srgb, var(--navy) 45%, transparent) 120%) border-box;
+  color: var(--ink);
+}
+.people-card .people-glow { opacity: 0.06; }
+.people-card .people-watermark { color: color-mix(in srgb, var(--ink) 4%, transparent); }
+.people-card .people-chip-icon { color: var(--navy); }
+.people-card .people-dot { background: var(--navy); }
+.people-card .people-details { opacity: 0; translate: 0 6px; }
+
+/* Pointing at a closed card: the hairline and the chip warm up, nothing moves */
+@media (hover: hover) and (pointer: fine) {
+  .people-card:not([data-open]):hover .people-chip { background: color-mix(in srgb, var(--navy) 12%, var(--mist)); }
+  .people-card:not([data-open]):hover .people-glow { opacity: 0.12; }
+}
+
+.people-card[data-open] {
+  background:
+    linear-gradient(var(--ink), var(--ink)) padding-box,
+    linear-gradient(160deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.06) 45%, var(--navy) 120%) border-box;
+  box-shadow: 0 18px 40px -24px color-mix(in srgb, var(--ink) 55%, transparent);
+}
+.people-card[data-open] .people-title { color: #fff; }
+.people-card[data-open] .people-index { color: rgb(255 255 255 / 0.5); }
+.people-card[data-open] .people-plus { color: #fff; transform: rotate(45deg); }
+.people-card[data-open] .people-chip { background: var(--navy); }
+.people-card[data-open] .people-chip-icon { color: #fff; }
+.people-card[data-open] .people-dot { background: rgb(255 255 255 / 0.55); }
+.people-card[data-open] .people-glow { opacity: 0.2; }
+.people-card[data-open] .people-watermark {
+  color: rgb(255 255 255 / 0.06);
+  /* Reuses the sustainability cards' slow turn */
+  animation: ecoSpin 40s linear infinite;
+}
+.people-card[data-open] .people-details { opacity: 1; translate: 0 0; }
+
+/* The caption under the sticky photo, re-keyed on every change */
+.people-caption { animation: awardIn 500ms var(--ease-out) both; }
+.people-caption-late { animation-delay: 120ms; }
+
+@supports (animation-timeline: view()) {
+  .people-drift {
+    animation: peopleDrift linear both;
+    animation-timeline: view();
+  }
+}
+@keyframes peopleDrift {
+  from { transform: translateX(-20px); }
+  to { transform: translateX(20px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .people-drift,
+  .people-card[data-open] .people-watermark,
+  .people-caption { animation: none; }
+  .people-card[data-open] .people-plus { transform: none; }
+  /* The content still appears, it simply does not travel */
+  .people-card .people-details { opacity: 1; translate: 0 0; }
+}
+
+
+/* ── Preloader (src/Preloader.tsx) ──
+   The timeline there drives the draw, the fill and the curtain; only the dot's
+   glow is styling. */
+.preloader-dot { filter: drop-shadow(0 0 4px rgba(100, 200, 152, 0.3)); }

@@ -181,7 +181,7 @@ export default function ChatPanel(props: ChatPanelProps) {
       <PanelHeader nameId={nameId} compact={hasUserMessages} onCall={props.onCall} onClose={() => close()} />
 
       <div className="hm-assist-scroll-wrap">
-        <div ref={scrollRef} className="hm-assist-scroll" onScroll={onScroll}>
+        <div ref={scrollRef} data-lenis-prevent className="hm-assist-scroll" onScroll={onScroll}>
           <MessageList
             messages={messages}
             isTyping={isTyping}
