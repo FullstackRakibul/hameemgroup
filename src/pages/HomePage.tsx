@@ -33,8 +33,6 @@ const heroSlides = [
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00053.jpeg", alt: "Sewing floor at Ha-Meem garment factory" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00054.jpeg", alt: "Ha-Meem Group manufacturing facility" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00055.jpeg", alt: "Ha-Meem Group manufacturing facility" },
-  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00056.jpeg", alt: "Ha-Meem Group manufacturing facility" },
-  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00057.jpeg", alt: "Ha-Meem Group manufacturing facility" },
 ];
 
 
@@ -308,7 +306,7 @@ export default function HomePage() {
           if the copy needs it: the copy sits in flow at the foot. */}
       <section
         id="top"
-        className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden text-white bg-(--ink) [--ring:#fff]"
+        className="relative flex min-h-svh flex-col justify-end overflow-hidden text-white bg-(--ink) [--ring:#fff]"
       >
         {/* Isolated, so the slides' z-index stays under the shade layers */}
         <div className="absolute inset-0 isolate">
@@ -985,13 +983,13 @@ export default function HomePage() {
                 <span className="text-(--ink)">Ha-Meem Group&apos;s export performance, product quality and technical excellence</span>
                 <span className="text-(--mute)"> since 2009.</span>
               </p>
-              <SmartLink
+              {/* <SmartLink
                 href="/about"
                 className="group mt-cta inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(17,20,24,0.18)] transition-colors duration-300 hover:bg-(--red) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--red) motion-reduce:transition-none"
               >
                 About Ha-Meem Group
                 <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" />
-              </SmartLink>
+              </SmartLink> */}
             </div>
             <AwardSlider className="mt-section-head" />
             {/* Accreditations & certifications */}
