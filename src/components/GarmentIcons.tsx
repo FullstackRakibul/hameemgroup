@@ -89,7 +89,7 @@ export default function GarmentIcons() {
             className="garment-float h-(--s) w-(--s) motion-reduce:animate-none max-md:h-[calc(var(--s)*0.7)] max-md:w-[calc(var(--s)*0.7)]"
             style={{
               "--s": `${p.size}px`,
-              color: p.red ? "var(--red)" : "var(--ink)",
+              color: p.red ? "var(--navy)" : "var(--ink)",
               opacity: p.red ? 0.2 : p.op,
               animationDuration: `${p.dur}s`,
               animationDelay: `${p.delay}s`,

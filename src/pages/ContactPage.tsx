@@ -9,7 +9,7 @@ import { MANAGEMENT, MERCHANDISING_CONTACTS } from "../data/units";
 import { COMPANY_CRUMBS } from "./crumbs";
 
 // 44px tall on phones (touch targets); natural height from 768px
-const linkClass = "inline-flex min-h-11 items-center text-(--red) font-medium underline-offset-4 hover:underline md:min-h-0";
+const linkClass = "inline-flex min-h-11 items-center text-(--navy) font-medium underline-offset-4 hover:underline md:min-h-0";
 
 export default function ContactPage() {
   usePageMeta(

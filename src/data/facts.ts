@@ -29,7 +29,7 @@ export const F = {
   laboratory: "In-house accredited laboratory",
 
   /* From the 2018 site, unconfirmed */
-  productionLines: "300",
+  productionLines: "400",
   locations: "six",
   merchandisers: "250",
   washingPlants: "7",
@@ -65,7 +65,7 @@ export const splitUnit = (figure: string): [string, string] => {
 /* Links that exist only once the company supplies them. Empty hides them. */
 /* The Tongi zone tour, the entry point for the nav and footer links. The full
    set of four tours lives in VR_TOURS in ./gallery. */
-export const VIRTUAL_TOUR_URL = "https://360vr.hameemgroup.com/tongi/";
+export const VIRTUAL_TOUR_URL = "https://hameemgroup.net/360vr.html";
 export const DENIM_SITE_URL = "";
 
 /* ── Head office and enquiries ── */

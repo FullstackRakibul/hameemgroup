@@ -57,7 +57,7 @@ export default function PageHero({ image, imageAlt, eyebrow, title, intro, crumb
 
       {/* The stitch: a dashed red seam along the bottom edge */}
       <svg className="absolute inset-x-0 bottom-2.5 h-0.5 w-full" aria-hidden="true">
-        <line x1="0" y1="1" x2="100%" y2="1" stroke="var(--red)" strokeWidth="2" strokeDasharray="8 6" />
+        <line x1="0" y1="1" x2="100%" y2="1" stroke="var(--navy)" strokeWidth="2" strokeDasharray="8 6" />
       </svg>
     </section>
   );

@@ -14,7 +14,7 @@ export default function AwardGrid({ awards, className = "" }: { awards: Award[];
           key={`${a.year}-${a.title}-${a.by}`}
           className="min-h-43.75 p-5 pr-7 border-r border-(--hair) last:border-r-0 grid grid-cols-[1fr_60px] gap-y-0"
         >
-          <b className="font-['Fira_Sans_Condensed'] text-(--red) text-[40px]">{a.year}</b>
+          <b className="font-['Fira_Sans_Condensed'] text-(--navy) text-[40px]">{a.year}</b>
           <img src={`/media/${a.logo}`} alt="" className="justify-self-end w-15 h-6.25 object-contain" />
           <strong className="col-span-2 mt-7 text-sm font-semibold">{a.title}</strong>
           <small className="col-span-2 text-(--mute) leading-snug mt-2 text-sm">{a.by}</small>

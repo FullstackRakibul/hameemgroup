@@ -77,7 +77,7 @@ function routePath(to: string, lift: number) {
 /* ── Sizes (CSS px at desktop; scaled down below md) ── */
 const MARKET_GREY = "#8a8b90";
 const RADIUS: Record<Kind, number> = { home: 7, market: 5.5, sourcing: 5.5 };
-const FILL: Record<Kind, string> = { home: "var(--red)", market: MARKET_GREY, sourcing: "var(--navy)" };
+const FILL: Record<Kind, string> = { home: "var(--navy)", market: MARKET_GREY, sourcing: "var(--navy)" };
 const HALO_R = 34;
 const SHIP_R = 6.5;
 const COMPACT_SCALE = 0.72;
@@ -317,7 +317,7 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
 
         {/* Bangladesh halo, under everything else */}
         <g transform={`translate(${homePt.x} ${homePt.y}) scale(${unit})`} pointerEvents="none">
-          <circle className="wr-halo" r={HALO_R} fill="var(--red)" opacity={0.15} />
+          <circle className="wr-halo" r={HALO_R} fill="var(--navy)" opacity={0.15} />
         </g>
 
         {/* Routes */}
@@ -339,7 +339,7 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
                 data-route={r.to}
                 d={routePath(r.to, r.lift)}
                 fill="none"
-                stroke="var(--red)"
+                stroke="var(--navy)"
                 strokeLinecap="round"
                 strokeDasharray="4 4"
                 vectorEffect="non-scaling-stroke"
@@ -351,7 +351,7 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
         {/* Shipment dot; leaves from under the Bangladesh marker */}
         <g className="wr-ship" style={{ opacity: 0 }} pointerEvents="none">
           <g transform={`scale(${unit})`}>
-            <circle r={SHIP_R} fill="var(--red)" filter={`url(#${uid}-shadow)`} />
+            <circle r={SHIP_R} fill="var(--navy)" filter={`url(#${uid}-shadow)`} />
           </g>
         </g>
 
@@ -418,7 +418,7 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
                 <circle className="wr-ring" r={r + 4} fill="none" stroke="var(--ink)" strokeWidth={1.5} />
                 <g className="wr-pin" data-place={p.id}>
                   <circle r={r} fill={FILL[p.kind]} stroke="#fff" strokeWidth={2} filter={`url(#${uid}-shadow)`} />
-                  <circle className="wr-flash" r={r} fill="var(--red)" stroke="#fff" strokeWidth={2} opacity={0} />
+                  <circle className="wr-flash" r={r} fill="var(--navy)" stroke="#fff" strokeWidth={2} opacity={0} />
                 </g>
               </g>
             </g>

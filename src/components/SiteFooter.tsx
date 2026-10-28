@@ -5,7 +5,7 @@ import SmartLink from "./SmartLink";
 
 function Brand() {
   return (
-    <Link className="flex items-center gap-3 self-start text-(--red)" to="/" aria-label="Ha-Meem Group — home">
+    <Link className="flex items-center gap-3 self-start text-(--navy)" to="/" aria-label="Ha-Meem Group — home">
       <span className="brand-pill flex items-center h-12 px-1 rounded-lg backdrop-blur-sm shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-white/30 transition-all duration-300 hover:bg-white hover:-translate-y-px">
         <img src="/group-logo.png" alt="" className="h-10 rounded-sm w-auto object-contain" />
       </span>
@@ -40,11 +40,11 @@ export default function SiteFooter() {
             ))}
           </p>
           <b className="text-(--ink) text-xs tracking-[0.08em]">SOURCING ENQUIRIES</b>
-          <a className={`${tap} self-start text-(--red) hover:underline underline-offset-4`} href={`mailto:${EMAIL.sales}`}>
+          <a className={`${tap} self-start text-(--navy) hover:underline underline-offset-4`} href={`mailto:${EMAIL.sales}`}>
             {EMAIL.sales}
           </a>
           <b className="text-(--ink) text-xs tracking-[0.08em]">CAREERS</b>
-          <a className={`${tap} self-start text-(--red) hover:underline underline-offset-4`} href={`mailto:${EMAIL.careers}`}>
+          <a className={`${tap} self-start text-(--navy) hover:underline underline-offset-4`} href={`mailto:${EMAIL.careers}`}>
             {EMAIL.careers}
           </a>
         </div>
@@ -72,7 +72,7 @@ export default function SiteFooter() {
           <span>© 2026 Ha-Meem Group. demo homepage</span>
           <span>Privacy notice　　Terms of use　　Supplier code of conduct</span>
           <span>
-            <b className="text-(--red)">*</b>by Ha-Meem Group. [ IT Department ]
+            <b className="text-(--navy)">*</b>by Ha-Meem Group. [ IT Department ]
           </span>
         </div>
       </div>

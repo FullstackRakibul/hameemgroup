@@ -19,7 +19,7 @@ export default function UnitCard({ unit, website }: { unit: Unit; website?: stri
       {unit.lines && (
         <div className="mt-auto flex flex-col gap-2 border-t border-(--hair) pt-5">
           <b className="font-['Fira_Sans_Condensed'] text-[44px] font-semibold leading-none">{unit.lines}</b>
-          <span className="text-[10px] font-semibold tracking-[0.12em] text-(--red)">PRODUCTION LINES</span>
+          <span className="text-[10px] font-semibold tracking-[0.12em] text-(--navy)">PRODUCTION LINES</span>
         </div>
       )}
       {website && (
@@ -27,7 +27,7 @@ export default function UnitCard({ unit, website }: { unit: Unit; website?: stri
           href={website}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-auto inline-flex min-h-11 items-center self-start pt-3 text-sm font-semibold text-(--red) underline-offset-4 hover:underline"
+          className="mt-auto inline-flex min-h-11 items-center self-start pt-3 text-sm font-semibold text-(--navy) underline-offset-4 hover:underline"
         >
           Visit our website →
         </a>

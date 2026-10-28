@@ -21,12 +21,12 @@ export default function StatGrid({ stats, className = "" }: { stats: Stat[]; cla
           {/* Red accent bar that slides in from center on hover */}
           <span
             aria-hidden="true"
-            className="absolute bottom-0 left-1/2 h-0.5 w-0 -translate-x-1/2 bg-(--red) transition-all duration-500 ease-out group-hover:w-3/4"
+            className="absolute bottom-0 left-1/2 h-0.5 w-0 -translate-x-1/2 bg-(--navy) transition-all duration-500 ease-out group-hover:w-3/4"
           />
-          <b className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[52px] font-semibold block leading-none text-(--ink) transition-all duration-300 ease-out group-hover:text-(--red) motion-safe:group-hover:scale-[1.08]">
+          <b className="font-['Fira_Sans_Condensed'] text-[42px] md:text-[52px] font-semibold block leading-none text-(--ink) transition-all duration-300 ease-out group-hover:text-(--navy) motion-safe:group-hover:scale-[1.08]">
             {s.value}
           </b>
-          <span className="text-(--red) text-[10px] font-semibold tracking-[0.12em] block mt-3 transition-opacity duration-300">
+          <span className="text-(--navy) text-[10px] font-semibold tracking-[0.12em] block mt-3 transition-opacity duration-300">
             {s.label}
           </span>
           {s.sub && (
