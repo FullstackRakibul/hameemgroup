@@ -6,7 +6,7 @@ import SiteFooter from "./components/SiteFooter";
 import GarmentBackdrop from "./components/GarmentBackdrop";
 import useReveal from "./components/useReveal";
 import SmoothScroll from "./components/SmoothScroll";
-import { scrollToTarget } from "./lib/scroll";
+import { getLenis, scrollToTarget } from "./lib/scroll";
 import { AiAssistant } from "./features/ai-assistant";
 import { megaMenuData } from "./data/navigation";
 import gsap from "gsap";
@@ -125,7 +125,7 @@ function Shell() {
 
   // The preloader plays once per browser session, never on route changes. It
   // ends when its own timeline does (onDone) and the fonts are ready, whichever
-  // is later, so the page appears already set; a 4s safety net ends it anyway.
+  // is later, so the page appears already set; a 5s safety net ends it anyway.
   const finishedRef = useRef(false);
   const finishPreloader = useCallback(() => {
     if (finishedRef.current) return;
@@ -140,8 +140,17 @@ function Shell() {
 
   useEffect(() => {
     if (!loading) return;
-    const safety = setTimeout(finishPreloader, 4000);
-    return () => clearTimeout(safety);
+    const safety = setTimeout(finishPreloader, 5000);
+    // Hold the page still under the overlay
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    root.style.overflow = "hidden";
+    getLenis()?.stop();
+    return () => {
+      clearTimeout(safety);
+      root.style.overflow = prevOverflow;
+      getLenis()?.start();
+    };
   }, [loading, finishPreloader]);
 
   // onDone from the timeline, held until the fonts have loaded

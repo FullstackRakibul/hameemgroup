@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
@@ -8,86 +8,157 @@ const LOGO_D =
 const reducedMotion = () =>
   typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// One "M … Z" chunk per outline; letters and their counters are grouped at mount
+const CHUNKS = LOGO_D.split(/(?=M )/)
+  .map((c) => c.trim())
+  .filter(Boolean);
+
+type Box = { x: number; y: number; width: number; height: number };
+type Letter = { d: string; box: Box };
+
+const inside = (a: Box, b: Box) =>
+  a !== b &&
+  a.x >= b.x &&
+  a.y >= b.y &&
+  a.x + a.width <= b.x + b.width &&
+  a.y + a.height <= b.y + b.height;
+
+const DRAW = 1.7; // the dot's travel; letter i starts drawing as the dot reaches it
+
 /* ── Preloader ──
-   One 2.5s timeline, played once: the logo outline draws itself, a dot runs
-   the path, the letters fill navy, then the whole overlay lifts off like a
-   curtain. `onDone` fires when the timeline ends — App waits for that and for
-   the fonts, whichever is later, so the page appears already set.
+   One ~2.9s timeline, played once: each letter of the wordmark draws its
+   outline as a dot hops across the tops of the letters, the letters fill
+   navy left to right, then the overlay lifts off like a curtain. `onDone`
+   fires when the timeline ends — App waits for that and for the fonts,
+   whichever is later, so the page appears already set.
 
    With reduced motion the filled logo is simply shown, then faded out. */
 export default function Preloader({ onDone }: { onDone: () => void }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<SVGSVGElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
+  const measureRef = useRef<SVGGElement>(null);
+  const guideRef = useRef<SVGPathElement>(null);
   const dotRef = useRef<SVGCircleElement>(null);
   const barRef = useRef<HTMLSpanElement>(null);
   const nameRef = useRef<HTMLParagraphElement>(null);
   const doneRef = useRef(onDone);
   doneRef.current = onDone;
+  const [letters, setLetters] = useState<Letter[] | null>(null);
 
-  useEffect(() => {
-    const path = pathRef.current;
-    if (!path) return;
-    const finish = () => doneRef.current();
-
-    if (reducedMotion()) {
-      const tl = gsap.timeline({ onComplete: finish });
-      tl.set(path, { fillOpacity: 1, strokeOpacity: 0 })
-        .set(dotRef.current, { opacity: 0 })
-        .set(barRef.current, { scaleX: 1 })
-        .to(rootRef.current, { opacity: 0, duration: 0.3, delay: 0.6, ease: "none" });
-      return () => {
-        tl.kill();
-      };
-    }
-
-    gsap.registerPlugin(MotionPathPlugin);
-
-    // The real outline length, so the draw lands exactly on 1.4s
-    const length = path.getTotalLength();
-    gsap.set(path, {
-      strokeDasharray: length,
-      strokeDashoffset: length,
-      fillOpacity: 0,
-      strokeOpacity: 1,
+  // Measuring pass (before first paint): a chunk lying inside another is its counter
+  useLayoutEffect(() => {
+    const paths = measureRef.current?.querySelectorAll("path");
+    if (!paths) return;
+    const boxes: Box[] = Array.from(paths, (p) => p.getBBox());
+    const groups = new Map<number, string[]>();
+    boxes.forEach((box, i) => {
+      if (!boxes.some((other) => inside(box, other))) groups.set(i, [CHUNKS[i]]);
     });
-    gsap.set(dotRef.current, { xPercent: -50, yPercent: -50, transformOrigin: "50% 50%", opacity: 1 });
-    gsap.set(barRef.current, { scaleX: 0, transformOrigin: "0% 50%" });
-    gsap.set(nameRef.current, { opacity: 0 });
-
-    const tl = gsap.timeline({ onComplete: finish });
-
-    // 0.00–1.40 the outline draws
-    tl.to(path, { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut" }, 0);
-    // 0.00–1.60 the hairline bar fills
-    tl.to(barRef.current, { scaleX: 1, duration: 1.6, ease: "none" }, 0);
-    // 0.40 the wordmark under the logo fades in
-    tl.to(nameRef.current, { opacity: 1, duration: 0.4, ease: "power1.out" }, 0.4);
-    // 0.20–1.60 the dot travels the path once, ending on the last letter
-    tl.to(
-      dotRef.current,
-      {
-        duration: 1.4,
-        ease: "power1.inOut",
-        motionPath: { path, align: path, alignOrigin: [0.5, 0.5], start: 0, end: 1 },
-      },
-      0.2,
+    boxes.forEach((box, i) => {
+      if (groups.has(i)) return;
+      const host = [...groups.keys()].find((j) => inside(box, boxes[j]));
+      if (host !== undefined) groups.get(host)!.push(CHUNKS[i]);
+    });
+    setLetters(
+      [...groups.entries()]
+        .map(([i, ds]) => ({ d: ds.join(" "), box: boxes[i] }))
+        .sort((a, b) => a.box.x - b.box.x),
     );
-    // 1.30–1.80 the letters fill navy, the stroke fades, the dot blooms away
-    tl.to(path, { fillOpacity: 1, strokeOpacity: 0, duration: 0.5, ease: "power2.out" }, 1.3);
-    tl.to(dotRef.current, { scale: 2.4, opacity: 0, duration: 0.5, ease: "power2.out" }, 1.3);
-    // 1.80–2.50 the curtain lifts, the logo rising with it
-    tl.to(logoRef.current, { y: -24, opacity: 0, duration: 0.7, ease: "power3.inOut" }, 1.8);
-    tl.to(
-      rootRef.current,
-      { clipPath: "inset(0 0 100% 0)", duration: 0.7, ease: "power3.inOut" },
-      1.8,
-    );
-
-    return () => {
-      tl.kill();
-    };
   }, []);
+
+  // The dot's path: one smooth arc per letter, hopping across the tops
+  const guideD = useMemo(() => {
+    if (!letters?.length) return "";
+    const peak = Math.min(...letters.map((l) => l.box.y)) - 26;
+    const tops = letters.map(({ box }) => [box.x + box.width / 2, box.y]);
+    const first = letters[0].box;
+    const last = letters[letters.length - 1].box;
+    let d = `M ${first.x} ${first.y + first.height / 2}`;
+    let px = first.x;
+    for (const [x, y] of tops) {
+      d += ` C ${px} ${peak} ${x} ${peak} ${x} ${y}`;
+      px = x;
+    }
+    const ex = last.x + last.width;
+    d += ` C ${px} ${peak} ${ex} ${peak} ${ex} ${last.y + last.height}`;
+    return d;
+  }, [letters]);
+
+  useLayoutEffect(() => {
+    if (!letters) return;
+    const finish = () => doneRef.current();
+    const ctx = gsap.context(() => {
+      const paths = gsap.utils.toArray<SVGPathElement>(".preloader-letter");
+
+      if (reducedMotion()) {
+        gsap
+          .timeline({ onComplete: finish })
+          .set(paths, { fillOpacity: 1, strokeOpacity: 0 })
+          .set(dotRef.current, { opacity: 0 })
+          .set(barRef.current, { scaleX: 1 })
+          .to(rootRef.current, { opacity: 0, duration: 0.3, delay: 0.6, ease: "none" });
+        return;
+      }
+
+      gsap.registerPlugin(MotionPathPlugin);
+
+      paths.forEach((p) => {
+        const length = p.getTotalLength();
+        gsap.set(p, { strokeDasharray: length, strokeDashoffset: length });
+      });
+      gsap.set(barRef.current, { scaleX: 0, transformOrigin: "0% 50%" });
+      gsap.set(nameRef.current, { opacity: 0, y: 6 });
+
+      const tl = gsap.timeline({
+        onComplete: finish,
+        // The hairline is the timeline's own progress, so it can't drift
+        onUpdate: () => {
+          gsap.set(barRef.current, { scaleX: Math.min(1, tl.time() / 2.1) });
+        },
+      });
+
+      // 0.00–1.70 the dot hops across the wordmark
+      tl.to(
+        dotRef.current,
+        {
+          duration: DRAW,
+          ease: "power1.inOut",
+          motionPath: {
+            path: guideRef.current!,
+            align: guideRef.current!,
+            alignOrigin: [0.5, 0.5],
+            autoRotate: false,
+          },
+        },
+        0,
+      );
+      // each letter draws as the dot reaches it
+      tl.to(
+        paths,
+        { strokeDashoffset: 0, duration: 0.75, ease: "power2.out", stagger: DRAW / paths.length },
+        0,
+      );
+      // 0.30–0.70 the line under the logo fades up
+      tl.to(nameRef.current, { opacity: 1, y: 0, duration: 0.4, ease: "power1.out" }, 0.3);
+      // 1.55–2.15 the letters fill left to right, the outline fading
+      tl.to(
+        paths,
+        { fillOpacity: 1, strokeOpacity: 0, duration: 0.2, ease: "power1.out", stagger: 0.035 },
+        1.55,
+      );
+      // 1.70–2.10 the dot lands and blooms away
+      tl.to(dotRef.current, { scale: 1.8, opacity: 0, duration: 0.4, ease: "power2.out" }, 1.7);
+      // 2.20–2.90 the curtain lifts, the logo rising with it
+      tl.to(logoRef.current, { y: -20, opacity: 0, duration: 0.7, ease: "power3.inOut" }, 2.15);
+      tl.set(rootRef.current, { willChange: "clip-path" }, 2.2);
+      tl.to(
+        rootRef.current,
+        { clipPath: "inset(0 0 100% 0)", duration: 0.7, ease: "power3.inOut" },
+        2.2,
+      );
+    }, rootRef);
+    return () => ctx.revert();
+  }, [letters]);
 
   return (
     <div
@@ -95,20 +166,48 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
       className="fixed inset-0 z-9999 flex flex-col items-center justify-center gap-6 bg-white"
       style={{ clipPath: "inset(0 0 0 0)" }}
     >
-      <div className="w-full max-w-2xl px-2">
-        <svg ref={logoRef} className="h-auto w-full" viewBox="0 0 1400 250" aria-label="Ha-Meem Group">
-          <path
-            ref={pathRef}
-            fill="var(--navy)"
-            stroke="#393b54"
-            strokeWidth="3"
-            d={LOGO_D}
-          />
-          <circle ref={dotRef} className="preloader-dot" cx="0" cy="0" r="10" fill="#5C2D23" />
-        </svg>
-      </div>
+      <svg
+        ref={logoRef}
+        className="h-auto w-[min(82vw,640px)]"
+        viewBox="-8 -8 1366 140"
+        aria-label="Ha-Meem Group"
+      >
+        {letters ? (
+          <>
+            {letters.map((l) => (
+              <path
+                key={l.d}
+                className="preloader-letter"
+                d={l.d}
+                fill="var(--navy)"
+                fillOpacity={0}
+                stroke="#393b54"
+                strokeWidth={1.6}
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+            <path ref={guideRef} d={guideD} fill="none" stroke="none" />
+          </>
+        ) : (
+          <g ref={measureRef}>
+            {CHUNKS.map((d) => (
+              <path key={d} d={d} fill="none" stroke="none" />
+            ))}
+          </g>
+        )}
+        <circle
+          ref={dotRef}
+          cx="0"
+          cy="0"
+          r="10"
+          fill="#5C2D23"
+          opacity={letters ? 1 : 0}
+          style={{ filter: "drop-shadow(0 2px 4px rgba(92, 45, 35, 0.35))", willChange: "transform" }}
+        />
+      </svg>
 
-      {/* A hairline that fills while the logo draws */}
+      {/* A hairline that fills in step with the timeline */}
       <span aria-hidden="true" className="block h-px w-40 bg-(--hair)">
         <span ref={barRef} className="block h-px w-full origin-left bg-(--navy)" />
       </span>

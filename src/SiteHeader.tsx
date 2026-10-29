@@ -22,18 +22,18 @@ const OPEN_DELAY = 90;
 const CLOSE_DELAY = 180;
 const label = (key: string) => key.charAt(0).toUpperCase() + key.slice(1);
 
-// Logo in a pill: frosted glass over the hero, a quiet mist chip once the
-// header turns solid, with a lift and a light sheen on hover.
+// Formal lockup: the round mark and the name, in currentColor like the nav
 function Logo() {
   return (
-    <Link to="/" className="site-logo flex shrink-0 items-center" aria-label="Ha-Meem Group — home">
-      <span className="logo-pill">
-        <img
-          src="/group-logo-circle.png"
-          alt=""
-          className="h-10 w-auto rounded-sm object-contain"
-          draggable={false}
-        />
+    <Link to="/" className="site-logo flex shrink-0 items-center gap-3" aria-label="Ha-Meem Group — home">
+      <img
+        src="/group-logo-circle.png"
+        alt=""
+        className="size-10 rounded-full ring-1 ring-black/5 lg:size-11"
+        draggable={false}
+      />
+      <span className="hidden font-['Fira_Sans_Condensed'] text-[17px] font-bold uppercase leading-none tracking-[0.06em] sm:block">
+        Ha-Meem Group
       </span>
     </Link>
   );
@@ -70,6 +70,8 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
   const triggerRefs = useRef<Partial<Record<MenuKey, HTMLButtonElement | null>>>({});
   const lastPointer = useRef("mouse");
   const hoverTimer = useRef<number | null>(null);
+  // Set while the pending timer is a close, so re-entering cancels only that
+  const closing = useRef(false);
   // Mirrors shownMenu so openMenu can read it without re-creating the callback.
   const shownMenuRef = useRef<MenuKey | null>(null);
 
@@ -80,6 +82,7 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
       window.clearTimeout(hoverTimer.current);
       hoverTimer.current = null;
     }
+    closing.current = false;
   };
 
   // Opening a menu records the direction of travel through the nav, so the
@@ -234,8 +237,10 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
 
   const onAreaLeave = () => {
     clearHoverTimer();
+    closing.current = true;
     hoverTimer.current = window.setTimeout(() => {
       hoverTimer.current = null;
+      closing.current = false;
       setActiveMenu(null);
     }, CLOSE_DELAY);
   };
@@ -281,7 +286,10 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
         ref={wrapperRef}
         className={`header-wrapper ${solid ? "is-solid" : ""} ${activeMenu ? "is-mega-open" : ""} ${mobileOpen ? "is-mobile-open" : ""}`}
         onMouseLeave={onAreaLeave}
-        onMouseEnter={clearHoverTimer}
+        onMouseEnter={() => {
+          // mouseenter fires after a trigger's pointerenter: keep its open timer
+          if (closing.current) clearHoverTimer();
+        }}
         onBlur={(e) => {
           // Focus leaving the header closes the menu, but must not cancel a
           // pending hover timer: the pointer may still be inside.
