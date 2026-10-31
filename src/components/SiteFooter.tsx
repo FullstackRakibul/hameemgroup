@@ -6,7 +6,7 @@ import SmartLink from "./SmartLink";
 function Brand() {
   return (
     <Link className="flex items-center gap-3 self-start text-(--navy)" to="/" aria-label="Ha-Meem Group — home">
-      <span className="brand-pill flex items-center h-12 px-1 rounded-lg backdrop-blur-sm shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-white/30 transition-all duration-300 hover:bg-white hover:-translate-y-px">
+      <span className="brand-pill flex items-center h-12 px-1 rounded-sm backdrop-blur-sm shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-white/30 transition-all duration-300 hover:bg-white hover:-translate-y-px">
         <img src="/group-logo.png" alt="" className="h-10 rounded-sm w-auto object-contain" />
       </span>
     </Link>

@@ -69,7 +69,7 @@ export default function PeopleSection() {
                 <li key={item.id}>
                   <div
                     data-open={isOpen || undefined}
-                    className="people-card relative overflow-hidden rounded-[20px] border border-transparent transition-[background-color,color,box-shadow] duration-400 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
+                    className="people-card relative overflow-hidden rounded-sm border transition-[background-color,color,box-shadow] duration-400 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
                   >
                     {/* A soft navy glow, bottom-right; stronger while open */}
                     <span
@@ -100,7 +100,7 @@ export default function PeopleSection() {
                         <span className="people-index shrink-0 text-[11px] tabular-nums text-(--mute) transition-colors duration-400 motion-reduce:transition-none">
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <span className="people-chip grid size-10 shrink-0 place-items-center rounded-xl bg-(--mist) transition-colors duration-400 motion-reduce:transition-none">
+                        <span className="people-chip grid size-10 shrink-0 place-items-center rounded-xs bg-(--mist) transition-colors duration-400 motion-reduce:transition-none">
                           <Icon size={18} strokeWidth={1.75} aria-hidden="true" className="people-chip-icon" />
                         </span>
                         <span className="people-title min-w-0 flex-1 font-['Fira_Sans_Condensed'] text-lg font-bold leading-tight transition-colors duration-400 motion-reduce:transition-none md:text-xl">
@@ -131,7 +131,7 @@ export default function PeopleSection() {
                             alt={item.imageAlt}
                             loading="lazy"
                             decoding="async"
-                            className="aspect-video w-full rounded-xl object-cover md:max-h-64 lg:hidden"
+                            className="aspect-video w-full rounded-sm object-cover md:max-h-64 lg:hidden"
                           />
                           <p className="text-sm leading-relaxed text-white/85">{item.summary}</p>
                           <ul
@@ -161,7 +161,7 @@ export default function PeopleSection() {
           <Link
             to="/#careers"
             data-reveal
-            className="group/cta relative mt-cta inline-flex min-h-12 items-center gap-3 overflow-hidden rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
+            className="group/cta relative mt-cta inline-flex min-h-12 items-center gap-3 overflow-hidden rounded-xs border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:text-white focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
           >
             {/* The fill sweeps in from the left instead of switching colour */}
             <span
@@ -182,7 +182,7 @@ export default function PeopleSection() {
             Every image is stacked here; the pointed-at card's is the one shown,
             falling back to the open one. */}
         <figure
-          className="group relative m-0 hidden aspect-4/5 max-h-[calc(100vh-var(--header-h)-48px)] overflow-hidden rounded-[28px] bg-(--ink) lg:sticky lg:top-[calc(var(--header-h)+24px)] lg:block"
+          className="group relative m-0 hidden aspect-4/5 max-h-[calc(100vh-var(--header-h)-48px)] overflow-hidden rounded-sm bg-(--ink) lg:sticky lg:top-[calc(var(--header-h)+24px)] lg:block"
         >
           {PEOPLE_PROGRAMS.map((item, i) => (
             <img
@@ -216,8 +216,8 @@ export default function PeopleSection() {
                   y="0"
                   width="100%"
                   height="100%"
-                  rx="20"
-                  ry="20"
+                  rx="3"
+                  ry="3"
                   pathLength={1}
                   fill="none"
                   stroke="white"
@@ -231,8 +231,8 @@ export default function PeopleSection() {
               y="0"
               width="100%"
               height="100%"
-              rx="20"
-              ry="20"
+              rx="3"
+              ry="3"
               fill="none"
               stroke="white"
               strokeOpacity="0.85"
@@ -244,7 +244,7 @@ export default function PeopleSection() {
 
           {/* The open card's title and first point, re-animating on every change */}
           <figcaption key={shownId} className="absolute bottom-7 left-7 right-7 flex flex-col items-start gap-2">
-            <span className="people-caption inline-block rounded-full bg-(--ink)/70 px-4 py-2 font-['Fira_Sans_Condensed'] text-sm font-bold text-white backdrop-blur-sm">
+            <span className="people-caption inline-block rounded-xs bg-(--ink)/70 px-4 py-2 font-['Fira_Sans_Condensed'] text-sm font-bold text-white backdrop-blur-sm">
               {shown.title}
             </span>
             <span className="people-caption people-caption-late text-xs leading-snug text-white/80">

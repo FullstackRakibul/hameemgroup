@@ -47,7 +47,7 @@ export default function MerchandisingPage() {
           />
           <Link
             to="/contact#merchandising"
-            className="btn-ring inline-flex min-h-12 items-center self-start rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white"
+            className="btn-ring inline-flex min-h-12 items-center self-start rounded-xs border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white"
           >
             MERCHANDISING CONTACTS
           </Link>

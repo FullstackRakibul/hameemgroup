@@ -102,7 +102,7 @@ function TourCard({ tour }: { tour: VrTour }) {
       }}
       className="group block"
     >
-      <div className="tour-frame relative aspect-[16/9] overflow-hidden rounded-[24px] bg-white ring-1 ring-(--hair) group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-(--navy)">
+      <div className="tour-frame relative aspect-[16/9] overflow-hidden rounded-sm bg-white ring-1 ring-(--hair) group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-(--navy)">
         <img
           {...imgProps({ src: tour.image, width: tour.width, height: tour.height }, "(min-width: 768px) 46vw, 100vw")}
           alt=""
@@ -142,7 +142,7 @@ function TourCard({ tour }: { tour: VrTour }) {
         )}
 
         {/* Top-right chip: on hover, and always on touch */}
-        <span className="absolute right-4 top-4 inline-flex -translate-y-1.5 items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-(--ink) opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 motion-reduce:transition-none [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
+        <span className="absolute right-4 top-4 inline-flex -translate-y-1.5 items-center gap-1.5 rounded-xs bg-white px-3 py-1.5 text-xs font-semibold text-(--ink) opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 motion-reduce:transition-none [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
           Enter tour
           <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
         </span>
@@ -260,7 +260,7 @@ export default function GalleryPage() {
               item={item}
               eager={i < 2}
               sizes="240px"
-              className="size-full rounded-xl ring-1 ring-(--hair) transition-transform duration-500 hover:-translate-y-1.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+              className="size-full rounded-sm ring-1 ring-(--hair) transition-transform duration-500 hover:-translate-y-1.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
               onOpen={(el) => openBox(INTRO, i, el)}
             />
           </div>
@@ -285,7 +285,7 @@ export default function GalleryPage() {
                 e.preventDefault();
                 scrollToId("film");
               }}
-              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-(--navy) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-xs bg-(--ink) px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-(--navy) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
             >
               <Play size={14} strokeWidth={1.75} fill="currentColor" aria-hidden="true" />
               Watch the film
@@ -308,7 +308,7 @@ export default function GalleryPage() {
                 item={item}
                 eager={i < 2}
                 sizes="50vw"
-                className="aspect-[4/5] rounded-xl"
+                className="aspect-[4/5] rounded-sm"
                 onOpen={(el) => openBox(INTRO, i, el)}
               />
             ))}
@@ -331,7 +331,7 @@ export default function GalleryPage() {
         <div className="wrap">
           <div data-reveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <span className="inline-block rounded-full border border-(--hair) px-3 py-1 text-[11px] uppercase tracking-widest text-(--mute)">
+              <span className="inline-block rounded-xs border border-(--hair) px-3 py-1 text-[11px] uppercase tracking-widest text-(--mute)">
                 Browse our image collection
               </span>
               <h2 className="mt-4 font-['Fira_Sans_Condensed'] text-h2 font-black">{category === "All" ? "All photos" : category}</h2>
@@ -344,7 +344,7 @@ export default function GalleryPage() {
                   type="button"
                   onClick={() => setCategory(c)}
                   aria-pressed={category === c}
-                  className={`min-h-10 rounded-full px-4 text-xs font-semibold tracking-widest transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--navy) motion-reduce:transition-none ${
+                  className={`min-h-10 rounded-xs px-4 text-xs font-semibold tracking-widest transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--navy) motion-reduce:transition-none ${
                     category === c ? "bg-(--ink) text-white" : "border border-(--hair) text-(--ink) hover:border-(--ink)"
                   }`}
                 >
@@ -354,7 +354,7 @@ export default function GalleryPage() {
               <button
                 type="button"
                 onClick={() => scrollToId("tours")}
-                className="min-h-10 rounded-full border border-(--hair) px-4 text-xs font-semibold tracking-widest text-(--ink) transition-colors duration-300 hover:border-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--navy) motion-reduce:transition-none"
+                className="min-h-10 rounded-xs border border-(--hair) px-4 text-xs font-semibold tracking-widest text-(--ink) transition-colors duration-300 hover:border-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--navy) motion-reduce:transition-none"
               >
                 360° TOURS ↓
               </button>
@@ -367,7 +367,7 @@ export default function GalleryPage() {
                 key={item.src}
                 item={item}
                 sizes={i % 5 === 0 ? "(min-width: 1024px) 66vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
-                className={`gallery-in aspect-[4/3] rounded-[24px] lg:aspect-auto ${BENTO[i % 5]}`}
+                className={`gallery-in aspect-[4/3] rounded-sm lg:aspect-auto ${BENTO[i % 5]}`}
                 style={{ animationDelay: `${i * 60}ms` }}
                 onOpen={(el) => openBox(filtered, i, el)}
               />
@@ -474,7 +474,7 @@ export default function GalleryPage() {
               {...imgProps(current, "90vw")}
               alt={current.title}
               decoding="async"
-              className="gallery-in max-h-[80vh] w-auto max-w-full rounded-md object-contain"
+              className="gallery-in max-h-[80vh] w-auto max-w-full rounded-sm object-contain"
             />
 
             <p className="absolute bottom-6 left-6">

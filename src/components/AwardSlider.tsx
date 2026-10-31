@@ -47,7 +47,7 @@ function CardFace({ a, active }: { a: TimelineAward; active: boolean }) {
         />
       )}
       <span className="font-['Fira_Sans_Condensed'] text-lg font-semibold text-(--mute)">{firstYear(a)}</span>
-      <span aria-hidden="true" className="pointer-events-none absolute inset-3 rounded-[14px] border border-dashed border-(--ink)/12" />
+      <span aria-hidden="true" className="pointer-events-none absolute inset-3 rounded-xs border border-dashed border-(--ink)/12" />
     </span>
   );
 }
@@ -265,7 +265,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
             className="group/card absolute left-1/2 top-1/2 h-53.5 w-40 will-change-transform md:h-73.5 md:w-55"
           >
             <span
-              className={`block size-full overflow-hidden rounded-[20px] bg-white transition-[filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
+              className={`block size-full overflow-hidden rounded-sm bg-white transition-[filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
                 i === active
                   ? "blur-0 ring-2 ring-(--navy) ring-offset-[6px] ring-offset-white grayscale-0 saturate-100"
                   : Math.abs(i - active) === 1
@@ -278,7 +278,7 @@ export default function AwardSlider({ className = "" }: { className?: string }) 
             {/* Year chip under the active card */}
             <span
               aria-hidden="true"
-              className={`absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-(--navy) px-3 py-1 text-[10px] font-semibold tracking-[0.16em] text-white transition-[opacity,translate] duration-300 motion-reduce:transition-none ${
+              className={`absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-xs bg-(--navy) px-3 py-1 text-[10px] font-semibold tracking-[0.16em] text-white transition-[opacity,translate] duration-300 motion-reduce:transition-none ${
                 i === active ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"
               }`}
             >

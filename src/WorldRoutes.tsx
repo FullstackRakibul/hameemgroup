@@ -441,7 +441,7 @@ function Tooltip({ place, sizeScale }: { place: Place; sizeScale: number }) {
 
   return (
     <div
-      className="absolute z-10 pointer-events-none whitespace-nowrap bg-white border border-(--hair) rounded-md px-3 py-2 shadow-[0_6px_18px_rgba(17,20,24,0.12)]"
+      className="absolute z-10 pointer-events-none whitespace-nowrap bg-white border border-(--hair) rounded-sm px-3 py-2 shadow-[0_6px_18px_rgba(17,20,24,0.12)]"
       style={{ left: `${left}%`, top: `${top}%`, transform: `translate(${tx}, calc(-100% - ${lift}px))` }}
       role="tooltip"
     >

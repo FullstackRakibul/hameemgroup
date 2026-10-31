@@ -483,7 +483,7 @@ export default function HomePage() {
 
             {/* The group at a glance. Hairline grid: the 1px gaps show the
                 container's tint, so rows and columns line up on every width. */}
-            <ul data-reveal-stagger className="mt-section-head grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-(--hair) bg-(--hair) lg:grid-cols-3">
+            <ul data-reveal-stagger className="mt-section-head grid grid-cols-2 gap-px overflow-hidden rounded-sm border border-(--hair) bg-(--hair) lg:grid-cols-3">
               {GROUP_STATS.map((s, i) => (
                 <li
                   key={s.label}
@@ -589,21 +589,21 @@ export default function HomePage() {
                 {F.denimYardsMonth} yards a month.
               </p>
               <div className="flex flex-wrap gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold text-(--navy)">
+                <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-xs text-[11px] tracking-[0.07em] font-semibold text-(--navy)">
                   <span
                     className="inline-block size-2 rounded-full bg-(--navy)"
                     aria-hidden="true"
                   />
                   BANGLADESH
                 </span>
-                <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
+                <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-xs text-[11px] tracking-[0.07em] font-semibold">
                   <span
                     className="inline-block size-2 rounded-full bg-(--navy)"
                     aria-hidden="true"
                   />
                   SOURCING OFFICES
                 </span>
-                <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-full text-[11px] tracking-[0.07em] font-semibold">
+                <span className="inline-flex items-center gap-2 px-4 py-3 border border-(--hair) rounded-xs text-[11px] tracking-[0.07em] font-semibold">
                   <span
                     className="inline-block size-2 rounded-full bg-[#8a8b90]"
                     aria-hidden="true"
@@ -665,7 +665,7 @@ export default function HomePage() {
                 href={VIRTUAL_TOUR_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-ring inline-flex min-h-12 items-center rounded-full border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white"
+                className="btn-ring inline-flex min-h-12 items-center rounded-xs border border-(--ink) px-8 text-xs font-semibold tracking-widest transition-colors duration-300 hover:bg-(--ink) hover:text-white"
               >
                 TAKE A VIRTUAL TOUR OF HA-MEEM GROUP
               </a>
@@ -918,7 +918,7 @@ export default function HomePage() {
             hover. A visual cue only; the whole card is the link. */}
                   <span
                     aria-hidden="true"
-                    className="absolute right-6 top-6 z-1 flex h-11 items-center rounded-full border border-white/60 bg-[#11141833] text-white backdrop-blur-sm transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-(--ink) group-focus-visible:border-white group-focus-visible:bg-white group-focus-visible:text-(--ink) motion-reduce:transition-none"
+                    className="absolute right-6 top-6 z-1 flex h-11 items-center rounded-xs border border-white/60 bg-[#11141833] text-white backdrop-blur-sm transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-(--ink) group-focus-visible:border-white group-focus-visible:bg-white group-focus-visible:text-(--ink) motion-reduce:transition-none"
                   >
                     <span className="max-w-0 overflow-hidden whitespace-nowrap text-[11px] font-semibold tracking-[0.14em] opacity-0 transition-all duration-300 group-hover:max-w-24 group-hover:pl-4 group-hover:opacity-100 group-focus-visible:max-w-24 group-focus-visible:pl-4 group-focus-visible:opacity-100 motion-reduce:transition-none">
                       OPEN
@@ -988,7 +988,7 @@ export default function HomePage() {
               </p>
               {/* <SmartLink
                 href="/about"
-                className="group mt-cta inline-flex min-h-11 items-center gap-2 rounded-full bg-(--ink) px-6 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(17,20,24,0.18)] transition-colors duration-300 hover:bg-(--navy) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
+                className="group mt-cta inline-flex min-h-11 items-center gap-2 rounded-xs bg-(--ink) px-6 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(17,20,24,0.18)] transition-colors duration-300 hover:bg-(--navy) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
               >
                 About Ha-Meem Group
                 <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" />
@@ -1004,13 +1004,13 @@ export default function HomePage() {
                 {CERTIFICATIONS.map((c) => (
                   <span
                     key={c.abbr}
-                    className="bg-white border border-(--hair) rounded-full px-4 py-2.5 text-(--mute) text-xs"
+                    className="bg-white border border-(--hair) rounded-xs px-4 py-2.5 text-(--mute) text-xs"
                   >
                     <b className="text-(--ink) mr-2 font-semibold">{c.abbr}</b>
                     {c.name}
                   </span>
                 ))}
-                <span className="bg-white border border-(--hair) rounded-full px-4 py-2.5 text-(--mute) text-xs">
+                <span className="bg-white border border-(--hair) rounded-xs px-4 py-2.5 text-(--mute) text-xs">
                   <b className="text-(--ink) mr-2 font-semibold">LAB</b>
                   {F.laboratory}
                 </span>
@@ -1106,7 +1106,7 @@ export default function HomePage() {
                     key={s.label}
                     tabIndex={0}
                     style={{ "--accent": look.accent } as CSSProperties}
-                    className="group relative min-h-75 overflow-hidden rounded-[22px] border border-transparent text-left backdrop-blur-md [background:linear-gradient(rgba(10,14,18,.62),rgba(10,14,18,.62))_padding-box,linear-gradient(160deg,rgba(255,255,255,.28),rgba(255,255,255,.04)_45%,var(--accent)_120%)_border-box] transition-[flex-grow,opacity] duration-700 ease-[cubic-bezier(.22,1,.36,1)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none lg:min-h-0 lg:flex-1 lg:group-hover/eco:opacity-70 lg:hover:flex-[2.4] lg:hover:opacity-100! lg:focus:flex-[2.4] lg:focus-within:flex-[2.4]"
+                    className="group relative min-h-75 overflow-hidden rounded-sm border border-white/15 text-left backdrop-blur-md bg-[rgba(10,14,18,.62)] transition-[flex-grow,opacity] duration-700 ease-[cubic-bezier(.22,1,.36,1)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none lg:min-h-0 lg:flex-1 lg:group-hover/eco:opacity-70 lg:hover:flex-[2.4] lg:hover:opacity-100! lg:focus:flex-[2.4] lg:focus-within:flex-[2.4]"
                   >
                     {/* a) Topic photo; hidden if the file is missing */}
                     <img
@@ -1147,8 +1147,8 @@ export default function HomePage() {
                             y="0"
                             width="100%"
                             height="100%"
-                            rx="16"
-                            ry="16"
+                            rx="3"
+                            ry="3"
                             pathLength={1}
                             fill="none"
                             stroke="white"
@@ -1162,8 +1162,8 @@ export default function HomePage() {
                         y="0"
                         width="100%"
                         height="100%"
-                        rx="16"
-                        ry="16"
+                        rx="3"
+                        ry="3"
                         fill="none"
                         stroke="white"
                         strokeOpacity="0.7"
@@ -1177,7 +1177,7 @@ export default function HomePage() {
                     <div data-reveal className="relative z-10 flex h-full flex-col p-6 md:p-7">
                       <span className="flex items-center justify-between">
                         <span className="text-[11px] tabular-nums tracking-widest text-white/50">{String(i + 1).padStart(2, "0")}</span>
-                        <span className="grid size-9 place-items-center rounded-full border border-white/15 bg-white/5 transition-colors duration-300 group-hover:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] group-focus:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] motion-reduce:transition-none">
+                        <span className="grid size-9 place-items-center rounded-xs border border-white/15 bg-white/5 transition-colors duration-300 group-hover:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] group-focus:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] motion-reduce:transition-none">
                           <look.Icon size={18} strokeWidth={1.5} aria-hidden="true" style={{ color: look.accent }} />
                         </span>
                       </span>
@@ -1304,7 +1304,7 @@ export default function HomePage() {
 
                     {/* Top: category chip and date */}
                     <span className="relative z-1 flex flex-wrap items-center gap-x-3 gap-y-2">
-                      <span className="rounded-full border border-[#ef7898]/60 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#ef7898]">
+                      <span className="rounded-xs border border-[#ef7898]/60 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#ef7898]">
                         {n.cat}
                       </span>
                       <span className="text-[11px] font-semibold tracking-widest text-white/75">{n.date}</span>

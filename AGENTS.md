@@ -32,6 +32,14 @@ This is the canonical project structure. Start with task-relevant files below. O
 
 This project uses **Tailwind CSS v4** through the `@tailwindcss/vite` plugin configured in `vite.config.ts`. `src/index.css` imports Tailwind with `@import 'tailwindcss';`. Use Tailwind utility classes directly in JSX and put global CSS or Tailwind v4 theme customization in `src/index.css`. This scaffold does not need a Tailwind config file or PostCSS config.
 
+Corner radius is square-ish and editorial (hairlines, stitched seams, Fira Sans Condensed). Use only 0, 2px or 4px:
+
+- Cards, photos, panels, tiles, sheets, video frames, tooltips: `rounded-sm` (4px). An inner element in a rounded parent gets the same radius or none.
+- Small chips, badges, tags, inputs, pagination pills, eyebrow ribbon body, and text CTA buttons and filter pills: `rounded-xs` (2px).
+- Full-bleed images and section backgrounds: no radius.
+- `rounded-full` only for genuinely circular things: dots, round icon buttons (slider prev/next/play, back-to-top, close), the round logo, the 360° badge, orbit rings, the chat launcher.
+- Never `rounded-md` or larger. Cards use a plain 1px border (`var(--hair)` on light, `white/15` on dark), not gradient borders or large soft shadows; shadows are only for floating UI (mega sheet, dialogs, chat panel).
+
 `src/main.tsx` imports `src/index.css`, so global font wiring belongs in `src/index.css`. Keep CSS `@import` statements first, then add any `@font-face` rules and font-family defaults there.
 
 ## Icons
