@@ -140,7 +140,7 @@ function Shell() {
 
   useEffect(() => {
     if (!loading) return;
-    const safety = setTimeout(finishPreloader, 5000);
+    const safety = setTimeout(finishPreloader, 5500);
     // Hold the page still under the overlay
     const root = document.documentElement;
     const prevOverflow = root.style.overflow;

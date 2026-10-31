@@ -34,8 +34,10 @@ const ECO_LOOK: Record<string, { Icon: LucideIcon; accent: string; image: string
   "Fiber recycled a day": { Icon: Recycle, accent: "#6fbf73", image: "sustain/recycle.gif", motion: "animate-[ecoSpin_30s_linear_infinite]" },
 };
 
+
 export const HOME_TITLE = "Ha-Meem Group | Leading Wholesale Clothing Manufacturer";
 export const HOME_DESCRIPTION = `Ha-Meem Group is a leading wholesale clothing manufacturer in Bangladesh. Established in ${F.established}, we make denim fabrics and apparel, and employ ${F.employeesText} people.`;
+
 
 /* ── Data ── */
 const heroSlides = [
@@ -45,6 +47,7 @@ const heroSlides = [
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00054.jpeg", alt: "Ha-Meem Group manufacturing facility" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00055.jpeg", alt: "Ha-Meem Group manufacturing facility" },
 ];
+
 
 
 const products = [

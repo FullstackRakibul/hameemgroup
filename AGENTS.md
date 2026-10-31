@@ -42,6 +42,14 @@ Corner radius is square-ish and editorial (hairlines, stitched seams, Fira Sans 
 
 `src/main.tsx` imports `src/index.css`, so global font wiring belongs in `src/index.css`. Keep CSS `@import` statements first, then add any `@font-face` rules and font-family defaults there.
 
+## Styling: Tailwind first
+
+- Style in JSX with Tailwind v4 utilities, including arbitrary values (`[clip-path:…]`, `drop-shadow-[…]`, `bg-[radial-gradient(…)]`) and variants (`hover:`, `group-hover:`, `data-[open]:`, `motion-reduce:`, `[@media(hover:none)]:`).
+- Use `src/index.css` only for what Tailwind can't express cleanly: design tokens (`:root` and `@theme`), `@keyframes`, base resets, third-party hooks (Lenis), and selectors on `::before`/`::after` or across components that utilities can't reach. Don't add per-component classes there when utilities can do the job.
+- No inline `<style>` blocks. `style={}` only for runtime values (CSS variables, measured sizes, values driven by GSAP or JS).
+- When you touch a component that still uses custom CSS classes, move what you can to utilities and delete the dead rules from `index.css`.
+- Respect prefers-reduced-motion with `motion-reduce:` variants.
+
 ## Icons
 
 - Use `lucide-react` for all UI icons (arrows, chevrons, play/pause, close, menu, external link, check, etc.). Don't hand-write SVG paths or use text glyphs like ← → ▶ for UI icons.

@@ -23,11 +23,11 @@ const inside = (a: Box, b: Box) =>
   a.x + a.width <= b.x + b.width &&
   a.y + a.height <= b.y + b.height;
 
-const DRAW = 1.7; // the dot's travel; letter i starts drawing as the dot reaches it
+const DRAW = 1.8; // the dot's travel; letter i starts drawing as the dot reaches it
 
 /* ── Preloader ──
-   One ~2.9s timeline, played once: each letter of the wordmark draws its
-   outline as a dot hops across the tops of the letters, the letters fill
+   One ~3.1s timeline, played once: each letter of the wordmark draws its
+   outline as a dot glides across the tops of the letters, the letters fill
    navy left to right, then the overlay lifts off like a curtain. `onDone`
    fires when the timeline ends — App waits for that and for the fonts,
    whichever is later, so the page appears already set.
@@ -66,21 +66,29 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
     );
   }, []);
 
-  // The dot's path: one smooth arc per letter, hopping across the tops
+  // The dot's path: one Catmull-Rom spline through the letter tops and the
+  // crests between them, as cubic Béziers, so there is no corner to jolt on
   const guideD = useMemo(() => {
     if (!letters?.length) return "";
-    const peak = Math.min(...letters.map((l) => l.box.y)) - 26;
-    const tops = letters.map(({ box }) => [box.x + box.width / 2, box.y]);
+    const peak = Math.min(...letters.map((l) => l.box.y)) - 34;
     const first = letters[0].box;
     const last = letters[letters.length - 1].box;
-    let d = `M ${first.x} ${first.y + first.height / 2}`;
-    let px = first.x;
-    for (const [x, y] of tops) {
-      d += ` C ${px} ${peak} ${x} ${peak} ${x} ${y}`;
-      px = x;
+    const pts: number[][] = [[first.x, first.y + first.height / 2]];
+    letters.forEach(({ box }, i) => {
+      const cx = box.x + box.width / 2;
+      if (i > 0) {
+        const prev = letters[i - 1].box;
+        pts.push([(prev.x + prev.width / 2 + cx) / 2, peak]);
+      }
+      pts.push([cx, box.y - 18]);
+    });
+    pts.push([last.x + last.width, last.y + last.height / 2]);
+    const t = 0.5 / 3;
+    let d = `M ${pts[0][0]} ${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [p0, p1, p2, p3] = [pts[i - 1] ?? pts[i], pts[i], pts[i + 1], pts[i + 2] ?? pts[i + 1]];
+      d += ` C ${p1[0] + (p2[0] - p0[0]) * t} ${p1[1] + (p2[1] - p0[1]) * t} ${p2[0] - (p3[0] - p1[0]) * t} ${p2[1] - (p3[1] - p1[1]) * t} ${p2[0]} ${p2[1]}`;
     }
-    const ex = last.x + last.width;
-    d += ` C ${px} ${peak} ${ex} ${peak} ${ex} ${last.y + last.height}`;
     return d;
   }, [letters]);
 
@@ -88,7 +96,12 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
     if (!letters) return;
     const finish = () => doneRef.current();
     const ctx = gsap.context(() => {
-      const paths = gsap.utils.toArray<SVGPathElement>(".preloader-letter");
+      const paths = gsap.utils.toArray<SVGPathElement>("[data-letter]");
+      // Dash state first, so nothing flashes between the measuring and animated renders
+      paths.forEach((p) => {
+        const length = Math.ceil(p.getTotalLength());
+        gsap.set(p, { strokeDasharray: length, strokeDashoffset: length });
+      });
 
       if (reducedMotion()) {
         gsap
@@ -102,27 +115,26 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
 
       gsap.registerPlugin(MotionPathPlugin);
 
-      paths.forEach((p) => {
-        const length = p.getTotalLength();
-        gsap.set(p, { strokeDasharray: length, strokeDashoffset: length });
-      });
       gsap.set(barRef.current, { scaleX: 0, transformOrigin: "0% 50%" });
       gsap.set(nameRef.current, { opacity: 0, y: 6 });
+      gsap.set(dotRef.current, { opacity: 0, scale: 0.6, force3D: true, transformOrigin: "50% 50%" });
 
       const tl = gsap.timeline({
         onComplete: finish,
         // The hairline is the timeline's own progress, so it can't drift
         onUpdate: () => {
-          gsap.set(barRef.current, { scaleX: Math.min(1, tl.time() / 2.1) });
+          gsap.set(barRef.current, { scaleX: Math.min(1, tl.time() / 2.4) });
         },
       });
 
-      // 0.00–1.70 the dot hops across the wordmark
+      // 0.00–0.25 the dot fades in rather than popping
+      tl.to(dotRef.current, { opacity: 1, scale: 1, duration: 0.25, ease: "power2.out" }, 0);
+      // 0.10–1.90 the dot glides along the spline
       tl.to(
         dotRef.current,
         {
           duration: DRAW,
-          ease: "power1.inOut",
+          ease: "sine.inOut",
           motionPath: {
             path: guideRef.current!,
             align: guideRef.current!,
@@ -130,31 +142,31 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
             autoRotate: false,
           },
         },
-        0,
+        0.1,
       );
-      // each letter draws as the dot reaches it
+      // 0.10–2.00 each letter draws as the dot reaches it
       tl.to(
         paths,
-        { strokeDashoffset: 0, duration: 0.75, ease: "power2.out", stagger: DRAW / paths.length },
-        0,
+        { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut", stagger: DRAW / paths.length },
+        0.1,
       );
-      // 0.30–0.70 the line under the logo fades up
-      tl.to(nameRef.current, { opacity: 1, y: 0, duration: 0.4, ease: "power1.out" }, 0.3);
-      // 1.55–2.15 the letters fill left to right, the outline fading
+      // 0.35–0.80 the line under the logo fades up
+      tl.to(nameRef.current, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0.35);
+      // 1.60–2.40 the outlines crossfade into the navy fill, left to right
       tl.to(
         paths,
-        { fillOpacity: 1, strokeOpacity: 0, duration: 0.2, ease: "power1.out", stagger: 0.035 },
-        1.55,
+        { fillOpacity: 1, strokeOpacity: 0, duration: 0.5, ease: "power1.inOut", stagger: 0.04 },
+        1.6,
       );
-      // 1.70–2.10 the dot lands and blooms away
-      tl.to(dotRef.current, { scale: 1.8, opacity: 0, duration: 0.4, ease: "power2.out" }, 1.7);
-      // 2.20–2.90 the curtain lifts, the logo rising with it
-      tl.to(logoRef.current, { y: -20, opacity: 0, duration: 0.7, ease: "power3.inOut" }, 2.15);
-      tl.set(rootRef.current, { willChange: "clip-path" }, 2.2);
+      // 1.90–2.30 the dot lands and blooms away
+      tl.to(dotRef.current, { scale: 1.6, opacity: 0, duration: 0.4, ease: "power2.out" }, 1.9);
+      // 2.40–3.10 the curtain lifts, the logo and line rising out first
+      tl.to([logoRef.current, nameRef.current], { y: -16, opacity: 0, duration: 0.45, ease: "power2.in" }, 2.4);
+      tl.set(rootRef.current, { willChange: "clip-path" }, 2.4);
       tl.to(
         rootRef.current,
-        { clipPath: "inset(0 0 100% 0)", duration: 0.7, ease: "power3.inOut" },
-        2.2,
+        { clipPath: "inset(0 0 100% 0)", duration: 0.7, ease: "expo.inOut" },
+        2.4,
       );
     }, rootRef);
     return () => ctx.revert();
@@ -163,8 +175,7 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-9999 flex flex-col items-center justify-center gap-6 bg-white"
-      style={{ clipPath: "inset(0 0 0 0)" }}
+      className="fixed inset-0 z-9999 flex flex-col items-center justify-center gap-6 bg-white [clip-path:inset(0_0_0_0)]"
     >
       <svg
         ref={logoRef}
@@ -173,22 +184,23 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
         aria-label="Ha-Meem Group"
       >
         {letters ? (
-          <>
+          <g shapeRendering="geometricPrecision">
             {letters.map((l) => (
               <path
                 key={l.d}
-                className="preloader-letter"
+                data-letter=""
+                className="fill-(--navy) stroke-[#393b54]"
                 d={l.d}
-                fill="var(--navy)"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 fillOpacity={0}
-                stroke="#393b54"
                 strokeWidth={1.6}
                 strokeLinejoin="round"
                 vectorEffect="non-scaling-stroke"
               />
             ))}
             <path ref={guideRef} d={guideD} fill="none" stroke="none" />
-          </>
+          </g>
         ) : (
           <g ref={measureRef}>
             {CHUNKS.map((d) => (
@@ -201,9 +213,8 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
           cx="0"
           cy="0"
           r="10"
-          fill="#5C2D23"
-          opacity={letters ? 1 : 0}
-          style={{ filter: "drop-shadow(0 2px 4px rgba(92, 45, 35, 0.35))", willChange: "transform" }}
+          className="fill-(--ink) will-change-transform drop-shadow-[0_2px_4px_rgb(92_45_35/0.35)]"
+          opacity={0}
         />
       </svg>
 

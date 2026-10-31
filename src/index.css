@@ -963,8 +963,3 @@ dialog.gallery-lightbox::backdrop { background: rgb(17 20 24 / 0.96); }
   .people-card .people-details { opacity: 1; translate: 0 0; }
 }
 
-
-/* ── Preloader (src/Preloader.tsx) ──
-   The timeline there drives the draw, the fill and the curtain; only the dot's
-   glow is styling. */
-.preloader-dot { filter: drop-shadow(0 0 4px rgba(100, 200, 152, 0.3)); }
