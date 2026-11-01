@@ -2,6 +2,7 @@ import { useId, useLayoutEffect, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import gsap from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { Shirt } from "lucide-react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import FlagDefs from "./flags";
 import type { FlagCode } from "./flags";
@@ -59,8 +60,12 @@ const routes = [
   { to: "eu", lift: 0.3, duration: 2.6 },
   { to: "jp", lift: 0.45, duration: 2.2 },
   { to: "in", lift: 0.3, duration: 1.4 },
+  { to: "sh", lift: 0.4, duration: 2.0 },
+  { to: "hk", lift: 0.42, duration: 1.8 },
 ];
-const shipOrder = ["eu", "us", "in", "jp"];
+// Alternates between the far export markets and the nearer sourcing offices,
+// so the shipment is not making two short eastward hops in a row.
+const shipOrder = ["eu", "us", "sh", "in", "jp", "hk"];
 
 const home = places[0];
 const homePt = project(home.lon, home.lat);
@@ -79,7 +84,11 @@ const MARKET_GREY = "#8a8b90";
 const RADIUS: Record<Kind, number> = { home: 7, market: 5.5, sourcing: 5.5 };
 const FILL: Record<Kind, string> = { home: "var(--navy)", market: MARKET_GREY, sourcing: "var(--navy)" };
 const HALO_R = 34;
-const SHIP_R = 6.5;
+const SHIP_SIZE = 20;
+/* lucide draws the shirt 20 units tall inside a 24-unit canvas, so a canvas of
+   SHIP_SIZE would render the garment itself only ~17px. Scale the canvas by
+   the inverse to make the drawn shirt SHIP_SIZE tall. */
+const SHIP_BOX = SHIP_SIZE * (24 / 20);
 const COMPACT_SCALE = 0.72;
 
 function flagSize(kind: Kind) {
@@ -113,6 +122,9 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
   const [width, setWidth] = useState(1232);
   const [compact, setCompact] = useState(false);
   const [active, setActive] = useState<string | null>(null);
+  // Where the shipment has just landed. Kept apart from `active` so hover and
+  // focus always win: whichever the visitor is doing outranks the animation.
+  const [arrived, setArrived] = useState<string | null>(null);
 
   // Track rendered width (SVG units per CSS px) and the md breakpoint.
   useLayoutEffect(() => {
@@ -125,7 +137,10 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
     const mq = window.matchMedia("(min-width: 768px)");
     const onChange = () => {
       setCompact(!mq.matches);
-      if (!mq.matches) setActive(null);
+      if (!mq.matches) {
+        setActive(null);
+        setArrived(null);
+      }
     };
     onChange();
     mq.addEventListener("change", onChange);
@@ -154,6 +169,9 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
       const dashes = q(".wr-dash");
       const halo = q(".wr-halo");
       const ship = q(".wr-ship");
+      const shipPop = q(".wr-ship-pop");
+
+      gsap.set(shipPop, { transformOrigin: "50% 50%" });
 
       gsap.set([...pins, ...halo], { transformOrigin: "50% 50%" });
       gsap.set(pins, { scale: 0 });
@@ -177,15 +195,38 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
         const flash = pin.querySelector(".wr-flash");
         const arrive = t + route.duration;
 
-        loop.set(ship, { opacity: 1, immediateRender: false }, t);
+        // Departure: fade in, and pop up from half size at Bangladesh.
+        loop.to(ship, { opacity: 1, duration: 0.25 }, t);
+        loop.fromTo(
+          shipPop,
+          { scale: 0.5 },
+          { scale: 1, duration: 0.35, ease: "back.out(1.7)", immediateRender: false },
+          t,
+        );
         loop.to(
           ship,
           {
             duration: route.duration,
-            ease: "power1.inOut",
+            ease: "sine.inOut",
             motionPath: { path, align: path, alignOrigin: [0.5, 0.5] },
           },
           t,
+        );
+        // Sway: -6 to +6 and back, 0.6s a swing, then a last short tween that
+        // settles to upright exactly on arrival. The swings are whole, so the
+        // settle always starts from -6 and the shirt never jumps.
+        const swings = Math.max(2, Math.round((route.duration - 0.3) / 0.6 / 2) * 2);
+        const swayTime = swings * 0.6;
+        loop.fromTo(
+          shipPop,
+          { rotate: -6 },
+          { rotate: 6, duration: 0.6, ease: "sine.inOut", repeat: swings - 1, yoyo: true, immediateRender: false },
+          t,
+        );
+        loop.to(
+          shipPop,
+          { rotate: 0, duration: Math.max(0.1, route.duration - swayTime), ease: "sine.inOut" },
+          t + swayTime,
         );
         loop.fromTo(
           halo,
@@ -195,7 +236,14 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
         );
         loop.to(halo, { scale: 1, opacity: 0.15, duration: 0.4, ease: "power1.out" }, t + 1.2);
 
-        loop.to(ship, { opacity: 0, duration: 0.2 }, arrive);
+        // The tooltip opens as the shipment lands and closes as the next one
+        // leaves, so the card is up for the whole pause between trips.
+        loop.call(() => setArrived(null), undefined, t);
+        loop.call(() => setArrived(id), undefined, arrive);
+
+        // Arrival: shrink away as the pin takes over.
+        loop.to(ship, { opacity: 0, duration: 0.3, ease: "power2.in" }, arrive);
+        loop.to(shipPop, { scale: 0.6, duration: 0.3, ease: "power2.in" }, arrive);
         loop.to(pin, { scale: 1.6, duration: 0.2, ease: "power2.out" }, arrive);
         loop.to(pin, { scale: 1, duration: 0.3, ease: "power2.inOut" }, arrive + 0.2);
         loop.to(flash, { opacity: 1, duration: 0.15 }, arrive);
@@ -214,6 +262,8 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
         } else {
           loop.pause();
           march.pause();
+          // Paused off screen: do not leave a card frozen over the map.
+          setArrived(null);
         }
       };
 
@@ -252,7 +302,11 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
 
   const unit = (VB_W / (width || 1232)) * (compact ? COMPACT_SCALE : 1);
   const sizeScale = compact ? COMPACT_SCALE : 1;
+  // Hover and focus outrank the shipment, so pointing at a marker while the
+  // shirt is in flight shows the marker the visitor asked for.
+  const shownId = active ?? arrived;
   const activePlace = places.find((p) => p.id === active);
+  const shownPlace = places.find((p) => p.id === shownId);
 
   const routeState = (to: string) => {
     if (!activePlace) return "base";
@@ -348,10 +402,24 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
           );
         })}
 
-        {/* Shipment dot; leaves from under the Bangladesh marker */}
+        {/* The shipment; leaves from under the Bangladesh marker. The motion
+            path moves .wr-ship, so the pop and sway live on the inner group:
+            scaling the moved element would fight the path. */}
         <g className="wr-ship" style={{ opacity: 0 }} pointerEvents="none">
-          <g transform={`scale(${unit})`}>
-            <circle r={SHIP_R} fill="var(--navy)" filter={`url(#${uid}-shadow)`} />
+          <g className="wr-ship-pop">
+            <g transform={`scale(${unit})`}>
+              <Shirt
+                x={-SHIP_BOX / 2}
+                y={-SHIP_BOX / 2}
+                width={SHIP_BOX}
+                height={SHIP_BOX}
+                fill="var(--navy)"
+                stroke="#fff"
+                strokeWidth={1.75}
+                aria-hidden="true"
+                filter={`url(#${uid}-shadow)`}
+              />
+            </g>
           </g>
         </g>
 
@@ -426,12 +494,28 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
         })}
       </svg>
 
-      {activePlace && <Tooltip place={activePlace} sizeScale={sizeScale} />}
+      {shownPlace && (
+        <Tooltip
+          key={shownPlace.id}
+          place={shownPlace}
+          sizeScale={sizeScale}
+          // The shipment's own card fades in; a pointed-at one appears at once
+          animated={!active}
+        />
+      )}
     </div>
   );
 }
 
-function Tooltip({ place, sizeScale }: { place: Place; sizeScale: number }) {
+function Tooltip({
+  place,
+  sizeScale,
+  animated = false,
+}: {
+  place: Place;
+  sizeScale: number;
+  animated?: boolean;
+}) {
   const { x, y } = project(place.lon, place.lat);
   const left = (x / VB_W) * 100;
   const top = (y / VB_H) * 100;
@@ -441,7 +525,10 @@ function Tooltip({ place, sizeScale }: { place: Place; sizeScale: number }) {
 
   return (
     <div
-      className="absolute z-10 pointer-events-none whitespace-nowrap bg-white border border-(--hair) rounded-sm px-3 py-2 shadow-[0_6px_18px_rgba(17,20,24,0.12)]"
+      className={`absolute z-10 pointer-events-none whitespace-nowrap bg-white border border-(--hair) rounded-sm px-3 py-2 shadow-[0_6px_18px_rgba(17,20,24,0.12)] ${
+        // fadeIn only touches opacity: the positioning transform must survive
+        animated ? "animate-[fadeIn_300ms_var(--ease-out)_both] motion-reduce:animate-none" : ""
+      }`}
       style={{ left: `${left}%`, top: `${top}%`, transform: `translate(${tx}, calc(-100% - ${lift}px))` }}
       role="tooltip"
     >
