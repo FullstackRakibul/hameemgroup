@@ -1,14 +1,76 @@
-import { EMAIL } from "../data/facts";
+import { useEffect, useRef, useState } from "react";
+import { CONTACT_VIDEO, EMAIL } from "../data/facts";
 import Eyebrow from "./Eyebrow";
 
 const pill =
   "btn-ring inline-flex min-h-12 items-center rounded-xs border border-white px-8 text-xs font-semibold tracking-widest transition-colors duration-300";
 
-/* Dark closing band: "Sourcing from Bangladesh?" with the two pill buttons. */
+/* Dark closing band: "Sourcing from Bangladesh?" with the two pill buttons.
+   The fabric still is the background; on a wide, willing screen a film fades
+   in over it once the band scrolls into view. */
 export default function ContactCta({ id }: { id?: string }) {
+  // The film is heavy, so it is opt-in: only wide screens that are not on a
+  // metered or slow connection and have not asked for less motion load it.
+  // Everywhere else the still is the background, which costs nothing extra.
+  const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const wide = window.matchMedia("(min-width: 768px)").matches;
+    const calm = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Chrome-only, hence the cast; absent elsewhere, which counts as fine.
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const fast = !conn?.saveData && !/2g/.test(conn?.effectiveType ?? "");
+    setShowVideo(wide && calm && fast);
+  }, []);
+
+  // This band closes the page, so the file is only fetched once it comes into
+  // view, and playback stops again when it leaves.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // preload="none", so the first approach is what starts the download
+          if (!video.currentSrc) video.load();
+          void video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    io.observe(video);
+    return () => io.disconnect();
+  }, [showVideo]);
+
   return (
     <section id={id} className="relative overflow-hidden text-white bg-(--ink) [--ring:#fff]">
-      <img src="/media/cine/fabric.jpg" alt="" className="absolute inset-0 w-full h-full object-cover" />
+      {/* The section is already full-bleed, so inset-0 is the full screen
+          width: w-full matches it exactly, where 100vw would overshoot by the
+          scrollbar. The band is far wider than it is tall, so object-cover
+          crops a 16:9 frame hard top and bottom; centring keeps the subject. */}
+      <img
+        src={`/media/${CONTACT_VIDEO.poster}`}
+        alt=""
+        className="absolute inset-0 size-full object-cover object-center"
+      />
+      {showVideo && (
+        <video
+          ref={videoRef}
+          aria-hidden="true"
+          className="absolute inset-0 size-full object-cover object-center opacity-0 transition-opacity duration-700 data-ready:opacity-100 motion-reduce:transition-none"
+          muted
+          loop
+          playsInline
+          preload="none"
+          poster={`/media/${CONTACT_VIDEO.poster}`}
+          onPlaying={(e) => e.currentTarget.setAttribute("data-ready", "")}
+        >
+          <source src={CONTACT_VIDEO.src} type="video/mp4" />
+        </video>
+      )}
       {/* A lighter wash so the fabric shows, and a scrim that stays dark behind the copy */}
       <div aria-hidden="true" className="absolute inset-0 bg-[rgba(10,14,18,0.55)]" />
       <div

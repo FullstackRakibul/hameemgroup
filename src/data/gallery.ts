@@ -23,6 +23,14 @@ export const GALLERY: GalleryItem[] = [
   { src: "gallery/news-yarn.jpg", title: "Group profile", category: "Our group", width: 1900, height: 1200 },
 ];
 
+/* The gallery intro's background film. `poster` is the still behind it: it
+   shows while the file loads, and stands in for the video entirely on small
+   screens and for reduced motion. */
+export const GALLERY_HERO_VIDEO = {
+  src: "https://api.hameemgroup.com:9012/Resources/Videos/gallery-main.mp4",
+  poster: "gallery/chain-sewing.jpg",
+};
+
 export const GALLERY_VIDEO = {
   src: "https://api.hameemgroup.com:9012/Resources/hameem-group-website/RFIDDIGITALVIDEO.mp4",
   title: "RFID-tracked production, end to end",

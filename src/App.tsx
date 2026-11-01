@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import Preloader from "./Preloader";
+import { whenHeroReady } from "./lib/heroReady";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./components/SiteFooter";
 import GarmentBackdrop from "./components/GarmentBackdrop";
@@ -153,12 +154,15 @@ function Shell() {
     };
   }, [loading, finishPreloader]);
 
-  // onDone from the timeline, held until the fonts have loaded
+  // onDone from the timeline, held until the fonts have loaded and, on the
+  // home page, until the hero's first slide (a video) can paint. The 5.5s net
+  // above still applies, so a slow or missing file only delays the reveal: it
+  // can never strand the visitor on the overlay.
   const onPreloaderDone = useCallback(() => {
-    const fonts = document.fonts?.ready;
-    if (fonts) fonts.then(finishPreloader).catch(finishPreloader);
-    else finishPreloader();
-  }, [finishPreloader]);
+    const fonts = document.fonts?.ready ?? Promise.resolve();
+    const hero = pathname === "/" ? whenHeroReady() : Promise.resolve();
+    Promise.all([fonts, hero]).then(finishPreloader).catch(finishPreloader);
+  }, [finishPreloader, pathname]);
 
   // Scroll handler: back-to-top + scroll progress (header state lives in SiteHeader).
   // Re-measured on route change, since the new page has a different height.

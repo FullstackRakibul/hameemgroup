@@ -205,6 +205,14 @@ export type PeopleProgram = {
   imageAlt: string;
 };
 
+/* The closing contact band's background film. `poster` is the still behind
+   it: it shows while the file loads, and stands in for the video on small
+   screens and for reduced motion. */
+export const CONTACT_VIDEO = {
+  src: "https://api.hameemgroup.com:9012/Resources/Videos/texttile-qwill-01.mp4",
+  poster: "cine/fabric.jpg",
+};
+
 export const PEOPLE_PROGRAMS: PeopleProgram[] = [
   {
     id: "schools",

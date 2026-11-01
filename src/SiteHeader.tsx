@@ -26,14 +26,19 @@ const label = (key: string) => key.charAt(0).toUpperCase() + key.slice(1);
 function Logo() {
   return (
     <Link to="/" className="site-logo flex shrink-0 items-center gap-3" aria-label="Ha-Meem Group — home">
-      <img
-        src="/group-logo-circle.png"
-        alt=""
-        className="size-10 rounded-full ring-1 ring-black/5 lg:size-11"
-        draggable={false}
-      />
-      <span className="hidden font-['Fira_Sans_Condensed'] text-[17px] font-bold uppercase leading-none tracking-[0.06em] sm:block">
-        Ha-Meem Group
+      <span className="site-logo-stack relative block size-16 lg:size-24">
+        <img
+          src="/hameem-group-logo.svg"
+          alt=""
+          className="site-logo-light absolute inset-0 size-full"
+          draggable={false}
+        />
+        <img
+          src="/hameem-group-logo-blue.svg"
+          alt=""
+          className="site-logo-blue absolute inset-0 size-full"
+          draggable={false}
+        />
       </span>
     </Link>
   );

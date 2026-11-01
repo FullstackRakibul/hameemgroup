@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import type { CSSProperties } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, Droplets, Pause, Play, Recycle, Sun, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { markHeroReady } from "../lib/heroReady";
 import WorldRoutes from "../WorldRoutes";
 import Productcarousel from "../components/Productcarousel ";
 import Eyebrow from "../components/Eyebrow";
@@ -41,12 +42,22 @@ export const HOME_DESCRIPTION = `Ha-Meem Group is a leading wholesale clothing m
 
 /* ── Data ── */
 const heroSlides = [
+  { src: "https://api.hameemgroup.com:9012/Resources/Videos/ccl.mp4", alt: "Long rows of looms weaving indigo denim" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00051.jpeg", alt: "Long rows of looms weaving indigo denim" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00052.jpeg", alt: "Rolls of indigo denim fabric" },
+  { src: "https://api.hameemgroup.com:9012/Resources/Videos/laser-01.mp4", alt: "Ha-Meem Group manufacturing facility" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00053.jpeg", alt: "Sewing floor at Ha-Meem garment factory" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00054.jpeg", alt: "Ha-Meem Group manufacturing facility" },
-  { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00055.jpeg", alt: "Ha-Meem Group manufacturing facility" },
 ];
+
+/* The hero mixes photos and video. A slide's type comes from its extension, and
+   each type holds for its own time: a photo reads in 6s, a video needs longer,
+   so it gets 10s. One duration drives both the advance timer and the stitched
+   progress line, so they stay in step whatever the slide is. */
+const PHOTO_MS = 6000;
+const VIDEO_MS = 10000;
+const isVideo = (src: string) => /\.(mp4|webm|ogv|mov)(\?|$)/i.test(src);
+const slideMs = (i: number) => (isVideo(heroSlides[i].src) ? VIDEO_MS : PHOTO_MS);
 
 
 
@@ -226,6 +237,8 @@ export default function HomePage() {
   const [hero, setHero] = useState({ current: 0, prev: -1 });
   const heroSlide = hero.current;
   const [heroPaused, setHeroPaused] = useState(false);
+  const heroVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const heroFirstImgRef = useRef<HTMLImageElement>(null);
 
   usePageMeta(HOME_TITLE, HOME_DESCRIPTION, true);
 
@@ -244,9 +257,39 @@ export default function HomePage() {
 
   useEffect(() => {
     if (heroPaused) return;
-    const timer = setTimeout(advanceSlide, 6000);
+    const timer = setTimeout(advanceSlide, slideMs(heroSlide));
     return () => clearTimeout(timer);
   }, [heroPaused, heroSlide, advanceSlide]);
+
+  // A cached first slide can finish loading before React attaches onLoad, so
+  // the event would never fire. Check the element directly on mount and
+  // release the preloader if it is already painted.
+  useEffect(() => {
+    if (isVideo(heroSlides[0].src)) {
+      const video = heroVideoRefs.current[0];
+      // HAVE_CURRENT_DATA: at least the first frame is there
+      if (video && video.readyState >= 2) markHeroReady();
+    } else if (heroFirstImgRef.current?.complete) {
+      markHeroReady();
+    }
+  }, []);
+
+  // Video slides: the element plays only while it is the slide on show, and
+  // restarts from the top each time, so a revisit is never a frozen last frame.
+  // Autoplay needs muted (browsers block sound without a gesture), and the
+  // pause button pauses the footage along with the slideshow.
+  useEffect(() => {
+    heroVideoRefs.current.forEach((video, i) => {
+      if (!video) return;
+      if (i !== heroSlide) {
+        video.pause();
+        return;
+      }
+      if (video.currentTime > 0.1) video.currentTime = 0;
+      if (heroPaused) video.pause();
+      else void video.play().catch(() => {});
+    });
+  }, [heroSlide, heroPaused]);
 
   const prevSlide = () =>
     setHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
@@ -289,6 +332,9 @@ export default function HomePage() {
                   pathLength={1}
                   stroke="white"
                   strokeWidth="6"
+                  // Inline, so it overrides the duration in the animate-[…]
+                  // shorthand below: the sewing lasts as long as this slide holds
+                  style={{ animationDuration: `${slideMs(i)}ms` }}
                   className={`[stroke-dasharray:1] ${heroPaused
                       ? "[stroke-dashoffset:0]"
                       : "[stroke-dashoffset:1] animate-[stitchDash_6s_linear_forwards] motion-reduce:animate-none motion-reduce:[stroke-dashoffset:0]"
@@ -323,15 +369,49 @@ export default function HomePage() {
       >
         {/* Isolated, so the slides' z-index stays under the shade layers */}
         <div className="absolute inset-0 isolate">
-          {heroSlides.map((slide, i) => (
-            <img
-              key={slide.src + i}
-              src={slide.src}
-              alt={slide.alt}
-              decoding="async"
-              className={`hero-slide ${heroSlide === i ? "active" : hero.prev === i ? "prev" : ""}`}
-            />
-          ))}
+          {heroSlides.map((slide, i) => {
+            const state = heroSlide === i ? "active" : hero.prev === i ? "prev" : "";
+            // Both types fill the frame the same way (.hero-slide covers and
+            // cross-fades); only video skips the Ken Burns drift, since the
+            // footage already moves.
+            // The first slide is what the preloader waits for, so it loads in
+            // full; the rest stay at metadata until their turn comes round.
+            const first = i === 0;
+            return isVideo(slide.src) ? (
+              <video
+                key={slide.src + i}
+                ref={(el) => {
+                  heroVideoRefs.current[i] = el;
+                }}
+                className={`hero-slide is-video ${state}`}
+                muted
+                loop
+                playsInline
+                preload={first ? "auto" : "metadata"}
+                aria-label={slide.alt}
+                // Decorative: the headline carries the hero's meaning
+                tabIndex={-1}
+                // Enough buffered to paint; onError too, so a file that never
+                // arrives releases the preloader instead of holding it.
+                onLoadedData={first ? markHeroReady : undefined}
+                onError={first ? markHeroReady : undefined}
+              >
+                <source src={slide.src} type="video/mp4" />
+              </video>
+            ) : (
+              <img
+                key={slide.src + i}
+                ref={first ? heroFirstImgRef : undefined}
+                src={slide.src}
+                alt={slide.alt}
+                decoding="async"
+                fetchPriority={first ? "high" : undefined}
+                className={`hero-slide ${state}`}
+                onLoad={first ? markHeroReady : undefined}
+                onError={first ? markHeroReady : undefined}
+              />
+            );
+          })}
         </div>
         {/* Shade: light, so the photo carries the hero. A little at the top for
             the header's white links, a little more at the foot under the copy;

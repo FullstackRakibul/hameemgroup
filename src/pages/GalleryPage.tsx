@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import Eyebrow from "../components/Eyebrow";
-import useLightHero from "../components/useLightHero";
 import usePageMeta from "../components/usePageMeta";
 import { scrollToTarget } from "../lib/scroll";
-import { GALLERY, GALLERY_CATEGORIES, GALLERY_VIDEO, VR_TOURS, type GalleryCategory, type GalleryItem, type VrTour } from "../data/gallery";
+import { GALLERY, GALLERY_CATEGORIES, GALLERY_HERO_VIDEO, GALLERY_VIDEO, VR_TOURS, type GalleryCategory, type GalleryItem, type VrTour } from "../data/gallery";
 
 const media = "/media/";
 
@@ -102,13 +101,13 @@ function TourCard({ tour }: { tour: VrTour }) {
       }}
       className="group block"
     >
-      <div className="tour-frame relative aspect-[16/9] overflow-hidden rounded-sm bg-white ring-1 ring-(--hair) group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-(--navy)">
+      <div className="tour-frame relative aspect-video overflow-hidden rounded-sm bg-white ring-1 ring-(--hair) group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-(--navy)">
         <img
           {...imgProps({ src: tour.image, width: tour.width, height: tour.height }, "(min-width: 768px) 46vw, 100vw")}
           alt=""
           loading="lazy"
           decoding="async"
-          className="size-full object-cover [object-position:50%_50%] transition-[transform,object-position] duration-[1200ms] ease-out group-hover:scale-[1.06] group-hover:[object-position:60%_50%] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          className="size-full object-cover object-[50%_50%] transition-[transform,object-position] duration-[1200ms] ease-out group-hover:scale-[1.06] group-hover:[object-position:60%_50%] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
 
         {/* Red wash on hover, plus a permanent bottom gradient so the text reads */}
@@ -167,8 +166,12 @@ export default function GalleryPage() {
     "Gallery",
     "Photos and film from inside Ha-Meem Group: denim mills, garment factories, virtual tours and the people behind the group.",
   );
-  // This page opens white, so the header starts in ink rather than white
-  useLightHero();
+  // The background film is heavy, so it is opt-in: only wide screens that are
+  // not on a metered or slow connection and have not asked for less motion
+  // load it. Everywhere else the poster is the background, which costs nothing
+  // extra. Checked once on mount, where window is available.
+  const [showHeroVideo, setShowHeroVideo] = useState(false);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
 
   const [category, setCategory] = useState<GalleryCategory | "All">("All");
   const [box, setBox] = useState<{ list: GalleryItem[]; index: number } | null>(null);
@@ -177,6 +180,31 @@ export default function GalleryPage() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
   const swipeX = useRef<number | null>(null);
+
+  useEffect(() => {
+    const wide = window.matchMedia("(min-width: 768px)").matches;
+    const calm = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Chrome-only, hence the cast; absent elsewhere, which counts as fine.
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const fast = !conn?.saveData && !/2g/.test(conn?.effectiveType ?? "");
+    setShowHeroVideo(wide && calm && fast);
+  }, []);
+
+  // The film is decoration: it plays only while the intro is on screen, so it
+  // stops eating bandwidth and battery once the visitor scrolls into the wall.
+  useEffect(() => {
+    const video = heroVideoRef.current;
+    if (!video) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) void video.play().catch(() => {});
+        else video.pause();
+      },
+      { threshold: 0.1 },
+    );
+    io.observe(video);
+    return () => io.disconnect();
+  }, [showHeroVideo]);
 
   const filtered = category === "All" ? PHOTOS : PHOTOS.filter((g) => g.category === category);
 
@@ -245,9 +273,39 @@ export default function GalleryPage() {
   return (
     <>
       {/* ── A. INTRO: centred headline, photos scattered round it ── */}
-      <section className="relative isolate overflow-hidden bg-white pb-section pt-[calc(var(--header-h)+48px)] lg:min-h-190">
-        {/* Glow, top right */}
-        <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 -z-10 size-120 rounded-full bg-[radial-gradient(var(--navy)_0%,transparent_70%)] opacity-[0.08] blur-3xl" />
+      <section className="relative isolate overflow-hidden bg-(--ink) text-white pb-section pt-[calc(var(--header-h)+48px)] lg:min-h-190">
+        {/* Background film. The poster carries the frame until the video can
+            paint, and stands in for it on small screens and reduced motion,
+            where the file is never fetched. */}
+        <div aria-hidden="true" className="absolute inset-0 -z-10">
+          <img
+            src={`${media}${GALLERY_HERO_VIDEO.poster}`}
+            alt=""
+            fetchPriority="high"
+            decoding="async"
+            className="size-full object-cover"
+          />
+          {showHeroVideo && (
+            <video
+              ref={heroVideoRef}
+              className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-700 data-[ready]:opacity-100 motion-reduce:transition-none"
+              muted
+              loop
+              playsInline
+              preload="auto"
+              poster={`${media}${GALLERY_HERO_VIDEO.poster}`}
+              onPlaying={(e) => e.currentTarget.setAttribute("data-ready", "")}
+            >
+              <source src={GALLERY_HERO_VIDEO.src} type="video/mp4" />
+            </video>
+          )}
+          {/* Shade: enough for white type over any frame, heavier at the top
+              so the header's links read, and at the foot under the counts. */}
+          <div className="absolute inset-0 bg-linear-to-b from-(--ink)/80 via-(--ink)/55 to-(--ink)/85" />
+          {/* Denim: the indigo wash and twill the home hero uses */}
+          <div className="absolute inset-0 bg-(--navy) opacity-12 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.045)_0_1px,transparent_1px_5px)]" />
+        </div>
 
         {/* Scattered photos, lg and up */}
         {INTRO.map((item, i) => (
@@ -260,7 +318,7 @@ export default function GalleryPage() {
               item={item}
               eager={i < 2}
               sizes="240px"
-              className="size-full rounded-sm ring-1 ring-(--hair) transition-transform duration-500 hover:-translate-y-1.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+              className="size-full rounded-sm ring-1 ring-white/15 shadow-lg transition-transform duration-500 hover:-translate-y-1.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
               onOpen={(el) => openBox(INTRO, i, el)}
             />
           </div>
@@ -268,15 +326,19 @@ export default function GalleryPage() {
 
         <div className="wrap">
           <div data-reveal className="relative z-10 mx-auto max-w-xl text-center lg:pt-16">
-            <Eyebrow>
+            {/* Eyebrow colours itself from currentColor, so white here */}
+            <Eyebrow className="!text-white">
               GALLERY
             </Eyebrow>
-            <h1 tabIndex={-1} className="mt-head-eyebrow font-['Fira_Sans_Condensed'] text-[56px] font-black leading-[0.95] outline-none md:text-[88px]">
+            <h1
+              tabIndex={-1}
+              className="mt-head-eyebrow font-['Fira_Sans_Condensed'] text-[56px] font-black leading-[0.95] text-white outline-none [text-shadow:0_2px_24px_rgba(0,0,0,0.45)] md:text-[88px]"
+            >
               Inside
               <br />
-              <span className="text-(--navy)">Ha-Meem.</span>
+              <span className="text-white/75">Ha-Meem.</span>
             </h1>
-            <p className="mx-auto mt-head-intro max-w-[42ch] text-pretty text-(--mute)">
+            <p className="mx-auto mt-head-intro max-w-[42ch] text-pretty text-white/85 [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
               From yarn and denim to sewing, washing and shipping: a look inside the factories, mills and people behind Ha-Meem Group.
             </p>
             <a
@@ -285,16 +347,16 @@ export default function GalleryPage() {
                 e.preventDefault();
                 scrollToId("film");
               }}
-              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-xs bg-(--ink) px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-(--navy) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-xs bg-white px-6 text-sm font-semibold text-(--ink) transition-colors duration-300 hover:bg-(--navy) hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none"
             >
               <Play size={14} strokeWidth={1.75} fill="currentColor" aria-hidden="true" />
               Watch the film
             </a>
-            <p className="mt-8 text-xs uppercase tracking-[0.14em] text-(--mute)">
+            <p className="mt-8 text-xs uppercase tracking-[0.14em] text-white/70">
               {GALLERY_CATEGORIES.map((c, i) => (
                 <span key={c}>
                   {i > 0 && <span aria-hidden="true" className="mx-2">·</span>}
-                  {c} <span className="tabular-nums text-(--ink)">{pad(countOf(c))}</span>
+                  {c} <span className="tabular-nums text-white">{pad(countOf(c))}</span>
                 </span>
               ))}
             </p>
@@ -308,7 +370,7 @@ export default function GalleryPage() {
                 item={item}
                 eager={i < 2}
                 sizes="50vw"
-                className="aspect-[4/5] rounded-sm"
+                className="aspect-[4/5] rounded-sm ring-1 ring-white/15"
                 onOpen={(el) => openBox(INTRO, i, el)}
               />
             ))}
