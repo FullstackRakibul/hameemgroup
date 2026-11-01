@@ -12,6 +12,11 @@
   --mute: #61646a;
   --hair: #d9d9d6;
   --navy: #1b3243;
+  /* Section headings: the logo brown. Its own token so SectionHeader sets the
+     colour once for every section, rather than each section inheriting. */
+  --heading: #5d2e24;
+  /* Marker highlight behind newsroom headlines on hover: a pale wash of the navy */
+  --marker: color-mix(in srgb, var(--navy) 14%, white);
   
   --header-h: 64px;
   font-family: "Fira Sans", sans-serif;
@@ -622,12 +627,9 @@ body:has(.hm-assist-panel) .back-to-top {
 }
 /* ── Business card hover ── */
 .biz-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); }
-.biz-card:hover .biz-overlay { background: linear-gradient(180deg, #11141815, #111418c8); }
+/* Hover darkens the card so the details that open under the title read */
+.biz-card:hover .biz-overlay { background: linear-gradient(180deg, #11141859, #111418d9); }
 .biz-card:hover .biz-img { transform: scale(1.06); }
-
-/* ── News card hover ── */
-.news-card:hover .news-img { filter: brightness(0.7); transform: scale(1.04); }
-.news-card:hover .news-title { text-decoration: underline; text-underline-offset: 4px; }
 
 /* ── Product list interaction ── */
 .product-btn {
@@ -791,8 +793,7 @@ footer[id] { scroll-margin-top: var(--header-h); }
   .hero-slide.active,
   .hero-slide.prev { animation: none; }
   .biz-card:hover { transform: none; }
-  .biz-card:hover .biz-img,
-  .news-card:hover .news-img { transform: none; }
+  .biz-card:hover .biz-img { transform: none; }
 }
 
 /* ── Company section: garment icons drifting at the edges ── */

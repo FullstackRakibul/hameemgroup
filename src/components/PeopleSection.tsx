@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, GraduationCap, Handshake, Leaf, Plus, School, Sparkles } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import Eyebrow from "./Eyebrow";
+import SectionHeader from "./SectionHeader";
 import CountUp from "./CountUp";
 import { F, PEOPLE_PROGRAMS } from "../data/facts";
 
@@ -45,19 +45,25 @@ export default function PeopleSection() {
       <div className="wrap relative grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         {/* ── Text and accordion ── */}
         <div>
-          <div data-reveal>
-            <Eyebrow>PEOPLE</Eyebrow>
-            <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-h2 font-black">
-              <CountUp text={F.employeesText} className="inline-block min-w-[6.5ch] tabular-nums" />
-              <br />
-              <span className="text-(--red)">people.</span>
-              <sup className="text-(--navy)">*</sup>
-            </h2>
-            <p className="mt-head-intro max-w-[52ch] text-pretty text-intro text-(--mute)">
+          {/* Stacked: this header sits in the left half of a split section, too
+              narrow for the intro to run beside the heading. */}
+          <SectionHeader
+            layout="stacked"
+            eyebrow="PEOPLE"
+            title={
+              <>
+                <CountUp text={F.employeesText} className="inline-block min-w-[6.5ch] tabular-nums" />
+                <br />
+                <span className="text-(--red)">people.</span>
+                <sup className="text-(--navy)">*</sup>
+              </>
+            }
+          >
+            <p className="max-w-[52ch]">
               Our people are the engine of a vertically integrated group. We invest in them and their families through
               schools, scholarships, higher education and a cleaner place to work and live.
             </p>
-          </div>
+          </SectionHeader>
 
           <ul data-reveal-stagger className="mt-section-head flex list-none flex-col gap-2.5 p-0">
             {PEOPLE_PROGRAMS.map((item, i) => {

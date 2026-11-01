@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import type { CSSProperties } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, Droplets, Pause, Play, Recycle, Sun, Zap } from "lucide-react";
+import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, Droplets, Pause, Play, Recycle, Sun, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { markHeroReady } from "../lib/heroReady";
 import WorldRoutes from "../WorldRoutes";
@@ -642,7 +642,6 @@ export default function HomePage() {
           <div className="wrap">
             <SectionHeader
               eyebrow="WHERE WE ARE"
-              titleClassName="max-w-[20ch] font-semibold"
               title={
                 <>
                   From Bangladesh
@@ -703,7 +702,7 @@ export default function HomePage() {
           <div className="wrap">
             <SectionHeader
               eyebrow="OUR BUYERS"
-              titleClassName="max-w-[22ch] font-black"
+              titleClassName="max-w-[22ch]"
               title={
                 <>
                   Retailers and brands we manufacture for.
@@ -957,7 +956,10 @@ export default function HomePage() {
                     alt=""
                     className="biz-img absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out motion-reduce:transition-none"
                   />
-                  <span className="biz-overlay absolute inset-0 bg-linear-to-b from-[#11141828] to-[#111418dc] transition-all duration-350" />
+                  {/* Light at rest so the photo leads; darkens on hover (the .biz-card
+                      rule in index.css), and on focus or touch, where the
+                      details are shown and need the contrast. */}
+                  <span className="biz-overlay absolute inset-0 bg-linear-to-b from-[#1114181a] to-[#1114188c] transition-all duration-350 group-focus-visible:from-[#11141859] group-focus-visible:to-[#111418d9] [@media(hover:none)]:from-[#11141859] [@media(hover:none)]:to-[#111418d9]" />
 
                   {/* Stitched seam: on hover (or keyboard focus) a dashed line is
             sewn around the card, like topstitching on a denim hem.
@@ -1018,7 +1020,10 @@ export default function HomePage() {
                     </span>
                   </span>
 
-                  <span className="relative z-1 flex flex-col pr-14">
+                  {/* Figure and unit: out of sight at rest, sliding down into
+                      place on hover. Opacity and transform only, so the text
+                      stays in the link's accessible name. */}
+                  <span className="relative z-1 flex -translate-y-2 flex-col pr-28 opacity-0 transition-[opacity,translate] duration-250 group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-60 group-hover:duration-300 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-60 group-focus-visible:duration-300 motion-reduce:transition-none [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
                     <b className="font-['Fira_Sans_Condensed'] text-white text-[37px] leading-none">
                       {b.stat}
                     </b>
@@ -1031,58 +1036,59 @@ export default function HomePage() {
                     <strong className="font-['Fira_Sans_Condensed'] text-white text-card">
                       {b.title}
                     </strong>
-                    {/* A short red rule that grows on hover: the eyebrow's colour, used once */}
-                    <span
-                      aria-hidden="true"
-                      className="mt-2 mb-3 h-0.5 w-8 bg-(--navy) transition-[width] duration-500 ease-out group-hover:w-16 group-focus-visible:w-16 motion-reduce:transition-none"
-                    />
-                    <small className="line-clamp-3 text-sm leading-snug text-white/80 transition-colors duration-300 group-hover:text-white">
-                      {b.text}
-                    </small>
+                    {/* The rule and description open under the title: the row
+                        goes 0fr → 1fr, which the card's fixed height absorbs,
+                        so the title rises and the grid never reflows. */}
+                    <span className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-250 ease-out group-hover:grid-rows-[1fr] group-hover:duration-350 group-focus-visible:grid-rows-[1fr] group-focus-visible:duration-350 motion-reduce:transition-none [@media(hover:none)]:grid-rows-[1fr]">
+                      <span className="min-h-0 overflow-hidden">
+                        {/* A short red rule that grows on hover: the eyebrow's colour, used once */}
+                        <span
+                          aria-hidden="true"
+                          className="mt-2 mb-3 block h-0.5 w-0 bg-(--navy) transition-[width] duration-250 ease-out group-hover:w-16 group-hover:duration-500 group-focus-visible:w-16 group-focus-visible:duration-500 motion-reduce:transition-none [@media(hover:none)]:w-16"
+                        />
+                        <small className="line-clamp-3 block translate-y-2 text-sm leading-snug text-white opacity-0 transition-[opacity,translate] duration-250 group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-120 group-hover:duration-300 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-120 group-focus-visible:duration-300 motion-reduce:transition-none [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
+                          {b.text}
+                        </small>
+                      </span>
+                    </span>
                   </span>
                 </Link>
               ))}
             </div>
-            <p className="mt-head-intro text-[13px] text-(--mute)">
-              Tiles open the group&apos;s own pages for each unit.
-            </p>
           </div>
         </section>
 
         {/* ── RECOGNITION & AWARDS ── */}
         {/* Brand palette for this section: navy primary, brown accent. The
             eyebrow and other red accents inside pick up the navy. */}
-        <section id="recognition" className="relative isolate bg-white section-y [--primary:#142E53] [--accent:#3A1C14] [--navy:var(--primary)]">
+        <section id="recognition" className="relative isolate bg-white section-y">
           <div className="wrap">
-            <div data-reveal className="mx-auto max-w-3xl text-center">
-              <Eyebrow>
-                RECOGNITION &amp; AWARDS
-              </Eyebrow>
-              <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-h2 font-black uppercase leading-[0.95] tracking-[-0.01em]">
-                Award-winning apparel
-                <br />
-                manufacturing <span className="text-(--navy)">in Bangladesh</span>
-              </h2>
-              <p className="mx-auto mt-head-intro max-w-[60ch] text-pretty text-intro">
+            <SectionHeader
+              eyebrow={<>RECOGNITION &amp; AWARDS</>}
+              title={
+                <>
+                  Award-winning apparel
+                  <br />
+                  manufacturing in Bangladesh
+                </>
+              }
+            >
+              <p>
                 <span className="text-(--ink)">National Export Trophies from the Government of Bangladesh</span>
-                <span className="text-(--mute)"> and quality awards from global retailers including Kohl&apos;s and JCPenney recognise </span>
+                <span> and quality awards from global retailers including Kohl&apos;s and JCPenney recognise </span>
                 <span className="text-(--ink)">Ha-Meem Group&apos;s export performance, product quality and technical excellence</span>
-                <span className="text-(--mute)"> since 2009.</span>
+                <span> since 2009.</span>
               </p>
-              {/* <SmartLink
-                href="/about"
-                className="group mt-cta inline-flex min-h-11 items-center gap-2 rounded-xs bg-(--ink) px-6 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(17,20,24,0.18)] transition-colors duration-300 hover:bg-(--navy) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
-              >
-                About Ha-Meem Group
-                <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" />
-              </SmartLink> */}
-            </div>
+            </SectionHeader>
+            {/* The slider and certifications keep the award palette; it no
+                longer reaches the header, which matches every other section. */}
+            <div className="[--primary:#142E53] [--accent:#3A1C14] [--navy:var(--primary)]">
             <AwardSlider className="mt-section-head" />
             {/* Accreditations & certifications */}
-            <div className="border-t border-(--hair) mt-8 pt-8 grid md:grid-cols-[260px_1fr] gap-6">
-              <Eyebrow>
+            <div className="border-t border-(--hair) mt-8 pt-8 grid  gap-4">
+              {/* <Eyebrow>
                 Accreditations &amp; certifications<sup className="text-(--navy)">*</sup>
-              </Eyebrow>
+              </Eyebrow> */}
               <div className="flex flex-wrap gap-3">
                 {CERTIFICATIONS.map((c) => (
                   <span
@@ -1098,6 +1104,7 @@ export default function HomePage() {
                   {F.laboratory}
                 </span>
               </div>
+            </div>
             </div>
           </div>
         </section>
@@ -1121,58 +1128,62 @@ export default function HomePage() {
           />
 
           <div className="wrap flex flex-col items-center section-y text-center">
-            <div className="flex flex-col items-center">
-              <div data-reveal>
-                <Eyebrow className="text-white!">SUSTAINABILITY</Eyebrow>
-              </div>
-
-              {/* Three lines, each with its own treatment. Gradient and outlined words
-                  use drop-shadow, since a text-shadow would show through them. */}
-              <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-statement font-black [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]">
-                <span data-reveal className="block" style={{ animationDelay: "0ms" }}>
-                  Cleaner{" "}
-                  <span className="bg-[linear-gradient(90deg,#9fdcf2,#4fb3d9)] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] text-shadow-none">
-                    water.
+            <SectionHeader
+              align="center"
+              tone="dark"
+              size="statement"
+              titleClassName="max-w-none"
+              eyebrow="SUSTAINABILITY"
+              title={
+                <>
+                  {/* Three lines, each with its own treatment. Gradient and
+                      outlined words use drop-shadow, since a text-shadow would
+                      show through them. */}
+                  <span className="block">
+                    Cleaner{" "}
+                    <span className="bg-[linear-gradient(90deg,#9fdcf2,#4fb3d9)] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] text-shadow-none">
+                      water.
+                    </span>
                   </span>
-                </span>
-                <span data-reveal className="block" style={{ animationDelay: "120ms" }}>
-                  Cleaner{" "}
-                  <span className="bg-[linear-gradient(90deg,#ffd27a,#f5a524)] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] text-shadow-none">
-                    power.
+                  <span className="block">
+                    Cleaner{" "}
+                    <span className="bg-[linear-gradient(90deg,#ffd27a,#f5a524)] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] text-shadow-none">
+                      power.
+                    </span>
                   </span>
-                </span>
-                <span data-reveal className="block" style={{ animationDelay: "240ms" }}>
-                  <span className="relative inline-block text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] [-webkit-text-stroke:1.5px_rgba(255,255,255,0.85)] text-shadow-none">
-                    Measured.
-                    {/* Stitch underline: drawn by a mask whose dashoffset runs 1 → 0 once
-                        the line is revealed (data-reveal="shown"); fully drawn otherwise */}
-                    <svg aria-hidden="true" className="absolute -bottom-2 left-0 h-2 w-full overflow-visible" preserveAspectRatio="none">
-                      <defs>
-                        <mask id="eco-underline" maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
-                          <line
-                            x1="0"
-                            y1="50%"
-                            x2="100%"
-                            y2="50%"
-                            pathLength={1}
-                            stroke="white"
-                            strokeWidth="6"
-                            className="[stroke-dasharray:1] [stroke-dashoffset:0] transition-[stroke-dashoffset] delay-500 duration-1000 ease-out in-data-[reveal=hidden]:[stroke-dashoffset:1] motion-reduce:transition-none"
-                          />
-                        </mask>
-                      </defs>
-                      <line x1="0" y1="50%" x2="100%" y2="50%" strokeWidth="2" strokeDasharray="8 6" mask="url(#eco-underline)" className="stroke-white/60" />
-                    </svg>
+                  <span className="block">
+                    <span className="relative inline-block text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] [-webkit-text-stroke:1.5px_rgba(255,255,255,0.85)] text-shadow-none">
+                      Measured.
+                      {/* Stitch underline: drawn by a mask whose dashoffset runs 1 → 0
+                          once the header is revealed; fully drawn otherwise */}
+                      <svg aria-hidden="true" className="absolute -bottom-2 left-0 h-2 w-full overflow-visible" preserveAspectRatio="none">
+                        <defs>
+                          <mask id="eco-underline" maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+                            <line
+                              x1="0"
+                              y1="50%"
+                              x2="100%"
+                              y2="50%"
+                              pathLength={1}
+                              stroke="white"
+                              strokeWidth="6"
+                              className="[stroke-dasharray:1] [stroke-dashoffset:0] transition-[stroke-dashoffset] delay-500 duration-1000 ease-out in-data-[reveal=hidden]:[stroke-dashoffset:1] motion-reduce:transition-none"
+                            />
+                          </mask>
+                        </defs>
+                        <line x1="0" y1="50%" x2="100%" y2="50%" strokeWidth="2" strokeDasharray="8 6" mask="url(#eco-underline)" className="stroke-white/60" />
+                      </svg>
+                    </span>
                   </span>
-                </span>
-              </h2>
-
-              <p data-reveal className="mt-head-intro max-w-[52ch] text-pretty text-intro text-[#d5d6d7] [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
+                </>
+              }
+            >
+              <p className="max-w-[52ch]">
                 Our mills treat effluent biologically, recover process chemicals
                 and put solar on factory roofs, working toward net-zero by{" "}
                 {F.netZeroBy}.
               </p>
-            </div>
+            </SectionHeader>
 
             {/* Four measured results. On wide screens the hovered or focused tile
                 widens (flex-grow transitions) and reveals its detail; the others
@@ -1317,127 +1328,131 @@ export default function HomePage() {
 
 
         {/* ── NEWSROOM ── */}
-        {/* On the page grid, with the grid gap between the cards and the section's
-    own padding below them. The latest story leads, larger; from 1024px the
-    other two stack beside it. */}
+        {/* An editorial front page: photos in full colour, headlines under them
+            in ink. From 1024px the lead runs down the centre with a story each
+            side, divided by hairline rules. Anything past the third story
+            becomes a text-only row under the side columns. */}
         <section id="news" className="bg-white section-y">
           <div className="wrap">
             <SectionHeader eyebrow="NEWSROOM" title="Latest from the group.">
-              {newsItems.some((n) => n.url) && (
-                <Eyebrow plain className="text-(--mute)!">LINKS OPEN THE ORIGINAL REPORT</Eyebrow>
-              )}
+              {newsItems.some((n) => n.url) && <p>Links open the original report.</p>}
             </SectionHeader>
 
             <div
               data-reveal-stagger
-              className="mt-section-head grid gap-grid sm:grid-cols-2 lg:auto-rows-[minmax(17rem,auto)] lg:grid-cols-3"
+              className="mt-section-head grid gap-grid sm:grid-cols-2 lg:grid-cols-12"
             >
               {newsItems.map((n, i) => {
-                const linked = Boolean(n.url);
                 const lead = i === 0;
-                const body = (
-                  <>
+                const extra = i > 2;
+                // Lead centre, first side story left, second right; later
+                // stories alternate under the sides as text-only rows.
+                const place = lead
+                  ? "sm:col-span-2 sm:order-first lg:order-none lg:col-span-6 lg:col-start-4 lg:row-start-1"
+                  : i === 1
+                    ? "lg:col-span-3 lg:col-start-1 lg:row-start-1"
+                    : i === 2
+                      ? "lg:col-span-3 lg:col-start-10 lg:row-start-1"
+                      : i % 2
+                        ? "lg:col-span-3 lg:col-start-1"
+                        : "lg:col-span-3 lg:col-start-10";
+                // Hairline rules: vertical between the columns from 1024px,
+                // horizontal between stories below that.
+                const rule = lead
+                  ? "border-t border-(--hair) pt-6 sm:border-t-0 sm:pt-0 lg:border-x lg:border-t-0 lg:px-grid"
+                  : "border-t border-(--hair) pt-6 lg:border-t-0 lg:pt-0";
+
+                const photo = (
+                  <span
+                    className={`relative block overflow-hidden rounded-xs bg-(--mist) ${
+                      // 5/6 on the sides makes the side photos the same height as the
+                      // lead's 16:10 in a half-width column, so all three
+                      // headlines start on one line.
+                      lead ? "aspect-16/10" : "aspect-4/3 lg:aspect-5/6"
+                    }`}
+                  >
                     <img
                       src={`${media}${n.img}`}
                       alt=""
-                      className="news-img absolute inset-0 h-full w-full object-cover brightness-[0.55] transition-all duration-500 ease-out motion-reduce:transition-none"
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 h-full w-full scale-100 object-cover transition-[scale] duration-600 ease-out group-hover:scale-104 group-focus-visible:scale-104 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-focus-visible:scale-100"
                     />
-                    {/* Darker at the foot, where the headline sits */}
-                    <span
+                    {/* The seam is sewn round the photo on hover or focus; always shown on touch */}
+                    <svg
                       aria-hidden="true"
-                      className="absolute inset-0 bg-linear-to-t from-[rgba(10,14,18,0.9)] via-[rgba(10,14,18,0.2)] to-[rgba(10,14,18,0.35)]"
-                    />
-
-                    {linked && (
-                      /* Stitched seam, sewn round the card on hover or keyboard focus;
-                         always shown on touch screens. Only linked cards get it. */
-                      <svg
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-3 h-[calc(100%-24px)] w-[calc(100%-24px)] overflow-visible"
-                      >
-                        <defs>
-                          <mask id={`news-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
-                            <rect
-                              x="0"
-                              y="0"
-                              width="100%"
-                              height="100%"
-                              pathLength={1}
-                              fill="none"
-                              stroke="white"
-                              strokeWidth="6"
-                              className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-1000 group-focus-visible:[stroke-dashoffset:0] motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
-                            />
-                          </mask>
-                        </defs>
-                        <rect
-                          x="0"
-                          y="0"
-                          width="100%"
-                          height="100%"
-                          fill="none"
-                          stroke="white"
-                          strokeOpacity="0.8"
-                          strokeWidth="1.5"
-                          strokeDasharray="8 6"
-                          mask={`url(#news-stitch-${i})`}
-                        />
-                      </svg>
-                    )}
-
-                    {/* Top: category chip and date */}
-                    <span className="relative z-1 flex flex-wrap items-center gap-x-3 gap-y-2">
-                      <span className="rounded-xs border border-[#ef7898]/60 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#ef7898]">
-                        {n.cat}
-                      </span>
-                      <span className="text-[11px] font-semibold tracking-widest text-white/75">{n.date}</span>
-                    </span>
-
-                    {/* Bottom: headline, a short red rule (as on the business cards),
-                then source and the open button */}
-                    <span className="relative z-1 mt-auto flex flex-col">
-                      <strong
-                        className={`news-title text-balance font-['Fira_Sans_Condensed'] font-bold text-white ${lead ? "max-w-[22ch] text-lead" : "text-card"
-                          }`}
-                      >
-                        {n.title}
-                      </strong>
-                      <span
-                        aria-hidden="true"
-                        className="mt-4 h-0.5 w-16 origin-left scale-x-50 bg-(--navy) transition-[scale] duration-500 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100 motion-reduce:transition-none"
+                      className="pointer-events-none absolute inset-2.5 h-[calc(100%-20px)] w-[calc(100%-20px)] overflow-visible"
+                    >
+                      <defs>
+                        <mask id={`news-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+                          <rect
+                            x="0"
+                            y="0"
+                            width="100%"
+                            height="100%"
+                            pathLength={1}
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="6"
+                            className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-1000 group-focus-visible:[stroke-dashoffset:0] motion-reduce:transition-none motion-reduce:[stroke-dashoffset:0] [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
+                          />
+                        </mask>
+                      </defs>
+                      <rect
+                        x="0"
+                        y="0"
+                        width="100%"
+                        height="100%"
+                        fill="none"
+                        stroke="white"
+                        strokeOpacity="0.8"
+                        strokeWidth="1.5"
+                        strokeDasharray="8 6"
+                        mask={`url(#news-stitch-${i})`}
                       />
-                      {linked && (
-                        <span className="mt-5 flex items-center justify-between gap-4 border-t border-white/20 pt-4">
-                          <span className="text-[11px] font-semibold tracking-[0.14em] text-white/70 transition-colors duration-300 group-hover:text-white">
-                            {n.source.toUpperCase()}
-                          </span>
-                          <span
-                            aria-hidden="true"
-                            className="grid size-11 shrink-0 place-items-center rounded-full border border-white/60 text-white transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-(--ink) group-focus-visible:bg-white group-focus-visible:text-(--ink) motion-reduce:transition-none"
-                          >
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 16 16"
-                              className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
-                            >
-                              <path d="M4.5 11.5l7-7M5.5 4.5h6v6" fill="none" stroke="currentColor" strokeWidth="1.6" />
-                            </svg>
-                          </span>
-                        </span>
-                      )}
+                    </svg>
+                  </span>
+                );
+
+                const body = (
+                  <>
+                    {!extra && photo}
+                    {/* The marker sweeps in behind the headline from the left;
+                        clone so every wrapped line is highlighted. */}
+                    <strong
+                      className={`text-balance box-decoration-clone bg-[linear-gradient(var(--marker),var(--marker))] bg-[length:0%_100%] bg-no-repeat font-['Fira_Sans_Condensed'] font-bold text-(--ink) transition-[background-size] duration-450 ease-out group-hover:bg-[length:100%_100%] group-focus-visible:bg-[length:100%_100%] motion-reduce:transition-none ${
+                        lead ? "max-w-[22ch] text-lead" : "text-card"
+                      }`}
+                    >
+                      {n.title}
+                    </strong>
+                    <span className="text-[11px] font-semibold uppercase tracking-widest text-(--mute)">
+                      {n.date}
+                      <span aria-hidden="true" className="mx-2">·</span>
+                      <span className="text-(--navy)">{n.cat}</span>
                     </span>
+                    {n.url && (
+                      <span className="flex items-center gap-1.5 text-[13px] text-(--mute) transition-colors duration-300 group-hover:text-(--ink) group-focus-visible:text-(--ink) motion-reduce:transition-none">
+                        Report: {n.source}
+                        <ArrowUpRight
+                          size={14}
+                          strokeWidth={1.75}
+                          aria-hidden="true"
+                          className="shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none"
+                        />
+                      </span>
+                    )}
                   </>
                 );
-                const cardClass = `relative flex flex-col overflow-hidden bg-(--ink) text-white ${lead ? "min-h-100 p-7 sm:col-span-2 lg:row-span-2 lg:p-10" : "min-h-80 p-7 lg:p-8"
-                  }`;
-                return linked ? (
+
+                const cardClass = `flex flex-col gap-4 ${place} ${rule}`;
+                return n.url ? (
                   <a
                     key={n.title}
                     href={n.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`news-card group ${cardClass} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy)`}
+                    className={`group ${cardClass} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy)`}
                   >
                     {body}
                     <span className="sr-only"> (opens the report on {n.source} in a new tab)</span>
