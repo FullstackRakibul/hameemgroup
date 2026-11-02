@@ -272,7 +272,7 @@ html.lenis body { height: auto; }
   left: 0;
   right: 0;
   height: 2px;
-  background: repeating-linear-gradient(90deg, var(--stitch, var(--navy)) 0 6px, transparent 6px 10px);
+  background: repeating-linear-gradient(90deg, var(--stitch, var(--navy)) 0 4px, transparent 2px 6px);
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0.25s var(--ease-out);
   pointer-events: none;
@@ -315,7 +315,7 @@ html.lenis body { height: auto; }
   top: calc(50% + 8px);
   width: 0;
   height: 2px;
-  background: repeating-linear-gradient(90deg, var(--nav-stitch) 0 6px, transparent 6px 10px);
+  background: repeating-linear-gradient(90deg, var(--nav-stitch) 0 2px, transparent 2px 6px);
   opacity: 0;
   pointer-events: none;
   transition:
@@ -981,4 +981,3 @@ dialog.gallery-lightbox::backdrop { background: rgb(17 20 24 / 0.96); }
   /* The content still appears, it simply does not travel */
   .people-card .people-details { opacity: 1; translate: 0 0; }
 }
-
