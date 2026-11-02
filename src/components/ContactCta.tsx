@@ -46,11 +46,11 @@ export default function ContactCta({ id }: { id?: string }) {
   }, [showVideo]);
 
   return (
-    <section id={id} className="relative overflow-hidden text-white bg-(--ink) [--ring:#fff]">
+    <section id={id} className="relative flex min-h-svh items-center overflow-hidden text-white bg-(--ink) [--ring:#fff]">
       {/* The section is already full-bleed, so inset-0 is the full screen
           width: w-full matches it exactly, where 100vw would overshoot by the
-          scrollbar. The band is far wider than it is tall, so object-cover
-          crops a 16:9 frame hard top and bottom; centring keeps the subject. */}
+          scrollbar. The band fills the screen height (min-h-svh), so object-cover
+          crops a 16:9 frame far less than a wide strip did (only the sides on a phone); centring keeps the subject. */}
       <img
         src={`/media/${CONTACT_VIDEO.poster}`}
         alt=""
@@ -75,9 +75,9 @@ export default function ContactCta({ id }: { id?: string }) {
       <div aria-hidden="true" className="absolute inset-0 bg-[rgba(10,14,18,0.55)]" />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(ellipse_60%_65%_at_50%_50%,rgba(10,14,18,0.6)_0%,rgba(10,14,18,0.3)_65%,transparent_100%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_50%,rgba(10,14,18,0.6)_0%,rgba(10,14,18,0.3)_65%,transparent_100%)]"
       />
-      <div data-reveal className="wrap relative z-1 flex flex-col items-center section-y text-center">
+      <div data-reveal className="wrap relative z-1 flex w-full flex-col items-center justify-center section-y text-center">
         <Eyebrow className="text-white!">WORK WITH US</Eyebrow>
         <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-statement font-black tracking-widest [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]">
           Sourcing from

@@ -918,50 +918,8 @@ dialog.gallery-lightbox::backdrop { background: rgb(17 20 24 / 0.96); }
 }
 
 /* ── People section ──
-   An accordion of cards in the Sustainability cards' idiom: light and closed,
-   dark glass when open. The border is a plain 1px hairline. Colour is ink, white and navy only: navy
-   carries the small signals (the chip when open, the bullets, the glow). The photo
-   panel beside the list is sticky, so there is no scroll-linked parallax here;
-   the giant word still drifts where the browser supports it. */
-.people-card {
-  background: #fff;
-  border-color: var(--hair);
-  color: var(--ink);
-}
-.people-card .people-glow { opacity: 0.06; }
-.people-card .people-watermark { color: color-mix(in srgb, var(--ink) 4%, transparent); }
-.people-card .people-chip-icon { color: var(--navy); }
-.people-card .people-dot { background: var(--navy); }
-.people-card .people-details { opacity: 0; translate: 0 6px; }
-
-/* Pointing at a closed card: the hairline and the chip warm up, nothing moves */
-@media (hover: hover) and (pointer: fine) {
-  .people-card:not([data-open]):hover .people-chip { background: color-mix(in srgb, var(--navy) 12%, var(--mist)); }
-  .people-card:not([data-open]):hover .people-glow { opacity: 0.12; }
-}
-
-.people-card[data-open] {
-  background: var(--ink);
-  border-color: rgb(255 255 255 / 0.15);
-}
-.people-card[data-open] .people-title { color: #fff; }
-.people-card[data-open] .people-index { color: rgb(255 255 255 / 0.5); }
-.people-card[data-open] .people-plus { color: #fff; transform: rotate(45deg); }
-.people-card[data-open] .people-chip { background: var(--navy); }
-.people-card[data-open] .people-chip-icon { color: #fff; }
-.people-card[data-open] .people-dot { background: rgb(255 255 255 / 0.55); }
-.people-card[data-open] .people-glow { opacity: 0.2; }
-.people-card[data-open] .people-watermark {
-  color: rgb(255 255 255 / 0.06);
-  /* Reuses the sustainability cards' slow turn */
-  animation: ecoSpin 40s linear infinite;
-}
-.people-card[data-open] .people-details { opacity: 1; translate: 0 0; }
-
-/* The caption under the sticky photo, re-keyed on every change */
-.people-caption { animation: awardIn 500ms var(--ease-out) both; }
-.people-caption-late { animation-delay: 120ms; }
-
+   Styled in PeopleSection.tsx; only the giant word's scroll-linked drift
+   lives here, since it needs animation-timeline. */
 @supports (animation-timeline: view()) {
   .people-drift {
     animation: peopleDrift linear both;
@@ -974,10 +932,6 @@ dialog.gallery-lightbox::backdrop { background: rgb(17 20 24 / 0.96); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .people-drift,
-  .people-card[data-open] .people-watermark,
-  .people-caption { animation: none; }
-  .people-card[data-open] .people-plus { transform: none; }
-  /* The content still appears, it simply does not travel */
-  .people-card .people-details { opacity: 1; translate: 0 0; }
+  .people-drift { animation: none; }
 }
+/* ── People section ──
