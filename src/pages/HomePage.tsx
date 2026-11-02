@@ -1119,66 +1119,21 @@ export default function HomePage() {
             alt="Ha-Meem Textiles at Mawna"
             className="absolute inset-0 -z-10 h-full w-full object-cover"
           />
-          {/* Overlay: a lighter wash so the campus shows (no blur), and a scrim that
-      stays dark behind the heading and intro */}
+          {/* Overlay: a lighter wash so the campus shows (no blur), and a
+              top-anchored scrim that keeps the header band dark */}
           <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[rgba(10,14,18,0.23)]" />
           <div
             aria-hidden="true"
-            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_75%_55%_at_50%_30%,rgba(10,14,18,0.6)_0%,rgba(10,14,18,0.35)_60%,transparent_100%)]"
+            className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(10,14,18,0.65)_0%,rgba(10,14,18,0.35)_45%,rgba(10,14,18,0.15)_100%)]"
           />
 
-          <div className="wrap flex flex-col items-center section-y text-center">
+          <div className="wrap section-y">
             <SectionHeader
-              align="center"
               tone="dark"
-              size="statement"
-              titleClassName="max-w-none"
               eyebrow="SUSTAINABILITY"
-              title={
-                <>
-                  {/* Three lines, each with its own treatment. Gradient and
-                      outlined words use drop-shadow, since a text-shadow would
-                      show through them. */}
-                  <span className="block">
-                    Cleaner{" "}
-                    <span className="bg-[linear-gradient(90deg,#9fdcf2,#4fb3d9)] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] text-shadow-none">
-                      water.
-                    </span>
-                  </span>
-                  <span className="block">
-                    Cleaner{" "}
-                    <span className="bg-[linear-gradient(90deg,#ffd27a,#f5a524)] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] text-shadow-none">
-                      power.
-                    </span>
-                  </span>
-                  <span className="block">
-                    <span className="relative inline-block text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] [-webkit-text-stroke:1.5px_rgba(255,255,255,0.85)] text-shadow-none">
-                      Measured.
-                      {/* Stitch underline: drawn by a mask whose dashoffset runs 1 → 0
-                          once the header is revealed; fully drawn otherwise */}
-                      <svg aria-hidden="true" className="absolute -bottom-2 left-0 h-2 w-full overflow-visible" preserveAspectRatio="none">
-                        <defs>
-                          <mask id="eco-underline" maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
-                            <line
-                              x1="0"
-                              y1="50%"
-                              x2="100%"
-                              y2="50%"
-                              pathLength={1}
-                              stroke="white"
-                              strokeWidth="6"
-                              className="[stroke-dasharray:1] [stroke-dashoffset:0] transition-[stroke-dashoffset] delay-500 duration-1000 ease-out in-data-[reveal=hidden]:[stroke-dashoffset:1] motion-reduce:transition-none"
-                            />
-                          </mask>
-                        </defs>
-                        <line x1="0" y1="50%" x2="100%" y2="50%" strokeWidth="2" strokeDasharray="8 6" mask="url(#eco-underline)" className="stroke-white/60" />
-                      </svg>
-                    </span>
-                  </span>
-                </>
-              }
+              title={<>Cleaner water, cleaner power. Measured.</>}
             >
-              <p className="max-w-[52ch]">
+              <p>
                 Our mills treat effluent biologically, recover process chemicals
                 and put solar on factory roofs, working toward net-zero by{" "}
                 {F.netZeroBy}.
@@ -1190,7 +1145,7 @@ export default function HomePage() {
                 narrow and dim. Touch screens keep a grid with details open. */}
             <ul
               data-reveal-stagger
-              className="group/eco mt-section-head grid w-full max-w-6xl grid-cols-1 gap-3 text-left sm:grid-cols-2 lg:flex lg:h-105 lg:gap-3 lg:[@media(hover:none)]:grid lg:[@media(hover:none)]:h-auto"
+              className="group/eco mt-section-head grid w-full grid-cols-1 gap-3 text-left sm:grid-cols-2 lg:flex lg:h-105 lg:gap-3 lg:[@media(hover:none)]:grid lg:[@media(hover:none)]:h-auto"
             >
               {SUSTAINABILITY_STATS.map((s, i) => {
                 const [num, unit] = splitUnit(s.value);
