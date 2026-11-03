@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent as ReactMouseEvent } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import BrandLockup from "./components/BrandLockup";
 import SmartLink from "./components/SmartLink";
 import { BUSINESS_PAGES, PLAIN_LINKS, isCurrentPage } from "./data/navigation";
 import type { MegaMenu, MenuKey } from "./data/navigation";
@@ -24,27 +25,7 @@ const label = (key: string) => key.charAt(0).toUpperCase() + key.slice(1);
 
 // Formal lockup: the round mark and the name, in currentColor like the nav
 function Logo() {
-  return (
-    <Link to="/" className="site-logo flex shrink-0 items-center gap-3" aria-label="Ha-Meem Group — home">
-      <img
-        src="/group-logo-circle.png"
-        alt=""
-        width={44}
-        height={44}
-        className="site-logo-mark size-10 shrink-0 rounded-full ring-1 ring-white/35 lg:size-11"
-        draggable={false}
-      />
-      {/* Two-line wordmark: white over the hero, red and navy once the header turns solid */}
-      <span className="flex flex-col leading-none">
-        <span className="site-logo-name whitespace-nowrap font-['Montserrat'] text-base font-extrabold uppercase tracking-[0.04em] transition-colors duration-300 lg:text-[1.05rem]">
-          Ha-Meem
-        </span>
-        <span className="site-logo-group mt-0.75 whitespace-nowrap font-['Montserrat'] text-[0.56rem] font-semibold uppercase tracking-[0.6em] transition-colors duration-300">
-          Group
-        </span>
-      </span>
-    </Link>
-  );
+  return <BrandLockup tone="header" size="md" className="site-logo shrink-0" />;
 }
 
 function RowArrow({ className = "" }: { className?: string }) {

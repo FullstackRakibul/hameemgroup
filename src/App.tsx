@@ -66,17 +66,21 @@ function RouteEffects({ ready }: { ready: boolean }) {
   const location = useLocation();
   const lastKey = useRef<string | null>(null);
   const lastPath = useRef(location.pathname);
-  const currentKey = useRef(location.key);
-  currentKey.current = location.key;
+  // A URL typed or opened directly (not a link click) arrives with the same
+  // key, "default", as the one before it, so the key alone can't tell two
+  // locations apart: the path and hash go into it too.
+  const locationKey = `${location.key}:${location.pathname}${location.hash}`;
+  const currentKey = useRef(locationKey);
+  currentKey.current = locationKey;
 
   useLayoutEffect(() => {
     // StrictMode runs this twice for one location; act once.
-    if (!ready || lastKey.current === location.key) return;
+    if (!ready || lastKey.current === locationKey) return;
     const firstLoad = lastKey.current === null;
     const samePage = !firstLoad && lastPath.current === location.pathname;
-    lastKey.current = location.key;
+    lastKey.current = locationKey;
     lastPath.current = location.pathname;
-    const key = location.key;
+    const key = locationKey;
 
     if (location.hash) {
       const id = decodeURIComponent(location.hash.slice(1));
@@ -101,7 +105,7 @@ function RouteEffects({ ready }: { ready: boolean }) {
     if (firstLoad) return;
     scrollToTarget(0, { offset: 0, immediate: true });
     document.querySelector<HTMLElement>("main h1")?.focus({ preventScroll: true });
-  }, [ready, location.key, location.hash, location.pathname]);
+  }, [ready, locationKey, location.hash, location.pathname]);
 
   return null;
 }

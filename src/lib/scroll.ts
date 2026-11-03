@@ -35,6 +35,10 @@ export function scrollToTarget(
   const immediate = opts.immediate || reducedMotion();
 
   if (lenis) {
+    // Lenis measures the page asynchronously; a lazy-loaded page that has just
+    // rendered may still be measured at the loading screen's height, which
+    // would clamp the target to the top. Re-measure first.
+    lenis.resize();
     lenis.scrollTo(target as HTMLElement | number, {
       offset,
       immediate,

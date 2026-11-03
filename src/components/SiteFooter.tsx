@@ -1,17 +1,7 @@
-import { Link } from "react-router-dom";
 import { EMAIL, HEAD_OFFICE, telHref } from "../data/facts";
 import { footerColumns } from "../data/navigation";
+import BrandLockup from "./BrandLockup";
 import SmartLink from "./SmartLink";
-
-function Brand() {
-  return (
-    <Link className="flex items-center gap-3 self-start text-(--navy)" to="/" aria-label="Ha-Meem Group — home">
-      <span className="brand-pill flex items-center h-12 px-1 rounded-sm backdrop-blur-sm shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-white/30 transition-all duration-300 hover:bg-white hover:-translate-y-px">
-        <img src="/group-logo.png" alt="" className="h-10 rounded-sm w-auto object-contain" />
-      </span>
-    </Link>
-  );
-}
 
 // Links are at least 44px tall on phones
 const tap = "inline-flex min-h-11 min-w-11 items-center sm:min-h-0 sm:min-w-0";
@@ -23,7 +13,7 @@ export default function SiteFooter() {
     <footer id="contact" className="bg-(--mist) text-(--mute)">
       <div className="wrap grid grid-cols-2 lg:grid-cols-[1.6fr_repeat(5,1fr)] gap-x-6 gap-y-10 sm:gap-10 pt-18 pb-16">
         <div className="col-span-2 flex flex-col gap-4 text-sm leading-relaxed lg:col-span-1">
-          <Brand />
+          <BrandLockup tone="light" size="lg" className="self-start" />
           <p>
             {HEAD_OFFICE.lines[0]}
             <br />

@@ -224,13 +224,10 @@ html.lenis body { height: auto; }
    drop shadow gives way to the sheet's, which sits under the whole thing. */
 .header-wrapper.is-mega-open { box-shadow: none; }
 
-/* Logo lockup: the round mark plus a two-line "HA-MEEM / GROUP" wordmark.
-   The words are white over the hero and turn red and navy as soon as the
-   header goes white (scrolled, mega or mobile menu open); light-hero pages
-   start in red and navy. */
-.site-logo-mark { transition: transform 0.25s ease; }
-.site-logo:hover .site-logo-mark,
-.site-logo:focus-visible .site-logo-mark { transform: translateY(-1px); }
+/* Logo lockup (BrandLockup, tone "header"): only the colours live here. The
+   words are white over the hero and turn red and navy as soon as the header
+   goes white (scrolled, mega or mobile menu open); light-hero pages start in
+   red and navy. The hover lift and focus ring are utilities on the component. */
 .is-solid .site-logo-mark,
 [data-light-hero] .header-wrapper:not(.is-solid) .site-logo-mark { --tw-ring-color: var(--hair); }
 .site-logo-name { color: #fff; }
@@ -239,11 +236,6 @@ html.lenis body { height: auto; }
 [data-light-hero] .header-wrapper:not(.is-solid) .site-logo-name { color: var(--red); }
 .is-solid .site-logo-group,
 [data-light-hero] .header-wrapper:not(.is-solid) .site-logo-group { color: var(--navy); }
-.site-logo:focus-visible { outline: 2px solid var(--navy); outline-offset: 4px; border-radius: 4px; }
-@media (prefers-reduced-motion: reduce) {
-  .site-logo:hover .site-logo-mark,
-  .site-logo:focus-visible .site-logo-mark { transform: none; }
-}
 
 /* Nav labels */
 .nav-label,
