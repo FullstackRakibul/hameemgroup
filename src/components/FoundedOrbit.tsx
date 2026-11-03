@@ -87,7 +87,7 @@ export default function FoundedOrbit() {
   };
 
   return (
-    <div ref={box} className="relative mx-auto size-55 lg:size-70">
+    <div ref={box} className="relative mx-auto size-55 xl:size-70">
       {/* Outer ring: dashed border, chips and the needle dot turn together */}
       <div ref={layer(0)} aria-hidden="true" className="absolute inset-0 will-change-transform">
         <div className="orbit-spin absolute inset-0 rounded-full border-[1.5px] border-dashed border-(--hair) motion-reduce:animate-none">

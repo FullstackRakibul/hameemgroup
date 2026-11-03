@@ -2,6 +2,7 @@ import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, FocusEvent, PointerEvent, ReactNode } from "react";
 import CountUp from "./CountUp";
 import FiberField from "./FiberField";
+import DressForm3D from "./DressForm3D";
 import FoundedOrbit from "./FoundedOrbit";
 import useInViewOnce from "./useInViewOnce";
 import StatVideoBackdrop from "./StatVideoBackdrop";
@@ -81,7 +82,7 @@ function Statement() {
           ABOUT THE GROUP
         </span>
       </p>
-      <p className="max-w-[60ch] font-['Fira_Sans_Condensed'] text-lead font-bold leading-tight text-(--ink) lg:max-w-[34ch]">
+      <p className="max-w-[60ch] font-['Fira_Sans_Condensed'] text-lead font-bold leading-tight text-(--ink) lg:max-w-[34ch] lg:max-xl:text-[36px]">
         {LINES.map((line, i) => (
           <Fragment key={i}>
             <span className={LINE} style={{ "--line": i } as CSSProperties}>
@@ -436,11 +437,18 @@ export default function CompanySection() {
       <div className="wrap relative">
         <CompanyThread />
         {/* Founded badge beside the statement; stacked, badge centred, below lg */}
-        <div className="grid gap-10 lg:grid-cols-[340px_1fr] lg:items-center lg:gap-16">
+        {/* From lg, three columns: the founded badge, the statement, and the
+            denim dress form. The form's cell stretches to the row and the form
+            overhangs it by 20px top and bottom, so it never makes the row
+            taller than the statement plus 40px. Below lg it isn't shown. */}
+        <div className="grid gap-10 lg:grid-cols-[240px_1fr_260px] lg:items-center lg:gap-8 xl:grid-cols-[300px_1fr_340px] xl:gap-12">
           <div data-reveal data-thread-from className="flex justify-center">
             <FoundedOrbit />
           </div>
           <Statement />
+          <div className="relative hidden self-stretch lg:block">
+            <DressForm3D className="absolute inset-x-0 -inset-y-5" />
+          </div>
         </div>
         {/* The gap down to the band; the thread ends at its foot */}
         <div data-thread-to aria-hidden="true" className="h-section-head" />

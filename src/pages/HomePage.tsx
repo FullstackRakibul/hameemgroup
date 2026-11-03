@@ -13,6 +13,9 @@ import AwardShowcase from "../components/AwardShowcase";
 import SmartLink from "../components/SmartLink";
 import ContactCta from "../components/ContactCta";
 import CompanySection from "../components/CompanySection";
+import BusinessMosaic from "../components/BusinessMosaic";
+import ChainSteps from "../components/ChainSteps";
+import CountUp from "../components/CountUp";
 import PeopleSection from "../components/PeopleSection";
 import usePageMeta from "../components/usePageMeta";
 import {
@@ -28,12 +31,13 @@ import { VIDEOS } from "../data/videos";
 
 const media = "/media/";
 
-// Sustainability cards: icon, accent, photo and watermark motion per topic
-const ECO_LOOK: Record<string, { Icon: LucideIcon; accent: string; image: string; motion: string }> = {
-  "Solar capacity": { Icon: Sun, accent: "#f5a524", image: "sustain/solar.gif", motion: "animate-[ecoSpin_40s_linear_infinite]" },
-  "Water recycling": { Icon: Droplets, accent: "#4fb3d9", image: "sustain/water.gif", motion: "animate-[ecoBob_6s_ease-in-out_infinite]" },
-  "Power co-generation": { Icon: Zap, accent: "#f2c94c", image: "sustain/fiber.gif", motion: "animate-[ecoFlicker_4s_ease-in-out_infinite]" },
-  "Fiber recycled a day": { Icon: Recycle, accent: "#6fbf73", image: "sustain/recycle.gif", motion: "animate-[ecoSpin_30s_linear_infinite]" },
+// Sustainability cards: icon, accent (the rule under the figure only) and loop per topic.
+// The loops are GIFs until the MP4 conversion in docs/PROJECT_GUIDE.md lands.
+const ECO_LOOK: Record<string, { Icon: LucideIcon; accent: string; image: string }> = {
+  "Solar capacity": { Icon: Sun, accent: "#f5a524", image: "sustain/solar.gif" },
+  "Water recycling": { Icon: Droplets, accent: "#4fb3d9", image: "sustain/water.gif" },
+  "Power co-generation": { Icon: Zap, accent: "#f2c94c", image: "sustain/fiber.gif" },
+  "Fiber recycled a day": { Icon: Recycle, accent: "#6fbf73", image: "sustain/recycle.gif" },
 };
 
 
@@ -73,126 +77,6 @@ const products = [
   ["OUTERWEAR & JACKETS", `${F.jacketsYear} jackets a year`, "showroom.jpg"],
   ["SWEATERS", "", "sweaters.jpg"],
   ["DENIM FABRIC", "", "fabric.jpg"],
-];
-
-const steps = [
-  {
-    title: "Spinning",
-    text: "Cotton becomes yarn in our own spinning mills at Mawna, with rotor spinning and yarn dyeing added since.",
-    stat: F.spinningDay,
-    unit: "YARN SPUN A DAY",
-    image: "chain-spinning.jpg",
-  },
-  {
-    title: "Weaving & dyeing",
-    text: `Ha-Meem Denim produces rope-dyed and slasher-dyed denim fabric: ${F.denimYardsMonth} yards of denim and ${F.nonDenimYardsMonth} yards of non-denim fabric a month.`,
-    stat: `${F.denimYardsMonth} yds`,
-    unit: "DENIM A MONTH",
-    image: "chain-fabric.jpg",
-  },
-  {
-    title: "Cutting & sewing",
-    text: `Automatic spreading and cutting across ${F.factories} garment factories and ${F.productionLines} production lines, making ${F.garmentsYear} garments a year.`,
-    stat: F.garmentsYear,
-    unit: "GARMENTS A YEAR",
-    image: "chain-sewing.jpg",
-  },
-  {
-    title: "Washing & finishing",
-    text: `Seven washing plants with ${F.laserMachines} laser machines and ${F.ozoneMachines} ozone machines support garment finishing, with processes including ozone, laser, over-dye, dip-dye and 3D whisker.`,
-    stat: F.washingPlants,
-    unit: "WASHING PLANTS",
-    image: "chain-wash.jpg",
-  },
-  {
-    title: "Trims & packaging",
-    text: `Accessories are ${F.inHouseAccessories} in-house: labels, elastic, twill tape, buttons, zips and hangers, then export cartons and poly bags from our own plants.`,
-    stat: F.labelsMonth,
-    unit: "LABELS A MONTH",
-    image: "chain-trims.jpg",
-  },
-  {
-    title: "Shipping",
-    text: "Our own transport fleet and clearing and forwarding offices at every Bangladeshi port move goods from factory gate to vessel.",
-    stat: "EVERY",
-    unit: "PORT, OWN C&F",
-    image: "biz/label.jpg",
-  },
-];
-
-const businesses = [
-  {
-    stat: F.productionLines,
-    unit: "PRODUCTION LINES",
-    title: "Woven garments",
-    text: `${F.factories} garment factories make ${F.garmentsYear} readymade garments a year, part of a group of ${F.employeesText} people.`,
-    image: "biz/woven.jpg",
-    to: "/businesses/woven",
-  },
-  {
-    stat: F.denimYardsMonth,
-    unit: "YARDS A MONTH",
-    title: "Denim mill",
-    text: "Rope-dyed and slasher-dyed denim fabric made for fashion brands at Ha-Meem Denim.",
-    image: "biz/denim.jpg",
-    to: "/businesses/denim-mill",
-  },
-  {
-    stat: F.spinningDay,
-    unit: "YARN A DAY",
-    title: "Spinning & textiles",
-    text: "Ring and rotor yarn, woven non-denim fabric and, since 2025, yarn dyeing at Sreepur.",
-    image: "biz/spinning.jpg",
-    to: "/businesses/denim-mill#spinning",
-  },
-  {
-    stat: F.washingPlants,
-    unit: "WASHING PLANTS",
-    title: "Washing & finishing",
-    text: "Seven plants support garment finishing across the group's integrated manufacturing operations.",
-    image: "biz/laundry.jpg",
-    to: "/businesses/laundry",
-  },
-  {
-    stat: F.sweatersYear,
-    unit: "SWEATERS A YEAR",
-    title: "Sweaters",
-    text: `Computerised flat-knitting at Kashimpur and Ashulia, on ${F.stollMachines} Stoll machines.`,
-    image: "biz/sweater.jpg",
-    to: "/businesses/sweater",
-  },
-  {
-    stat: F.samplesDay,
-    unit: "SAMPLES A DAY",
-    title: "Design & sampling",
-    text: `In-house designers, CAD and a ${F.sampleMachines}-machine sample room turn a brief into a counter sample.`,
-    image: "biz/design.jpg",
-    to: "/businesses/design-studio",
-  },
-  {
-    stat: F.embroideryMachines,
-    unit: "EMBROIDERY MACHINES",
-    title: "Embroidery, printing & trims",
-    text: "Forty embroidery heads, screen and digital print, labels, elastic, belts and narrow fabric.",
-    image: "biz/embroidery.jpg",
-    to: "/businesses/embroidery-printing-accessories",
-  },
-  {
-    stat: F.cartonExport,
-    unit: "EXPORT-ORIENTED",
-    title: "Packaging",
-    text: "Export cartons, poly bags and printed paper trims so every order ships complete.",
-    image: "biz/packaging.jpg",
-    to: "/businesses/ancillary",
-  },
-  {
-    stat: F.samakalFounded,
-    unit: "SAMAKAL FOUNDED",
-    title: "Beyond apparel",
-    text: "A national daily, a 24-hour news channel, jute, tea, transport and port clearing.",
-    image: "biz/gate.jpg",
-    to: "/about#other-businesses",
-  },
 ];
 
 /* ── Newsroom bento ── */
@@ -287,7 +171,6 @@ const productSlides = products.map(([title, text, image]) => ({
 }));
 
 export default function HomePage() {
-  const [step, setStep] = useState(1);
   // The outgoing slide is kept as `prev`: it stays opaque underneath while the
   // new one fades in on top, so the cross-fade never dips to the dark backdrop.
   const [hero, setHero] = useState({ current: 0, prev: -1 });
@@ -714,163 +597,7 @@ export default function HomePage() {
               </p>
             </SectionHeader>
           </div>
-          {/* Desktop and tablet (768px and up): horizontal accordion, unchanged */}
-          <div className="hidden md:flex h-155 md:h-168 text-white bg-(--ink) overflow-x-auto">
-            {steps.map((item, i) => (
-              <button
-                key={item.title}
-                className={`step-panel relative border-0 border-r-2 border-white text-white bg-transparent p-6 text-left overflow-hidden cursor-pointer ${step === i ? "step-open flex-[1_1_50%]" : "flex-[0_0_10%]"
-                  }`}
-                onClick={() => setStep(i)}
-                onMouseEnter={() => setStep(i)}
-              >
-                {/* Real image with object-cover: narrow collapsed panels crop the
-            centre of the photo instead of squashing the whole frame */}
-                <img
-                  src={`${media}${item.image}`}
-                  alt=""
-                  aria-hidden="true"
-                  className={`absolute inset-0 h-full w-full max-w-none object-cover object-center transition-transform duration-700 ease-out ${step === i ? "scale-105" : "scale-100"
-                    }`}
-                />
-
-                {/* Overlay: Light for active (image clear), Darker for collapsed (60% opacity) */}
-                <span
-                  className={`absolute inset-0 transition-all duration-500 ${step === i
-                      ? "bg-linear-to-r from-[rgba(17,20,24,0.55)] to-[rgba(17,20,24,0.35)]"
-                      : "bg-[rgba(17,20,24,0.6)]"
-                    }`}
-                  aria-hidden="true"
-                />
-
-                {/* Content wrapper - z-10 to sit above the overlay */}
-                <span className="relative z-10 block h-full">
-                  <span className="step-num-text absolute left-1/2 top-0 -translate-x-1/2 font-semibold transition-opacity duration-300">
-                    0{i + 1}
-                  </span>
-
-                  {step === i ? (
-                    <span className="step-body absolute left-10 right-12 bottom-4 flex flex-col">
-                      <em className="text-(--navy) not-italic text-xs font-semibold tracking-widest">
-                        STEP {String(i + 1).padStart(2, "0")} OF 6
-                      </em>
-                      <strong className="font-['Fira_Sans_Condensed'] text-[32px] md:text-[40px] my-4">
-                        {item.title}
-                      </strong>
-                      <span className="max-w-117.5 text-(--hair) leading-relaxed">
-                        {item.text}
-                      </span>
-                      <b className="font-['Fira_Sans_Condensed'] text-[28px] mt-6">
-                        {item.stat}{" "}
-                        <small className="font-['Fira_Sans'] text-[10px] tracking-[0.15em] font-medium">
-                          {item.unit}
-                        </small>
-                      </b>
-                    </span>
-                  ) : (
-                    <strong className="step-vertical absolute bottom-10 left-1/2 [writing-mode:vertical-rl] -translate-x-1/2 rotate-180 font-['Fira_Sans_Condensed'] text-[19px] whitespace-nowrap transition-all duration-300">
-                      {item.title}
-                    </strong>
-                  )}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {/* Phones (below 768px): the same six steps as a vertical accordion.
-      Closed steps are image strips; the open step shows its photo
-      uncropped above the text, so neither competes with the other. */}
-          <ol className="md:hidden bg-(--ink) text-white">
-            {steps.map((item, i) => {
-              const open = step === i;
-              const num = String(i + 1).padStart(2, "0");
-              return (
-                <li
-                  key={item.title}
-                  className="scroll-mt-24 border-b-2 border-white last:border-b-0"
-                >
-                  <button
-                    type="button"
-                    id={`chain-step-${i}`}
-                    aria-expanded={open}
-                    aria-controls={`chain-panel-${i}`}
-                    className="relative flex w-full min-h-18 items-center gap-4 overflow-hidden px-5 py-4 text-left"
-                    onClick={(e) => {
-                      const row = e.currentTarget.parentElement;
-                      setStep(i);
-                      // Without the height animation there is no transitionend to wait for.
-                      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-                        requestAnimationFrame(() =>
-                          row?.scrollIntoView({ block: "nearest", behavior: "instant" }),
-                        );
-                      }
-                    }}
-                  >
-                    {/* The strip photo fades out once the step is open: the full photo sits below */}
-                    <span
-                      aria-hidden="true"
-                      className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 motion-reduce:transition-none ${open ? "opacity-0" : "opacity-100"
-                        }`}
-                      style={{ backgroundImage: `url("${media}${item.image}")` }}
-                    />
-                    <span aria-hidden="true" className="absolute inset-0 bg-[rgba(17,20,24,0.62)]" />
-                    <span
-                      className={`relative z-1 w-6 shrink-0 text-sm font-semibold tabular-nums ${open ? "text-[#ef7898]" : "text-white/70"
-                        }`}
-                    >
-                      {num}
-                    </span>
-                    <span className="relative z-1 flex-1 font-['Fira_Sans_Condensed'] text-[22px] font-bold leading-tight text-white">
-                      {item.title}
-                    </span>
-                    <ChevronDown size={18} strokeWidth={1.75} aria-hidden="true" className={`relative z-1 shrink-0 text-white transition-transform duration-300 motion-reduce:transition-none ${open ? "rotate-180" : ""
-                      }`} />
-                  </button>
-
-                  {/* Grid rows 0fr → 1fr animates to the content's natural height */}
-                  <div
-                    id={`chain-panel-${i}`}
-                    role="region"
-                    aria-labelledby={`chain-step-${i}`}
-                    inert={!open}
-                    className={`grid transition-[grid-template-rows] duration-500 ease-in-out motion-reduce:transition-none ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                      }`}
-                    onTransitionEnd={(e) => {
-                      // Once open, bring the whole step into view: the step that
-                      // closed above it may have pulled it off-screen.
-                      if (open && e.target === e.currentTarget && e.propertyName === "grid-template-rows") {
-                        e.currentTarget.parentElement?.scrollIntoView({ block: "nearest" });
-                      }
-                    }}
-                  >
-                    <div className="min-h-0 overflow-hidden">
-                      <img
-                        src={`${media}${item.image}`}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                        className="block w-full aspect-16/10 object-cover"
-                      />
-                      <div className="flex flex-col gap-3 px-5 pt-5 pb-7">
-                        <span className="text-[#ef7898] text-[11px] font-semibold tracking-widest">
-                          STEP {num} OF {steps.length}
-                        </span>
-                        <p className="max-w-117.5 text-(--hair) text-[15px] leading-relaxed">
-                          {item.text}
-                        </p>
-                        <b className="font-['Fira_Sans_Condensed'] text-[28px] leading-none mt-2">
-                          {item.stat}{" "}
-                          <small className="font-['Fira_Sans'] text-[10px] tracking-[0.15em] font-medium">
-                            {item.unit}
-                          </small>
-                        </b>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
+          <ChainSteps />
         </section>
 
         {/* ── BUSINESSES ── */}
@@ -892,117 +619,7 @@ export default function HomePage() {
                 jute, tea and logistics.
               </p>
             </SectionHeader>
-            <div data-reveal-stagger className="mt-section-head grid grid-cols-1 gap-grid sm:grid-cols-2 lg:grid-cols-3">
-              {businesses.map((b, i) => (
-                <Link
-                  to={b.to}
-                  key={b.title}
-                  className="biz-card group relative block h-74.5 overflow-hidden p-4 text-white transition-all duration-350 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none"
-                >
-                  <img
-                    src={`${media}${b.image}`}
-                    alt=""
-                    className="biz-img absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out motion-reduce:transition-none"
-                  />
-                  {/* Light at rest so the photo leads; darkens on hover (the .biz-card
-                      rule in index.css), and on focus or touch, where the
-                      details are shown and need the contrast. */}
-                  <span className="biz-overlay absolute inset-0 bg-linear-to-b from-[#1114181a] to-[#1114188c] transition-all duration-350 group-focus-visible:from-[#11141859] group-focus-visible:to-[#111418d9] [@media(hover:none)]:from-[#11141859] [@media(hover:none)]:to-[#111418d9]" />
-
-                  {/* Stitched seam: on hover (or keyboard focus) a dashed line is
-            sewn around the card, like topstitching on a denim hem.
-            The mask reveals the 8/6 dash pattern along the path, so the
-            dashes keep their size whatever the card's width. Touch
-            screens have no hover, so there it is always shown. */}
-                  <svg
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-2.5 h-[calc(100%-20px)] w-[calc(100%-20px)] overflow-visible"
-                  >
-                    <defs>
-                      <mask id={`biz-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
-                        <rect
-                          x="0"
-                          y="0"
-                          width="100%"
-                          height="100%"
-                          pathLength={1}
-                          fill="none"
-                          stroke="white"
-                          strokeWidth="6"
-                          className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-900 group-focus-visible:[stroke-dashoffset:0] motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0]"
-                        />
-                      </mask>
-                    </defs>
-                    <rect
-                      x="0"
-                      y="0"
-                      width="100%"
-                      height="100%"
-                      fill="none"
-                      stroke="white"
-                      strokeOpacity="0.85"
-                      strokeWidth="1.5"
-                      strokeDasharray="8 6"
-                      mask={`url(#biz-stitch-${i})`}
-                    />
-                  </svg>
-
-                  {/* Open button: a round arrow that grows into a labelled pill on
-            hover. A visual cue only; the whole card is the link. */}
-                  <span
-                    aria-hidden="true"
-                    className="absolute right-6 top-6 z-1 flex h-11 items-center rounded-xs border border-white/60 bg-[#11141833] text-white backdrop-blur-sm transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-(--ink) group-focus-visible:border-white group-focus-visible:bg-white group-focus-visible:text-(--ink) motion-reduce:transition-none"
-                  >
-                    <span className="max-w-0 overflow-hidden whitespace-nowrap text-[11px] font-semibold tracking-[0.14em] opacity-0 transition-all duration-300 group-hover:max-w-24 group-hover:pl-4 group-hover:opacity-100 group-focus-visible:max-w-24 group-focus-visible:pl-4 group-focus-visible:opacity-100 motion-reduce:transition-none">
-                      OPEN
-                    </span>
-                    <span className="grid size-11 shrink-0 place-items-center">
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        className="transition-transform duration-300 group-hover:rotate-45 group-focus-visible:rotate-45 motion-reduce:transition-none"
-                      >
-                        <path d="M4.5 11.5l7-7M5.5 4.5h6v6" fill="none" stroke="currentColor" strokeWidth="1.6" />
-                      </svg>
-                    </span>
-                  </span>
-
-                  {/* Figure and unit: out of sight at rest, sliding down into
-                      place on hover. Opacity and transform only, so the text
-                      stays in the link's accessible name. */}
-                  <span className="relative z-1 flex -translate-y-2 flex-col pr-28 opacity-0 transition-[opacity,translate] duration-250 group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-60 group-hover:duration-300 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-60 group-focus-visible:duration-300 motion-reduce:transition-none [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
-                    <b className="font-['Fira_Sans_Condensed'] text-white text-[37px] leading-none">
-                      {b.stat}
-                    </b>
-                    <small className="mt-2 text-[10px] text-white tracking-[0.13em]">
-                      {b.unit}
-                    </small>
-                  </span>
-
-                  <span className="absolute left-6 right-6 bottom-6 z-1 flex flex-col">
-                    <strong className="font-['Fira_Sans_Condensed'] text-white text-card">
-                      {b.title}
-                    </strong>
-                    {/* The rule and description open under the title: the row
-                        goes 0fr → 1fr, which the card's fixed height absorbs,
-                        so the title rises and the grid never reflows. */}
-                    <span className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-250 ease-out group-hover:grid-rows-[1fr] group-hover:duration-350 group-focus-visible:grid-rows-[1fr] group-focus-visible:duration-350 motion-reduce:transition-none [@media(hover:none)]:grid-rows-[1fr]">
-                      <span className="min-h-0 overflow-hidden">
-                        {/* A short red rule that grows on hover: the eyebrow's colour, used once */}
-                        <span
-                          aria-hidden="true"
-                          className="mt-2 mb-3 block h-0.5 w-0 bg-(--navy) transition-[width] duration-250 ease-out group-hover:w-16 group-hover:duration-500 group-focus-visible:w-16 group-focus-visible:duration-500 motion-reduce:transition-none [@media(hover:none)]:w-16"
-                        />
-                        <small className="line-clamp-3 block translate-y-2 text-sm leading-snug text-white opacity-0 transition-[opacity,translate] duration-250 group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-120 group-hover:duration-300 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:delay-120 group-focus-visible:duration-300 motion-reduce:transition-none [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
-                          {b.text}
-                        </small>
-                      </span>
-                    </span>
-                  </span>
-                </Link>
-              ))}
-            </div>
+            <BusinessMosaic className="mt-section-head" />
           </div>
         </section>
 
@@ -1061,12 +678,13 @@ export default function HomePage() {
               </p>
             </SectionHeader>
 
-            {/* Four measured results. On wide screens the hovered or focused tile
-                widens (flex-grow transitions) and reveals its detail; the others
-                narrow and dim. Touch screens keep a grid with details open. */}
+            {/* Four measured results. On wide pointer screens the hovered or
+                focused card widens (flex-grow) and reveals its detail; the
+                others narrow and dim. md–lg (and touch at lg): a 2 × 2 grid
+                with a one-line detail. Phones: a sideways snap row. */}
             <ul
               data-reveal-stagger
-              className="group/eco mt-section-head grid w-full grid-cols-1 gap-3 text-left sm:grid-cols-2 lg:flex lg:h-105 lg:gap-3 lg:[@media(hover:none)]:grid lg:[@media(hover:none)]:h-auto"
+              className="group/eco mt-section-head -mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 text-left [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 lg:flex lg:h-[380px] lg:[@media(hover:none)]:grid lg:[@media(hover:none)]:h-auto"
             >
               {SUSTAINABILITY_STATS.map((s, i) => {
                 const [num, unit] = splitUnit(s.value);
@@ -1076,36 +694,26 @@ export default function HomePage() {
                     key={s.label}
                     tabIndex={0}
                     style={{ "--accent": look.accent } as CSSProperties}
-                    className="group relative min-h-75 overflow-hidden rounded-sm border border-white/15 text-left backdrop-blur-md bg-[rgba(10,14,18,.62)] transition-[flex-grow,opacity] duration-700 ease-[cubic-bezier(.22,1,.36,1)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none lg:min-h-0 lg:flex-1 lg:group-hover/eco:opacity-70 lg:hover:flex-[2.4] lg:hover:opacity-100! lg:focus:flex-[2.4] lg:focus-within:flex-[2.4]"
+                    className="group relative h-65 w-[78%] shrink-0 snap-start overflow-hidden rounded-sm border border-white/15 bg-[rgba(10,14,18,.62)] text-left backdrop-blur-md transition-[flex-grow,opacity,border-color] duration-600 ease-[cubic-bezier(.22,1,.36,1)] hover:border-white/35 focus-visible:border-white/35 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none md:h-[300px] md:w-auto lg:h-auto lg:flex-1 lg:group-hover/eco:opacity-75 lg:hover:flex-[2.2] lg:hover:opacity-100! lg:focus:flex-[2.2] lg:focus:opacity-100! lg:[@media(hover:none)]:h-[300px]"
                   >
-                    {/* a) Topic photo; hidden if the file is missing */}
+                    {/* a) The topic loop, clear in the top 55%, sliding up and
+                        brightening on the widened card; hidden if missing */}
                     <img
                       src={`${media}${look.image}`}
                       alt=""
                       aria-hidden="true"
                       loading="lazy"
+                      decoding="async"
                       onError={(e) => (e.currentTarget.style.display = "none")}
-                      className="pointer-events-none absolute inset-0 size-full scale-105 object-cover opacity-[0.14] mix-blend-luminosity grayscale-30 transition-[opacity,scale] duration-1000 ease-out group-hover:scale-100 group-hover:opacity-[0.28] group-focus:scale-100 group-focus:opacity-[0.28] motion-reduce:transition-none"
+                      className="pointer-events-none absolute inset-x-0 top-0 h-[calc(55%+8px)] w-full object-cover opacity-55 mask-[linear-gradient(to_bottom,black_55%,transparent)] transition-[opacity,translate] duration-600 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-2 group-hover:opacity-75 group-focus:-translate-y-2 group-focus:opacity-75 motion-reduce:transition-none"
                     />
-                    {/* b) Accent glow */}
+                    {/* b) Fading into the dark glass below */}
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute -right-16 -bottom-16 size-65 rounded-full bg-[radial-gradient(var(--accent),transparent_70%)] opacity-[0.18] blur-2xl transition-opacity duration-700 group-hover:opacity-[0.32] group-focus:opacity-[0.32] motion-reduce:transition-none"
-                    />
-                    {/* c) Watermark icon with a slow per-topic motion */}
-                    <look.Icon
-                      size={160}
-                      strokeWidth={1}
-                      aria-hidden="true"
-                      className={`eco-motion pointer-events-none absolute -right-6 -bottom-6 text-white opacity-[0.06] motion-reduce:animate-none ${look.motion}`}
-                    />
-                    {/* d) Top sheen */}
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.06),transparent_40%)]"
+                      className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-[rgba(10,14,18,0.55)] to-[rgba(10,14,18,0.85)]"
                     />
 
-                    {/* Stitched seam, sewn round the tile on hover or focus; always shown on touch screens */}
+                    {/* Stitched seam, sewn round the card on hover or focus; always shown on touch screens */}
                     <svg
                       aria-hidden="true"
                       className="pointer-events-none absolute inset-2 z-10 h-[calc(100%-16px)] w-[calc(100%-16px)] overflow-visible"
@@ -1143,42 +751,47 @@ export default function HomePage() {
                       />
                     </svg>
 
-                    {/* Content grows upward from the bottom, never past it */}
-                    <div data-reveal className="relative z-10 flex h-full flex-col p-6 md:p-7">
+                    {/* Top to bottom: index and icon, then the figure and label, then the detail */}
+                    <div className="relative z-10 flex h-full flex-col p-5 md:p-6">
                       <span className="flex items-center justify-between">
-                        <span className="text-[11px] tabular-nums tracking-widest text-white/50">{String(i + 1).padStart(2, "0")}</span>
-                        <span className="grid size-9 place-items-center rounded-xs border border-white/15 bg-white/5 transition-colors duration-300 group-hover:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] group-focus:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] motion-reduce:transition-none">
-                          <look.Icon size={18} strokeWidth={1.5} aria-hidden="true" style={{ color: look.accent }} />
+                        <span className="text-[11px] tabular-nums tracking-widest text-white/60">{String(i + 1).padStart(2, "0")}</span>
+                        <span className="grid size-9 place-items-center rounded-xs border border-white/15 bg-white/5">
+                          <look.Icon size={18} strokeWidth={1.5} aria-hidden="true" className="text-white/80" />
                         </span>
                       </span>
 
-                      <div className="mt-auto pt-8">
+                      <div className="mt-auto">
                         <div className="flex flex-wrap items-baseline gap-x-1.5">
-                          <span className="font-['Fira_Sans_Condensed'] text-[48px] font-black leading-none text-white transition-[text-shadow] duration-500 group-hover:[text-shadow:0_0_24px_color-mix(in_srgb,var(--accent)_35%,transparent)] group-focus:[text-shadow:0_0_24px_color-mix(in_srgb,var(--accent)_35%,transparent)] motion-reduce:transition-none sm:text-[60px]">
-                            {num}
+                          <span className="font-['Fira_Sans_Condensed'] text-[52px] font-black leading-none tabular-nums text-white lg:text-[60px]">
+                            <CountUp text={num} />
                           </span>
-                          {unit && <span className="text-[15px] font-medium text-white/70">{unit}</span>}
+                          {unit && <span className="text-base font-medium text-white/70">{unit}</span>}
                         </div>
+                        {/* The topic's colour, used only here */}
                         <span
                           aria-hidden="true"
-                          className="mt-4 block h-0.5 w-6 bg-(--accent) transition-[width] duration-500 ease-out group-hover:w-12 group-focus:w-12 motion-reduce:transition-none"
+                          className="mt-3 block h-0.5 w-6 origin-left bg-(--accent) transition-transform duration-600 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-200 group-focus:scale-x-200 motion-reduce:transition-none"
                         />
-                        <span className="mt-4 block text-[12px] font-semibold uppercase leading-snug tracking-[0.14em] text-white/75 transition-colors duration-300 group-hover:text-white group-focus:text-white motion-reduce:transition-none">
+                        <span className="mt-3 block text-xs font-semibold uppercase leading-snug tracking-[0.14em] text-white/80">
                           {s.label}
                         </span>
 
-                        {/* Detail: grid rows 0fr → 1fr. The content has a fixed width on
-                            lg, so it doesn't reflow while the tile widens. */}
+                        {/* Compact detail, one line: below lg and on touch screens */}
                         {s.detail && (
-                          <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:grid-rows-[1fr] group-focus:grid-rows-[1fr] group-focus-within:grid-rows-[1fr] motion-reduce:grid-rows-[1fr] motion-reduce:transition-none [@media(hover:none)]:grid-rows-[1fr]">
+                          <p className="mt-2 line-clamp-1 text-sm text-white/85 lg:[@media(hover:hover)]:hidden">{s.detail}</p>
+                        )}
+                        {/* Full detail on the widened card: grid rows 0fr → 1fr, at a
+                            fixed width, so it doesn't reflow while the card widens */}
+                        {s.detail && (
+                          <div className="hidden grid-rows-[0fr] transition-[grid-template-rows] duration-600 ease-[cubic-bezier(.22,1,.36,1)] group-hover:grid-rows-[1fr] group-focus:grid-rows-[1fr] motion-reduce:transition-none lg:[@media(hover:hover)]:grid">
                             <div className="min-h-0 overflow-hidden">
-                              <div className="translate-y-2 pt-4 opacity-0 transition-[opacity,translate] delay-150 duration-500 group-hover:translate-y-0 group-hover:opacity-100 group-focus:translate-y-0 group-focus:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none lg:w-[34ch] [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100 lg:[@media(hover:none)]:w-auto">
-                                <p className="line-clamp-3 text-sm leading-relaxed text-white/85">{s.detail}</p>
+                              <div className="w-[34ch] translate-y-2 pt-3 opacity-0 transition-[opacity,translate] delay-150 duration-500 group-hover:translate-y-0 group-hover:opacity-100 group-focus:translate-y-0 group-focus:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none">
+                                <p className="line-clamp-2 text-sm leading-relaxed text-white/85">{s.detail}</p>
                                 {s.points && (
-                                  <ul className="mt-3 flex flex-col gap-1.5 text-xs text-white/70">
+                                  <ul className="mt-2 flex flex-col gap-1 text-xs text-white/70">
                                     {s.points.slice(0, 2).map((pt) => (
                                       <li key={pt} className="flex gap-2">
-                                        <span aria-hidden="true" className="mt-1.5 size-1 shrink-0 rounded-full bg-(--accent)" />
+                                        <span aria-hidden="true" className="mt-1.5 size-1 shrink-0 rounded-full bg-white/60" />
                                         {pt}
                                       </li>
                                     ))}

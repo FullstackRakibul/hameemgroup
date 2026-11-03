@@ -163,10 +163,6 @@ html.lenis body { height: auto; }
 .font-headline { font-family: "Fira Sans Condensed", sans-serif; }
 
 /* ── Keyframes (can't be inlined via Tailwind) ── */
-@keyframes chainFadeIn {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 @keyframes kenBurns {
   from { transform: scale(1); }
   to { transform: scale(1.12); }
@@ -523,9 +519,6 @@ html.lenis body { height: auto; }
 .wr-place .wr-ring { opacity: 0; transition: opacity 0.2s ease; }
 .wr-place:focus-visible .wr-ring { opacity: 1; }
 
-/* ── Chain / steps accordion ── */
-.step-body { animation: chainFadeIn 0.4s ease both; }
-
 /* ── Stitch scrollbar ── */
 .stitch-track {
   position: fixed;
@@ -561,12 +554,6 @@ html.lenis body { height: auto; }
 .animate-stat-in {
   animation: statIn 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
-/* ── Business card hover ── */
-.biz-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); }
-/* Hover darkens the card so the details that open under the title read */
-.biz-card:hover .biz-overlay { background: linear-gradient(180deg, #11141859, #111418d9); }
-.biz-card:hover .biz-img { transform: scale(1.06); }
-
 /* ── Product list interaction ── */
 .product-btn {
   transition: color 0.25s ease, padding-left 0.25s ease;
@@ -584,16 +571,6 @@ html.lenis body { height: auto; }
   transition: opacity 0.6s ease, transform 0.5s ease;
 }
 
-/* ── Step accordion transitions ── */
-.step-panel {
-  transition: flex 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.step-panel:hover:not(.step-open) { flex: 0 0 15%; }
-.step-panel:hover:not(.step-open) .step-num-text { opacity: 0.5; }
-.step-panel:hover:not(.step-open) .step-vertical {
-  opacity: 0.7;
-  transform: translateX(-50%) rotate(180deg) translateY(-8px);
-}
 /* ── Theme border on buttons ──
    A dashed ring 4px outside pill and round buttons, fading in and settling
    from 96% on hover or focus. --ring is ink on light sections, white on dark. */
@@ -728,8 +705,6 @@ footer[id] { scroll-margin-top: var(--header-h); }
 @media (prefers-reduced-motion: reduce) {
   .hero-slide.active,
   .hero-slide.prev { animation: none; }
-  .biz-card:hover { transform: none; }
-  .biz-card:hover .biz-img { transform: none; }
 }
 
 /* ── Garment icons drifting at the page edges (GarmentBackdrop, Gallery) ── */
@@ -744,15 +719,23 @@ footer[id] { scroll-margin-top: var(--header-h); }
   .garment-float { animation: none; }
 }
 
-/* ── Sustainability cards: watermark motion ── */
-@keyframes ecoSpin { to { transform: rotate(360deg); } }
-@keyframes ecoBob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+/* ── What we do mosaic ──
+   Tiles rise in on entry; on lg each photo drifts 24px with the scroll. The
+   drift tracks its tile (view-timeline --tile, set on the tile): the tile
+   clips the photo, so view() would otherwise measure the photo against the
+   tile itself and never move. */
+@keyframes tileIn { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+@keyframes mosaicParallax {
+  from { translate: 0 -12px; }
+  to { translate: 0 12px; }
 }
-@keyframes ecoFlicker {
-  0%, 100% { opacity: 0.06; }
-  50% { opacity: 0.1; }
+@supports (animation-timeline: view()) {
+  @media (width >= 1024px) and (prefers-reduced-motion: no-preference) {
+    .mosaic-parallax {
+      animation: mosaicParallax linear both;
+      animation-timeline: --tile;
+    }
+  }
 }
 
 /* ── Company section: the thread from the founded badge to the stats ──
@@ -783,7 +766,7 @@ footer[id] { scroll-margin-top: var(--header-h); }
 @media (prefers-reduced-motion: reduce) {
   .orbit-spin, .orbit-counter, .orbit-spin-reverse, .soft-pulse,
   .gallery-marquee, .gallery-in, .gallery-ring, .gallery-spin,
-  .garment-float, .eco-motion,
+  .garment-float,
   [data-opening] .tour-frame, [data-opening] .tour-badge,
   .tour-ripple, .group:hover .tour-draw { animation: none; }
   /* With the animation off the ripple would sit there as a solid disc */
