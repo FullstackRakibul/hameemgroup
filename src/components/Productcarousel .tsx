@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 /* ── Product carousel ──
    A 3D "coverflow" slider: the active card faces forward, its neighbours sit
@@ -495,14 +496,14 @@ function ProductCarousel({
                       {item.text}
                     </p>
                   )}
-                  <a
-                    href={ctaHref}
+                  <Link
+                    to={ctaHref}
                     tabIndex={isActive ? 0 : -1}
                     draggable={false}
                     className="btn-ring [--ring:#fff] inline-block rounded-xs border border-white px-7 py-3.5 text-[11px] font-semibold tracking-widest text-white translate-x-[calc(var(--par-x,0px)*0.18)] translate-y-[calc(var(--par-y,0px)*0.18)] transition-[translate,background-color,color] duration-500 ease-[cubic-bezier(0.2,0.7,0,1)] hover:bg-white hover:text-(--ink)! focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   >
                     {ctaLabel}
-                  </a>
+                  </Link>
                 </div>
               </article>
             );

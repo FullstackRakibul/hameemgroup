@@ -26,19 +26,22 @@ const label = (key: string) => key.charAt(0).toUpperCase() + key.slice(1);
 function Logo() {
   return (
     <Link to="/" className="site-logo flex shrink-0 items-center gap-3" aria-label="Ha-Meem Group — home">
-      <span className="site-logo-stack relative block size-16 lg:size-24">
-        <img
-          src="/hameem-group-logo.svg"
-          alt=""
-          className="site-logo-light absolute inset-0 size-full"
-          draggable={false}
-        />
-        <img
-          src="/hameem-group-logo-blue.svg"
-          alt=""
-          className="site-logo-blue absolute inset-0 size-full"
-          draggable={false}
-        />
+      <img
+        src="/group-logo-circle.png"
+        alt=""
+        width={44}
+        height={44}
+        className="site-logo-mark size-10 shrink-0 rounded-full ring-1 ring-white/35 lg:size-11"
+        draggable={false}
+      />
+      {/* Two-line wordmark: white over the hero, red and navy once the header turns solid */}
+      <span className="flex flex-col leading-none">
+        <span className="site-logo-name whitespace-nowrap font-['Montserrat'] text-base font-extrabold uppercase tracking-[0.04em] transition-colors duration-300 lg:text-[1.05rem]">
+          Ha-Meem
+        </span>
+        <span className="site-logo-group mt-0.75 whitespace-nowrap font-['Montserrat'] text-[0.56rem] font-semibold uppercase tracking-[0.6em] transition-colors duration-300">
+          Group
+        </span>
       </span>
     </Link>
   );

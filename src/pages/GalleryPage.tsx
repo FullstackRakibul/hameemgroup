@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Play, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import Eyebrow from "../components/Eyebrow";
 import usePageMeta from "../components/usePageMeta";
 import { scrollToTarget } from "../lib/scroll";
@@ -341,8 +342,8 @@ export default function GalleryPage() {
             <p className="mx-auto mt-head-intro max-w-[42ch] text-pretty text-white/85 [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
               From yarn and denim to sewing, washing and shipping: a look inside the factories, mills and people behind Ha-Meem Group.
             </p>
-            <a
-              href="#film"
+            <Link
+              to="#film"
               onClick={(e) => {
                 e.preventDefault();
                 scrollToId("film");
@@ -351,7 +352,7 @@ export default function GalleryPage() {
             >
               <Play size={14} strokeWidth={1.75} fill="currentColor" aria-hidden="true" />
               Watch the film
-            </a>
+            </Link>
             <p className="mt-8 text-xs uppercase tracking-[0.14em] text-white/70">
               {GALLERY_CATEGORIES.map((c, i) => (
                 <span key={c}>

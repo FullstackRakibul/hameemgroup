@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&family=Fira+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&family=Fira+Sans:wght@400;500;600;700&family=Montserrat:wght@600;800&display=swap");
 @import "tailwindcss";
 
 /* ── Brand tokens ── */
@@ -214,24 +214,25 @@ html.lenis body { height: auto; }
    drop shadow gives way to the sheet's, which sits under the whole thing. */
 .header-wrapper.is-mega-open { box-shadow: none; }
 
-/* Logo lockup: the white mark over the hero cross-fades to the blue one as
-   soon as the header goes white (scrolled, mega or mobile menu open), and on
-   light-hero pages it starts blue. Both sit in the same square, so the swap is
-   an opacity fade with no layout shift. */
-.site-logo-stack { transition: transform 0.25s ease; }
-.site-logo:hover .site-logo-stack,
-.site-logo:focus-visible .site-logo-stack { transform: translateY(-1px); }
-.site-logo-light,
-.site-logo-blue { transition: opacity 0.25s ease; }
-.site-logo-blue { opacity: 0; }
-.is-solid .site-logo-light { opacity: 0; }
-.is-solid .site-logo-blue { opacity: 1; }
-[data-light-hero] .header-wrapper:not(.is-solid) .site-logo-light { opacity: 0; }
-[data-light-hero] .header-wrapper:not(.is-solid) .site-logo-blue { opacity: 1; }
+/* Logo lockup: the round mark plus a two-line "HA-MEEM / GROUP" wordmark.
+   The words are white over the hero and turn red and navy as soon as the
+   header goes white (scrolled, mega or mobile menu open); light-hero pages
+   start in red and navy. */
+.site-logo-mark { transition: transform 0.25s ease; }
+.site-logo:hover .site-logo-mark,
+.site-logo:focus-visible .site-logo-mark { transform: translateY(-1px); }
+.is-solid .site-logo-mark,
+[data-light-hero] .header-wrapper:not(.is-solid) .site-logo-mark { --tw-ring-color: var(--hair); }
+.site-logo-name { color: #fff; }
+.site-logo-group { color: rgb(255 255 255 / 0.85); }
+.is-solid .site-logo-name,
+[data-light-hero] .header-wrapper:not(.is-solid) .site-logo-name { color: var(--red); }
+.is-solid .site-logo-group,
+[data-light-hero] .header-wrapper:not(.is-solid) .site-logo-group { color: var(--navy); }
 .site-logo:focus-visible { outline: 2px solid var(--navy); outline-offset: 4px; border-radius: 4px; }
 @media (prefers-reduced-motion: reduce) {
-  .site-logo:hover .site-logo-stack,
-  .site-logo:focus-visible .site-logo-stack { transform: none; }
+  .site-logo:hover .site-logo-mark,
+  .site-logo:focus-visible .site-logo-mark { transform: none; }
 }
 
 /* Nav labels */

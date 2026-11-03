@@ -1,5 +1,5 @@
-import { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
-import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import { useState, useEffect, useLayoutEffect, useRef, useCallback, Suspense } from "react";
+import { HashRouter, Outlet, useLocation, useRoutes } from "react-router-dom";
 import Preloader from "./Preloader";
 import { whenHeroReady } from "./lib/heroReady";
 import SiteHeader from "./SiteHeader";
@@ -12,20 +12,7 @@ import { AiAssistant } from "./features/ai-assistant";
 import { megaMenuData } from "./data/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/AboutPage";
-import MerchandisingPage from "./pages/MerchandisingPage";
-import CustomersPage from "./pages/CustomersPage";
-import ContactPage from "./pages/ContactPage";
-import WovenPage from "./pages/WovenPage";
-import DenimMillPage from "./pages/DenimMillPage";
-import LaundryPage from "./pages/LaundryPage";
-import SweaterPage from "./pages/SweaterPage";
-import DesignStudioPage from "./pages/DesignStudioPage";
-import EmbroideryPage from "./pages/EmbroideryPage";
-import AncillaryPage from "./pages/AncillaryPage";
-import GalleryPage from "./pages/GalleryPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import routes from "./router/routes";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -72,8 +59,9 @@ const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)"
 
 /* On every navigation: a #section scrolls into view once it has rendered
    (smoothly within the same page); a new page starts at the top, instantly,
-   with focus on its h1. The first load is left to the browser. */
-function RouteEffects() {
+   with focus on its h1. The first load is left to the browser. Waits until
+   the page for this location has rendered (ready). */
+function RouteEffects({ ready }: { ready: boolean }) {
   const location = useLocation();
   const lastKey = useRef<string | null>(null);
   const lastPath = useRef(location.pathname);
@@ -82,7 +70,7 @@ function RouteEffects() {
 
   useLayoutEffect(() => {
     // StrictMode runs this twice for one location; act once.
-    if (lastKey.current === location.key) return;
+    if (!ready || lastKey.current === location.key) return;
     const firstLoad = lastKey.current === null;
     const samePage = !firstLoad && lastPath.current === location.pathname;
     lastKey.current = location.key;
@@ -112,8 +100,19 @@ function RouteEffects() {
     if (firstLoad) return;
     scrollToTarget(0, { offset: 0, immediate: true });
     document.querySelector<HTMLElement>("main h1")?.focus({ preventScroll: true });
-  }, [location.key, location.hash, location.pathname]);
+  }, [ready, location.key, location.hash, location.pathname]);
 
+  return null;
+}
+
+/* Sits beside the lazy page inside its Suspense boundary, so its layout effect
+   runs only once that page's DOM exists, and reports the path it rendered.
+   Link clicks keep the old page up until the next chunk arrives, but a
+   hashchange or back/forward to a page not yet loaded renders the fallback
+   first; this is what tells the Shell when the page has caught up. */
+function PageReady({ onReady }: { onReady: (pathname: string) => void }) {
+  const { pathname } = useLocation();
+  useLayoutEffect(() => onReady(pathname), [pathname, onReady]);
   return null;
 }
 
@@ -123,6 +122,8 @@ function Shell() {
   const [loading, setLoading] = useState(() => !preloaderSeen());
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [renderedPath, setRenderedPath] = useState<string | null>(null);
+  const pageReady = renderedPath === pathname;
 
   // The preloader plays once per browser session, never on route changes. It
   // ends when its own timeline does (onDone) and the fonts are ready, whichever
@@ -139,6 +140,7 @@ function Shell() {
     }
   }, []);
 
+
   useEffect(() => {
     if (!loading) return;
     const safety = setTimeout(finishPreloader, 5500);
@@ -154,6 +156,7 @@ function Shell() {
     };
   }, [loading, finishPreloader]);
 
+  
   // onDone from the timeline, held until the fonts have loaded and, on the
   // home page, until the hero's first slide (a video) can paint. The 5.5s net
   // above still applies, so a slow or missing file only delays the reveal: it
@@ -182,7 +185,7 @@ function Shell() {
   // element afterwards, so it creates no containing block once it lands.
   const pageRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    if (loading || reducedMotion() || !pageRef.current?.animate) return;
+    if (loading || !pageReady || reducedMotion() || !pageRef.current?.animate) return;
     const anim = pageRef.current.animate(
       [
         { opacity: 0, transform: "translateY(12px)" },
@@ -191,9 +194,9 @@ function Shell() {
       { duration: 450, easing: "cubic-bezier(0.22, 0.61, 0.36, 1)" },
     );
     return () => anim.cancel();
-  }, [pathname, loading]);
+  }, [pathname, loading, pageReady]);
 
-  useReveal(pathname, !loading);
+  useReveal(pathname, !loading && pageReady);
 
   const scrollToTop = () => scrollToTarget(0, { offset: 0, immediate: reducedMotion() });
 
@@ -201,7 +204,7 @@ function Shell() {
     <>
       {loading && <Preloader onDone={onPreloaderDone} />}
       <SmoothScroll />
-      <RouteEffects />
+      <RouteEffects ready={pageReady} />
 
       <StitchScrollbar progress={scrollProgress} />
 
@@ -226,7 +229,10 @@ function Shell() {
         <div ref={pageRef} className="page">
           <main>
             <GarmentBackdrop />
-            <Outlet />
+            <Suspense fallback={null}>
+              <Outlet />
+              <PageReady onReady={setRenderedPath} />
+            </Suspense>
           </main>
           <SiteFooter />
         </div>
@@ -235,27 +241,17 @@ function Shell() {
   );
 }
 
+// Every page renders inside the Shell layout; built once, outside render.
+const appRoutes = [{ element: <Shell />, children: routes }];
+
+function AppRoutes() {
+  return useRoutes(appRoutes);
+}
+
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<Shell />}>
-          <Route index element={<HomePage />} />
-          <Route path="about" element={<AboutPage />} />
-          <Route path="merchandising" element={<MerchandisingPage />} />
-          <Route path="customers" element={<CustomersPage />} />
-          <Route path="contact" element={<ContactPage />} />
-          <Route path="businesses/woven" element={<WovenPage />} />
-          <Route path="businesses/denim-mill" element={<DenimMillPage />} />
-          <Route path="businesses/laundry" element={<LaundryPage />} />
-          <Route path="businesses/sweater" element={<SweaterPage />} />
-          <Route path="businesses/design-studio" element={<DesignStudioPage />} />
-          <Route path="businesses/embroidery-printing-accessories" element={<EmbroideryPage />} />
-          <Route path="businesses/ancillary" element={<AncillaryPage />} />
-          <Route path="gallery" element={<GalleryPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <HashRouter>
+      <AppRoutes />
+    </HashRouter>
   );
 }
