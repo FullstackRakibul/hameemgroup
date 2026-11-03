@@ -61,8 +61,8 @@ export default function ChatPanel(props: ChatPanelProps) {
         else
           gsap.fromTo(
             panel,
-            { opacity: 0, scale: 0.96, y: 16, transformOrigin: "bottom right" },
-            { opacity: 1, scale: 1, y: 0, duration: 0.32, ease: "power3.out" },
+            { opacity: 0, scale: 0.96, transformOrigin: "bottom right" },
+            { opacity: 1, scale: 1, duration: 0.25, ease: "power3.out" },
           );
       });
     }, panel);
@@ -90,7 +90,7 @@ export default function ChatPanel(props: ChatPanelProps) {
       ? { opacity: 0, duration: 0.12 }
       : mobile
         ? { yPercent: 100, duration: 0.2, ease: "power2.in" }
-        : { opacity: 0, scale: 0.96, y: 16, transformOrigin: "bottom right", duration: 0.2, ease: "power2.in" };
+        : { opacity: 0, scale: 0.96, transformOrigin: "bottom right", duration: 0.2, ease: "power2.in" };
     const run = () => gsap.to(panel, { ...vars, overwrite: true, onComplete: done });
     if (ctxRef.current) ctxRef.current.add(run);
     else run();
@@ -178,6 +178,13 @@ export default function ChatPanel(props: ChatPanelProps) {
       aria-labelledby={nameId}
       aria-modal={isMobile ? true : undefined}
     >
+      {/* The bottom sheet's grab handle */}
+      {isMobile && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-2 z-10 h-1 w-10 -translate-x-1/2 rounded-xs bg-white/50"
+        />
+      )}
       <PanelHeader nameId={nameId} compact={hasUserMessages} onCall={props.onCall} onClose={() => close()} />
 
       <div className="hm-assist-scroll-wrap">

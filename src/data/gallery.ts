@@ -1,3 +1,5 @@
+import { VIDEOS } from "./videos";
+
 /* ── Gallery page ──
    `src` is a path under /media/, as the file is named on disk. `width`/`height`
    are the image's real pixel size, used to reserve space before it loads. */
@@ -27,14 +29,14 @@ export const GALLERY: GalleryItem[] = [
    shows while the file loads, and stands in for the video entirely on small
    screens and for reduced motion. */
 export const GALLERY_HERO_VIDEO = {
-  src: "https://api.hameemgroup.com:9012/Resources/Videos/gallery-main.mp4",
-  poster: "gallery/chain-sewing.jpg",
+  src: VIDEOS.campus.src,
+  poster: VIDEOS.campus.poster,
 };
 
 export const GALLERY_VIDEO = {
-  src: "https://api.hameemgroup.com:9012/Resources/hameem-group-website/RFIDDIGITALVIDEO.mp4",
+  src: VIDEOS.rfid.src,
   title: "RFID-tracked production, end to end",
-  poster: "gallery/chain-wash.jpg",
+  poster: VIDEOS.rfid.poster,
 };
 
 /* ── 360° VR tours ──

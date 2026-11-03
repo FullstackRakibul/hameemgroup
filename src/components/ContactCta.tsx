@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { CONTACT_VIDEO, EMAIL } from "../data/facts";
+import { canPlayBackgroundVideo } from "../lib/videoPolicy";
 import Eyebrow from "./Eyebrow";
 
 const pill =
@@ -15,14 +16,7 @@ export default function ContactCta({ id }: { id?: string }) {
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    const wide = window.matchMedia("(min-width: 768px)").matches;
-    const calm = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // Chrome-only, hence the cast; absent elsewhere, which counts as fine.
-    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-    const fast = !conn?.saveData && !/2g/.test(conn?.effectiveType ?? "");
-    setShowVideo(wide && calm && fast);
-  }, []);
+  useEffect(() => setShowVideo(canPlayBackgroundVideo()), []);
 
   // This band closes the page, so the file is only fetched once it comes into
   // view, and playback stops again when it leaves.

@@ -9,17 +9,14 @@ import Productcarousel from "../components/Productcarousel ";
 import Eyebrow from "../components/Eyebrow";
 import SectionHeader from "../components/SectionHeader";
 import BuyerGrid from "../components/BuyerGrid";
-import AwardSlider from "../components/AwardSlider";
+import AwardShowcase from "../components/AwardShowcase";
 import SmartLink from "../components/SmartLink";
 import ContactCta from "../components/ContactCta";
-import GarmentIcons from "../components/GarmentIcons";
-import FoundedOrbit from "../components/FoundedOrbit";
+import CompanySection from "../components/CompanySection";
 import PeopleSection from "../components/PeopleSection";
 import usePageMeta from "../components/usePageMeta";
 import {
-  CERTIFICATIONS,
   F,
-  GROUP_STATS,
   SOCIAL_LINKS,
   SUSTAINABILITY_STATS,
   VIRTUAL_TOUR_URL,
@@ -27,6 +24,7 @@ import {
 } from "../data/facts";
 import { NEWS, type NewsItem } from "../data/news";
 import { GALLERY_VIDEO } from "../data/gallery";
+import { VIDEOS } from "../data/videos";
 
 const media = "/media/";
 
@@ -45,10 +43,10 @@ export const HOME_DESCRIPTION = `Ha-Meem Group is a leading wholesale clothing m
 
 /* ── Data ── */
 const heroSlides = [
-  { src: "https://api.hameemgroup.com:9012/Resources/Videos/ccl.mp4", alt: "Long rows of looms weaving indigo denim" },
+  { src: VIDEOS.looms.src, alt: "Long rows of looms weaving indigo denim" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00051.jpeg", alt: "Long rows of looms weaving indigo denim" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00052.jpeg", alt: "Rolls of indigo denim fabric" },
-  { src: "https://api.hameemgroup.com:9012/Resources/Videos/laser-01.mp4", alt: "Ha-Meem Group manufacturing facility" },
+  { src: VIDEOS.laser.src, alt: "Ha-Meem Group manufacturing facility" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00053.jpeg", alt: "Sewing floor at Ha-Meem garment factory" },
   { src: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/mainBannerImage00054.jpeg", alt: "Ha-Meem Group manufacturing facility" },
 ];
@@ -423,6 +421,7 @@ export default function HomePage() {
           if the copy needs it: the copy sits in flow at the foot. */}
       <section
         id="top"
+        data-hero
         className="relative flex min-h-svh flex-col justify-end overflow-hidden text-white bg-(--ink) [--ring:#fff]"
       >
         {/* Isolated, so the slides' z-index stays under the shade layers */}
@@ -548,7 +547,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              {/* Clear of the floating dock (assistant, back-to-top): where the
+                  page gutter is narrower than the dock, the buttons step left */}
+              <div className="flex items-center gap-3 pr-[max(0px,calc(var(--dock-safe)-var(--gutter)))]">
                 {[
                   { id: "prev", label: "Previous slide", onClick: prevSlide, icon: <ChevronLeft size={18} strokeWidth={1.75} aria-hidden="true" className="group-hover:-translate-x-0.5 transition-transform duration-300 motion-reduce:transition-none" /> },
                   {
@@ -582,118 +583,7 @@ export default function HomePage() {
       {/* ═══ RAISED CONTENT ═══ */}
       <div className="relative z-3 shadow-[0_-35px_70px_#00000040]">
         {/* ── FOUNDED IN 1984 ── */}
-        <section id="company" className="relative bg-(--mist) section-y">
-          <GarmentIcons />
-          {/* Faint dot grid */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--hair)_1px,transparent_1px)] bg-size-[24px_24px] opacity-60" />
-          {/* Selvedge: the red-line edge of a roll of denim, with a stitch just inside it */}
-          <div aria-hidden="true" className="absolute inset-x-0 top-0">
-            <div className="h-1 bg-(--navy)" />
-            <div className="mt-2 border-t border-dashed border-(--ink)/25" />
-          </div>
-
-          <div className="wrap relative z-10">
-            {/* Founded orbit beside the statement; stacked and centred below lg */}
-            <div className="grid gap-head-eyebrow lg:grid-cols-[320px_1fr] lg:items-center lg:gap-12">
-              <div data-reveal className="flex justify-center">
-                <FoundedOrbit />
-              </div>
-
-              {/* The lead statement: a paragraph, not a heading. Label and
-                  sentences fade up one after another. */}
-              <p data-reveal-stagger className="max-w-[60ch] font-['Fira_Sans_Condensed'] text-lead font-bold leading-tight text-left text-pretty lg:max-w-[34ch]">
-                <span className="mb-4 flex items-center gap-3 font-sans text-xs font-semibold tracking-[0.18em] text-(--navy)">
-                  <span aria-hidden="true" className="h-0.5 w-6 bg-(--navy)" />
-                  ABOUT THE GROUP
-                </span>
-                <span className="block text-(--ink)">
-                  <span className="text-(--navy)">Ha-Meem Group</span> is one of Bangladesh&apos;s largest{" "}
-                  {/* Soft highlight plus red topstitch under the key phrase */}
-                  <span className="box-decoration-clone bg-[repeating-linear-gradient(90deg,var(--navy)_0_7px,transparent_7px_11px),linear-gradient(transparent_60%,color-mix(in_srgb,var(--navy)_12%,transparent)_60%)] bg-size-[100%_2px,100%_100%] bg-position-[bottom_left,0_0] bg-no-repeat pb-0.5">
-                    vertically integrated
-                  </span>{" "}
-                  apparel manufacturers.
-                </span>
-                <span className="mt-2 block font-semibold text-(--mute)">
-                  From our own yarn and denim to sewing, washing, trims and
-                  shipping, we make bottoms, tops, denim and sweaters for the
-                  world&apos;s leading retailers.
-                </span>
-              </p>
-            </div>
-
-            {/* The group at a glance. Hairline grid: the 1px gaps show the
-                container's tint, so rows and columns line up on every width. */}
-            <ul data-reveal-stagger className="mt-section-head grid grid-cols-2 gap-px overflow-hidden rounded-sm border border-(--hair) bg-(--hair) lg:grid-cols-3">
-              {GROUP_STATS.map((s, i) => (
-                <li
-                  key={s.label}
-                  className="group relative flex flex-col bg-white/90 backdrop-blur-[2px] px-4 py-7 transition-colors duration-300 hover:bg-(--mist) motion-reduce:transition-none sm:px-6 md:px-8 md:py-10"
-                >
-                  {/* Stitched seam, sewn round the tile on hover; always shown on touch screens */}
-                  <svg
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-2 h-[calc(100%-16px)] w-[calc(100%-16px)] overflow-visible"
-                  >
-                    <defs>
-                      <mask id={`company-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
-                        <rect
-                          x="0"
-                          y="0"
-                          width="100%"
-                          height="100%"
-                          pathLength={1}
-                          fill="none"
-                          stroke="white"
-                          strokeWidth="6"
-                          className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-900 motion-reduce:transition-none [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
-                        />
-                      </mask>
-                    </defs>
-                    <rect
-                      x="0"
-                      y="0"
-                      width="100%"
-                      height="100%"
-                      fill="none"
-                      strokeOpacity="0.4"
-                      strokeWidth="1.5"
-                      strokeDasharray="8 6"
-                      className="stroke-(--ink)"
-                      mask={`url(#company-stitch-${i})`}
-                    />
-                  </svg>
-
-                  {/* The tile stays; its content reveals, so the hairlines never show through */}
-                  <div data-reveal className="flex flex-col">
-                    {/* Figure, with a tag-style index in the corner */}
-                    <span className="flex items-start justify-between gap-3">
-                      <b className="font-['Fira_Sans_Condensed'] text-[38px] font-black leading-none text-(--ink) transition-colors duration-300 group-hover:text-(--navy) sm:text-[46px] md:text-[56px]">
-                        {s.value}
-                      </b>
-                      <span className="pt-1 text-[11px] font-semibold tabular-nums tracking-widest text-(--mute)">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </span>
-                    {/* Red rule that stretches on hover, as on the business cards */}
-                    <span
-                      aria-hidden="true"
-                      className="mt-5 h-0.5 w-6 bg-(--navy) transition-[width] duration-500 ease-out group-hover:w-12 motion-reduce:transition-none"
-                    />
-                    <span className="mt-4 text-[10px] font-semibold tracking-[0.14em] text-(--navy) sm:text-[11px]">
-                      {s.label}
-                    </span>
-                    {s.sub && (
-                      <span className="mt-2 text-[13px] leading-snug text-(--mute) transition-colors duration-300 group-hover:text-(--ink) sm:text-sm">
-                        {s.sub}
-                      </span>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+        <CompanySection />
 
         {/* ── WHERE WE ARE ── */}
         <section className="relative overflow-hidden border-t border-(--hair) bg-white section-y">
@@ -1117,8 +1007,6 @@ export default function HomePage() {
         </section>
 
         {/* ── RECOGNITION & AWARDS ── */}
-        {/* Brand palette for this section: navy primary, brown accent. The
-            eyebrow and other red accents inside pick up the navy. */}
         <section id="recognition" className="relative isolate bg-white section-y">
           <div className="wrap">
             <SectionHeader
@@ -1138,32 +1026,7 @@ export default function HomePage() {
                 <span> since 2009.</span>
               </p>
             </SectionHeader>
-            {/* The slider and certifications keep the award palette; it no
-                longer reaches the header, which matches every other section. */}
-            <div className="[--primary:#142E53] [--accent:#3A1C14] [--navy:var(--primary)]">
-            <AwardSlider className="mt-section-head" />
-            {/* Accreditations & certifications */}
-            <div className="border-t border-(--hair) mt-8 pt-8 grid  gap-4">
-              {/* <Eyebrow>
-                Accreditations &amp; certifications<sup className="text-(--navy)">*</sup>
-              </Eyebrow> */}
-              <div className="flex flex-wrap gap-3">
-                {CERTIFICATIONS.map((c) => (
-                  <span
-                    key={c.abbr}
-                    className="bg-white border border-(--hair) rounded-xs px-4 py-2.5 text-(--mute) text-xs"
-                  >
-                    <b className="text-(--ink) mr-2 font-semibold">{c.abbr}</b>
-                    {c.name}
-                  </span>
-                ))}
-                <span className="bg-white border border-(--hair) rounded-xs px-4 py-2.5 text-(--mute) text-xs">
-                  <b className="text-(--ink) mr-2 font-semibold">LAB</b>
-                  {F.laboratory}
-                </span>
-              </div>
-            </div>
-            </div>
+            <AwardShowcase className="mt-section-head" />
           </div>
         </section>
 

@@ -3,6 +3,8 @@
    Order of authority: current company figures win; 2018-site details fill
    gaps; anything else is not written. Change a figure here, nowhere else. */
 
+import { VIDEOS, type VideoId } from "./videos";
+
 export const POSITIONING = "Leading wholesale clothing manufacturer in Bangladesh";
 
 export const F = {
@@ -156,19 +158,28 @@ export const CERTIFICATIONS = [
 ];
 
 /* ── Stat rows ── */
-export type Stat = { value: string; label: string; sub?: string; detail?: string; points?: string[] };
+export type Stat = {
+  value: string;
+  label: string;
+  sub?: string;
+  detail?: string;
+  points?: string[];
+  /** The film behind this stat in the About stats band (placeholders for now) */
+  video?: VideoId;
+};
 
 /** The group at a glance: homepage stats row and the About page. */
 export const GROUP_STATS: Stat[] = [
-  { value: F.established, label: "ESTABLISHED", sub: "Founded as one garment factory in Dhaka" },
-  { value: F.factories, label: "FACTORIES", sub: `Garment factories in ${F.locations} locations` },
-  { value: F.employees, label: "EMPLOYEES", sub: "Working across the group" },
-  { value: F.revenue, label: "YEARLY REVENUE", sub: "Across the group" },
-  { value: F.garmentsYear, label: "GARMENTS A YEAR", sub: "Readymade garments, infant to adult" },
+  { value: F.established, label: "ESTABLISHED", sub: "Founded as one garment factory in Dhaka", video: "textile" },
+  { value: F.factories, label: "FACTORIES", sub: `Garment factories in ${F.locations} locations`, video: "campus" },
+  { value: F.employees, label: "EMPLOYEES", sub: "Working across the group", video: "rfid" },
+  { value: F.revenue, label: "YEARLY REVENUE", sub: "Across the group", video: "looms" },
+  { value: F.garmentsYear, label: "GARMENTS A YEAR", sub: "Readymade garments, infant to adult", video: "campus" },
   {
     value: F.washYear,
     label: "WASH CAPACITY A YEAR",
     sub: `Across ${F.washingPlantsWord} washing plants, ${F.laserMachines} laser machines`,
+    video: "laser",
   },
 ];
 
@@ -207,6 +218,7 @@ export type PeopleProgram = {
   title: string;
   summary: string;
   points: string[];
+  tag: string;
   image: string;
   imageAlt: string;
 };
@@ -215,8 +227,8 @@ export type PeopleProgram = {
    it: it shows while the file loads, and stands in for the video on small
    screens and for reduced motion. */
 export const CONTACT_VIDEO = {
-  src: "https://api.hameemgroup.com:9012/Resources/Videos/texttile-qwill-01.mp4",
-  poster: "cine/fabric.jpg",
+  src: VIDEOS.textile.src,
+  poster: VIDEOS.textile.poster,
 };
 
 export const PEOPLE_PROGRAMS: PeopleProgram[] = [
@@ -225,6 +237,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
     title: "Schools we founded",
     summary: "The group has established schools for its workers' children and the wider community.",
     points: ["M. A. Aziz High School", "M. A. Aziz Primary School", "Nurul Islam High School", "Refat Kowmi Madrasa"],
+    tag: "Education",
     image: "biz/gate.jpg",
     imageAlt: "Entrance to a Ha-Meem campus",
   },
@@ -233,6 +246,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
     title: "Scholarships",
     summary: "Ha-Meem Group funds scholarships for its workers' children.",
     points: ["For workers' children", "Funded by the group"],
+    tag: "Education",
     image: "people-knit.jpg",
     imageAlt: "A knitting technician programming a Stoll machine",
   },
@@ -241,6 +255,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
     title: "Dreams Beyond the Factory Floor",
     summary: "A higher-education pathway with the Asian University for Women.",
     points: ["Partnership with the Asian University for Women"],
+    tag: "Higher education",
     image: "chain-sewing.jpg",
     imageAlt: "Sewing line at a Ha-Meem factory",
   },
@@ -249,6 +264,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
     title: "Careers & universities",
     summary: "We take part in career fairs and work with clubs at universities across Bangladesh.",
     points: ["University career fairs", "Student clubs and programmes"],
+    tag: "Careers",
     image: "cine/sewing.jpg",
     imageAlt: "Workers on a production floor",
   },
@@ -262,6 +278,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
       "Organic raw materials: fewer pesticides, less water",
       "Tree plantation drives across the country",
     ],
+    tag: "Environment",
     image: "sustain-campus.jpg",
     imageAlt: "Green campus of Ha-Meem Textiles at Mawna, Bangladesh",
   },

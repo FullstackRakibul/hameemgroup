@@ -1,5 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback, Suspense } from "react";
 import { HashRouter, Outlet, useLocation, useRoutes } from "react-router-dom";
+import { ArrowUp } from "lucide-react";
 import Preloader from "./Preloader";
 import { whenHeroReady } from "./lib/heroReady";
 import SiteHeader from "./SiteHeader";
@@ -208,13 +209,36 @@ function Shell() {
 
       <StitchScrollbar progress={scrollProgress} />
 
+      {/* Back to top: the upper slot of the floating dock, right above the
+          assistant's launcher. A thin navy ring shows how far down the page
+          is. It steps aside while the assistant's greeting or panel is up, or
+          a header menu is open, so the dock is never three items tall. */}
       <button
-        className={`back-to-top ${showBackToTop ? "visible" : ""}`}
+        type="button"
         onClick={scrollToTop}
         aria-label="Back to top"
+        aria-hidden={!showBackToTop || undefined}
         tabIndex={showBackToTop ? 0 : -1}
+        className={`group fixed right-(--dock-gap) bottom-[calc(var(--dock-gap)+var(--dock-size)+12px+env(safe-area-inset-bottom))] z-1000 grid size-(--dock-size) place-items-center rounded-full transition-[opacity,translate] duration-300 ease-out motion-reduce:transition-opacity [body:has(.hm-assist-teaser,.hm-assist-panel,.is-mobile-open,.is-mega-open)_&]:pointer-events-none [body:has(.hm-assist-teaser,.hm-assist-panel,.is-mobile-open,.is-mega-open)_&]:opacity-0 focus-visible:outline-none ${
+          showBackToTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0 motion-reduce:translate-y-0"
+        }`}
       >
-        ↑
+        <span className="grid size-11 place-items-center rounded-full border border-(--hair) bg-white text-(--ink) shadow-[0_4px_14px_-6px_rgba(17,20,24,0.25)] transition-transform duration-200 group-hover:-translate-y-0.5 group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-(--navy) motion-reduce:transition-none">
+          <ArrowUp size={18} strokeWidth={1.75} aria-hidden="true" />
+        </span>
+        <svg aria-hidden="true" viewBox="0 0 52 52" className="pointer-events-none absolute size-13 -rotate-90">
+          <circle
+            cx="26"
+            cy="26"
+            r="25"
+            fill="none"
+            stroke="var(--navy)"
+            strokeWidth="1.5"
+            pathLength={1}
+            strokeDasharray="1"
+            strokeDashoffset={1 - scrollProgress}
+          />
+        </svg>
       </button>
       {!loading && <AiAssistant />}
 

@@ -1,5 +1,5 @@
 type AvatarProps = {
-  size: 56 | 36 | 32;
+  size: 56 | 36 | 32 | 24;
   /** Green "online" dot at the bottom right. */
   online?: boolean;
 };
