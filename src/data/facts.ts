@@ -67,6 +67,12 @@ export const splitUnit = (figure: string): [string, string] => {
    set of four tours lives in VR_TOURS in ./gallery. */
 export const VIRTUAL_TOUR_URL = "https://hameemgroup.net/360vr.html";
 export const DENIM_SITE_URL = "";
+/* The group's social channels; a tile shows only once its href is filled in. */
+export const SOCIAL_LINKS: { label: "YouTube" | "LinkedIn" | "Facebook"; href: string }[] = [
+  { label: "YouTube", href: "" },
+  { label: "LinkedIn", href: "" },
+  { label: "Facebook", href: "" },
+];
 
 /* ── Head office and enquiries ── */
 export const HEAD_OFFICE = {

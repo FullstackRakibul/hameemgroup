@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
-import type { CSSProperties } from "react";
-import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, Droplets, Pause, Play, Recycle, Sun, Zap } from "lucide-react";
+import type { CSSProperties, ReactNode } from "react";
+import { ArrowUpRight, Building2, ChevronDown, ChevronLeft, ChevronRight, Droplets, Newspaper, Pause, Play, Recycle, Sun, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { markHeroReady } from "../lib/heroReady";
 import WorldRoutes from "../WorldRoutes";
@@ -20,10 +20,13 @@ import {
   CERTIFICATIONS,
   F,
   GROUP_STATS,
+  SOCIAL_LINKS,
   SUSTAINABILITY_STATS,
   VIRTUAL_TOUR_URL,
   splitUnit,
 } from "../data/facts";
+import { NEWS, type NewsItem } from "../data/news";
+import { GALLERY_VIDEO } from "../data/gallery";
 
 const media = "/media/";
 
@@ -194,34 +197,89 @@ const businesses = [
   },
 ];
 
-const newsItems = [
-  {
-    cat: "TEXTILES",
-    date: "1 SEP 2025",
-    title: "Ha-Meem opens a new yarn-dyeing plant at Sreepur, Gazipur",
-    img: "news-yarn.jpg",
-    // Original report not found yet: the card shows without a link until one is added.
-    url: "",
-    source: "",
-  },
-  {
-    cat: "SUSTAINABILITY",
-    date: "2 FEB 2025",
-    title: "A 4.4 MWp rooftop plant takes group solar capacity to 12.2 MWp",
-    img: "biz/textiles.jpg",
-    url: "https://www.thedailystar.net/business/news/ha-meem-group-installs-44mwp-rooftop-solar-power-plant-3814796",
-    source: "The Daily Star",
-  },
-  {
-    cat: "RECOGNITION",
-    date: "NOV 2023",
-    title:
-      "Refat Garments receives the Bangabandhu Sheikh Mujib Export Trophy for FY2020-21",
-    img: "chain-sewing.jpg",
-    url: "https://www.tbsnews.net/bangladesh/73-businesses-receive-national-export-trophy-735806",
-    source: "The Business Standard",
-  },
+/* ── Newsroom bento ── */
+
+// Figure tiles: values straight from F, labels written for the newsroom
+const NEWS_FIGURES: [string, string][] = [
+  [F.solar, "Solar capacity"],
+  [F.waterRecycling, "Water recycled"],
+  [F.powerCogeneration, "Power co-generation"],
+  [F.fiberRecyclingDay, "Fibre recycled a day"],
 ];
+
+// lucide has no brand logos, so the social tiles carry the name in the brand colour
+const SOCIAL_COLOR: Record<(typeof SOCIAL_LINKS)[number]["label"], string> = {
+  YouTube: "#ff0000",
+  LinkedIn: "#0a66c2",
+  Facebook: "#1877f2",
+};
+
+// Every tile: a 4px card with a hairline border
+const tileClass = "rounded-sm border border-(--hair)";
+// Tiles that are links lift 2px and take a navy edge on hover or keyboard focus
+const liftClass =
+  "transition-[translate,border-color] duration-300 hover:-translate-y-0.5 hover:border-(--navy)/30 focus-visible:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:focus-visible:translate-y-0";
+// Story photos rest in grey and take their colour on hover; touch screens always see colour
+const photoToneClass =
+  "grayscale-[85%] transition-[filter] duration-700 group-hover:grayscale-0 group-focus-visible:grayscale-0 motion-reduce:transition-none [@media(hover:none)]:grayscale-0";
+
+/** The title with its highlight phrase wrapped in a <mark>; the plain title if the phrase is missing.
+    Each line's block would paint over the descenders of the line above, so the
+    words sit in relative spans, which paint after every background. Short
+    phrases ("12.2 MWp") stay on one line. */
+function withHighlight(title: string, phrase: string | undefined, markClass: string) {
+  const at = phrase ? title.indexOf(phrase) : -1;
+  if (!phrase || at < 0) return title;
+  return (
+    <>
+      <span className="relative">{title.slice(0, at)}</span>
+      <mark className={`box-decoration-clone text-inherit ${phrase.length <= 16 ? "whitespace-nowrap" : ""} ${markClass}`}>
+        <span className="relative">{phrase}</span>
+      </mark>
+      <span className="relative">{title.slice(at + phrase.length)}</span>
+    </>
+  );
+}
+
+/** Category and date (or date and category) in one small row */
+function StoryMeta({ story, dateFirst = false }: { story: NewsItem; dateFirst?: boolean }) {
+  const cat = <span className="text-(--navy)">{story.cat}</span>;
+  const date = <span className="text-(--mute)">{story.date}</span>;
+  return (
+    <p className="text-[11px] font-semibold uppercase tracking-widest">
+      {dateFirst ? date : cat}
+      <span aria-hidden="true" className="mx-2 text-(--mute)">·</span>
+      {dateFirst ? cat : date}
+    </p>
+  );
+}
+
+/** "Report: source ↗" when the story links out, a quiet note when it doesn't yet */
+function StorySource({ story }: { story: NewsItem }) {
+  if (!story.url) return <span className="text-[13px] text-(--mute)">Report link coming soon</span>;
+  return (
+    <span className="flex items-center gap-1.5 text-[13px] text-(--mute) transition-colors duration-300 group-hover:text-(--ink) group-focus-visible:text-(--ink) motion-reduce:transition-none">
+      Report: {story.source}
+      <ArrowUpRight
+        size={14}
+        strokeWidth={1.75}
+        aria-hidden="true"
+        className="shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none"
+      />
+    </span>
+  );
+}
+
+/** A story tile: one link to the original report, or an article until a link exists */
+function StoryTile({ story, className, children }: { story: NewsItem; className: string; children: ReactNode }) {
+  if (!story.url) return <article className={`${tileClass} ${className}`}>{children}</article>;
+  return (
+    <a href={story.url} target="_blank" rel="noopener noreferrer" className={`${tileClass} ${liftClass} ${className}`}>
+      {children}
+      <span className="sr-only"> (opens the report on {story.source} in a new tab)</span>
+    </a>
+  );
+}
 
 // Built once, outside the component, so the carousel is not re-rendered on scroll.
 const productSlides = products.map(([title, text, image]) => ({
@@ -1283,142 +1341,251 @@ export default function HomePage() {
 
 
         {/* ── NEWSROOM ── */}
-        {/* An editorial front page: photos in full colour, headlines under them
-            in ink. From 1024px the lead runs down the centre with a story each
-            side, divided by hairline rules. Anything past the third story
-            becomes a text-only row under the side columns. */}
+        {/* An editorial bento front page. From 1024px, 12 columns in three rows:
+            the lead story fills the left half of rows 1-2; the photo story and
+            the text story sit beside it, the press note and the figure tiles
+            under them; the film (with the social tiles, once their links exist)
+            and the gallery link close row 3. Two columns from 640px, one below,
+            in reading order: lead, stories, figures, film, press note, links. */}
         <section id="news" className="bg-white section-y">
           <div className="wrap">
             <SectionHeader eyebrow="NEWSROOM" title="Latest from the group.">
-              {newsItems.some((n) => n.url) && <p>Links open the original report.</p>}
+              <p>Plant openings, sustainability milestones and awards, with links to the original press reports.</p>
             </SectionHeader>
 
-            <div
-              data-reveal-stagger
-              className="mt-section-head grid gap-grid sm:grid-cols-2 lg:grid-cols-12"
-            >
-              {newsItems.map((n, i) => {
-                const lead = i === 0;
-                const extra = i > 2;
-                // Lead centre, first side story left, second right; later
-                // stories alternate under the sides as text-only rows.
-                const place = lead
-                  ? "sm:col-span-2 sm:order-first lg:order-none lg:col-span-6 lg:col-start-4 lg:row-start-1"
-                  : i === 1
-                    ? "lg:col-span-3 lg:col-start-1 lg:row-start-1"
-                    : i === 2
-                      ? "lg:col-span-3 lg:col-start-10 lg:row-start-1"
-                      : i % 2
-                        ? "lg:col-span-3 lg:col-start-1"
-                        : "lg:col-span-3 lg:col-start-10";
-                // Hairline rules: vertical between the columns from 1024px,
-                // horizontal between stories below that.
-                const rule = lead
-                  ? "border-t border-(--hair) pt-6 sm:border-t-0 sm:pt-0 lg:border-x lg:border-t-0 lg:px-grid"
-                  : "border-t border-(--hair) pt-6 lg:border-t-0 lg:pt-0";
+            {(() => {
+              const [lead, photoStory, textStory] = NEWS;
+              const socials = SOCIAL_LINKS.filter((s) => s.href);
+              const publications = new Set(NEWS.filter((n) => n.source).map((n) => n.source)).size;
+              return (
+                <div data-reveal-stagger className="mt-section-head grid gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[auto_auto_auto]">
+                  {/* A) Lead story: the photo fills the tile under a white wash */}
+                  {lead && (
+                    <StoryTile
+                      story={lead}
+                      className="group relative flex min-h-115 flex-col overflow-hidden bg-white p-6 sm:col-span-2 sm:min-h-140 md:p-8 lg:col-span-6 lg:col-start-1 lg:row-span-2 lg:row-start-1"
+                    >
+                      <img
+                        src={`${media}${lead.img}`}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className={`absolute inset-0 size-full object-cover ${photoToneClass}`}
+                      />
+                      <span aria-hidden="true" className="absolute inset-0 bg-linear-to-b from-white/92 via-white/70 to-white/95" />
+                      {/* Stitched seam, sewn round the tile on hover or focus; always shown on touch screens */}
+                      <svg aria-hidden="true" className="pointer-events-none absolute inset-3 h-[calc(100%-24px)] w-[calc(100%-24px)] overflow-visible">
+                        <defs>
+                          <mask id="news-stitch-0" maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
+                            <rect
+                              x="0"
+                              y="0"
+                              width="100%"
+                              height="100%"
+                              rx="3"
+                              ry="3"
+                              pathLength={1}
+                              fill="none"
+                              stroke="white"
+                              strokeWidth="6"
+                              className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-1000 group-focus-visible:[stroke-dashoffset:0] motion-reduce:transition-none motion-reduce:[stroke-dashoffset:0] [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
+                            />
+                          </mask>
+                        </defs>
+                        <rect
+                          x="0"
+                          y="0"
+                          width="100%"
+                          height="100%"
+                          rx="3"
+                          ry="3"
+                          fill="none"
+                          stroke="var(--navy)"
+                          strokeOpacity="0.45"
+                          strokeWidth="1.5"
+                          strokeDasharray="8 6"
+                          mask="url(#news-stitch-0)"
+                        />
+                      </svg>
 
-                const photo = (
-                  <span
-                    className={`relative block overflow-hidden rounded-xs bg-(--mist) ${
-                      // 5/6 on the sides makes the side photos the same height as the
-                      // lead's 16:10 in a half-width column, so all three
-                      // headlines start on one line.
-                      lead ? "aspect-16/10" : "aspect-4/3 lg:aspect-5/6"
+                      <div className="relative flex flex-1 flex-col">
+                        <StoryMeta story={lead} />
+                        <div className="mt-auto pt-12">
+                          <h3 className="max-w-[16ch] font-['Fira_Sans_Condensed'] text-[40px] font-semibold leading-[1.02] text-(--heading) md:text-[56px] lg:text-[64px]">
+                            {withHighlight(lead.title, lead.highlight, "bg-(--red) px-1.5 text-white")}
+                          </h3>
+                          {lead.dek && <p className="mt-4 max-w-[56ch] text-intro text-(--mute)">{lead.dek}</p>}
+                          <div className="mt-6">
+                            <StorySource story={lead} />
+                          </div>
+                        </div>
+                      </div>
+                    </StoryTile>
+                  )}
+
+                  {/* B) Photo story: a contained photo between its date and headline */}
+                  {photoStory && (
+                    <StoryTile
+                      story={photoStory}
+                      className="group flex flex-col bg-(--mist) p-6 lg:col-span-3 lg:col-start-7 lg:row-start-1"
+                    >
+                      <StoryMeta story={photoStory} dateFirst />
+                      <span className="mt-4 block aspect-4/3 overflow-hidden rounded-xs bg-white">
+                        <img
+                          src={`${media}${photoStory.img}`}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          className={`size-full object-cover ${photoToneClass}`}
+                        />
+                      </span>
+                      <div className="mt-auto pt-6">
+                        {/* The highlight is marked at rest; on hover the marker sweeps
+                            across the whole headline, cloned onto every wrapped line. */}
+                        <h3 className="font-['Fira_Sans_Condensed'] text-card font-semibold text-(--heading)">
+                          <span className="box-decoration-clone bg-[linear-gradient(var(--marker),var(--marker))] bg-size-[0%_100%] bg-no-repeat transition-[background-size] duration-450 ease-out group-hover:bg-size-[100%_100%] group-focus-visible:bg-size-[100%_100%] motion-reduce:transition-none">
+                            {withHighlight(photoStory.title, photoStory.highlight, "bg-(--marker) px-0.5")}
+                          </span>
+                        </h3>
+                        <div className="mt-4">
+                          <StorySource story={photoStory} />
+                        </div>
+                      </div>
+                    </StoryTile>
+                  )}
+
+                  {/* C) Text story: type only, with a round arrow that turns on hover */}
+                  {textStory && (
+                    <StoryTile
+                      story={textStory}
+                      className="group flex flex-col bg-white p-6 lg:col-span-3 lg:col-start-10 lg:row-start-1"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <StoryMeta story={textStory} />
+                        {textStory.url && (
+                          <span
+                            aria-hidden="true"
+                            className="-mt-2 grid size-9 shrink-0 place-items-center rounded-full border border-(--hair) text-(--ink) transition-[rotate,border-color] duration-300 group-hover:rotate-45 group-hover:border-(--navy)/30 group-focus-visible:rotate-45 motion-reduce:transition-none"
+                          >
+                            <ArrowUpRight size={18} strokeWidth={1.75} aria-hidden="true" />
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="mt-6 font-['Fira_Sans_Condensed'] text-[28px] font-semibold leading-tight text-(--heading) lg:text-[34px]">
+                        {withHighlight(textStory.title, textStory.highlight, "bg-[color-mix(in_srgb,var(--heading)_14%,white)] px-1")}
+                      </h3>
+                      {textStory.dek && <p className="mt-4 text-sm text-(--mute)">{textStory.dek}</p>}
+                      <div className="mt-auto pt-6">
+                        <StorySource story={textStory} />
+                      </div>
+                    </StoryTile>
+                  )}
+
+                  {/* E) Figure tiles: four results from F, one link to the sustainability section */}
+                  <Link
+                    to="/#sustainability"
+                    aria-label="Sustainability figures"
+                    className={`group grid grid-cols-2 gap-3 rounded-sm sm:col-span-2 sm:grid-cols-4 lg:col-span-3 lg:col-start-10 lg:row-start-2 lg:grid-cols-2 ${liftClass}`}
+                  >
+                    {NEWS_FIGURES.map(([value, label]) => {
+                      const [num, unit] = splitUnit(value);
+                      return (
+                        <span
+                          key={label}
+                          className={`flex min-h-36 flex-col bg-(--mist) p-4 transition-colors duration-300 group-hover:border-(--navy)/30 group-focus-visible:border-(--navy)/30 motion-reduce:transition-none ${tileClass}`}
+                        >
+                          {/* A stitched wave: decoration, not a trend line */}
+                          <svg width="72" height="12" viewBox="0 0 72 12" aria-hidden="true" className="text-(--navy)/50">
+                            <path d="M0 6 Q 9 0 18 6 T 36 6 T 54 6 T 72 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 3" />
+                          </svg>
+                          <span className="mt-auto flex items-baseline gap-1 pt-4 font-['Fira_Sans_Condensed'] text-[32px] font-semibold leading-none text-(--heading)">
+                            {num}
+                            {unit && <span className="text-sm font-medium text-(--mute)">{unit}</span>}
+                          </span>
+                          <span className="mt-2 text-balance text-[11px] font-semibold uppercase leading-snug tracking-widest text-(--mute)">{label}</span>
+                        </span>
+                      );
+                    })}
+                  </Link>
+
+                  {/* F) Film: the gallery's RFID film, poster behind a play button */}
+                  <Link
+                    to="/gallery#film"
+                    className={`group relative flex min-h-40 flex-col justify-between overflow-hidden rounded-sm border border-white/15 bg-(--ink) p-6 text-white transition-[translate,border-color] duration-300 hover:-translate-y-0.5 hover:border-white/40 focus-visible:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy) motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:focus-visible:translate-y-0 lg:col-start-1 lg:row-start-3 ${
+                      socials.length ? "lg:col-span-3" : "lg:col-span-6"
                     }`}
                   >
                     <img
-                      src={`${media}${n.img}`}
+                      src={`${media}${GALLERY_VIDEO.poster}`}
                       alt=""
                       loading="lazy"
                       decoding="async"
-                      className="absolute inset-0 h-full w-full scale-100 object-cover transition-[scale] duration-600 ease-out group-hover:scale-104 group-focus-visible:scale-104 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-focus-visible:scale-100"
+                      className="absolute inset-0 size-full object-cover opacity-40 transition-opacity duration-700 group-hover:opacity-55 group-focus-visible:opacity-55 motion-reduce:transition-none"
                     />
-                    {/* The seam is sewn round the photo on hover or focus; always shown on touch */}
-                    <svg
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-2.5 h-[calc(100%-20px)] w-[calc(100%-20px)] overflow-visible"
-                    >
-                      <defs>
-                        <mask id={`news-stitch-${i}`} maskUnits="userSpaceOnUse" x="-4" y="-4" width="200%" height="200%">
-                          <rect
-                            x="0"
-                            y="0"
-                            width="100%"
-                            height="100%"
-                            pathLength={1}
-                            fill="none"
-                            stroke="white"
-                            strokeWidth="6"
-                            className="[stroke-dasharray:1] [stroke-dashoffset:1] transition-[stroke-dashoffset] duration-500 ease-in-out group-hover:[stroke-dashoffset:0] group-hover:duration-1000 group-focus-visible:[stroke-dashoffset:0] motion-reduce:transition-none motion-reduce:[stroke-dashoffset:0] [@media(hover:none)]:[stroke-dashoffset:0] [@media(hover:none)]:transition-none"
-                          />
-                        </mask>
-                      </defs>
-                      <rect
-                        x="0"
-                        y="0"
-                        width="100%"
-                        height="100%"
-                        fill="none"
-                        stroke="white"
-                        strokeOpacity="0.8"
-                        strokeWidth="1.5"
-                        strokeDasharray="8 6"
-                        mask={`url(#news-stitch-${i})`}
-                      />
-                    </svg>
-                  </span>
-                );
-
-                const body = (
-                  <>
-                    {!extra && photo}
-                    {/* The marker sweeps in behind the headline from the left;
-                        clone so every wrapped line is highlighted. */}
-                    <strong
-                      className={`text-balance box-decoration-clone bg-[linear-gradient(var(--marker),var(--marker))] bg-[length:0%_100%] bg-no-repeat font-['Fira_Sans_Condensed'] font-bold text-(--ink) transition-[background-size] duration-450 ease-out group-hover:bg-[length:100%_100%] group-focus-visible:bg-[length:100%_100%] motion-reduce:transition-none ${
-                        lead ? "max-w-[22ch] text-lead" : "text-card"
-                      }`}
-                    >
-                      {n.title}
-                    </strong>
-                    <span className="text-[11px] font-semibold uppercase tracking-widest text-(--mute)">
-                      {n.date}
-                      <span aria-hidden="true" className="mx-2">·</span>
-                      <span className="text-(--navy)">{n.cat}</span>
+                    <span className="relative grid size-11 place-items-center rounded-full bg-white text-(--ink) transition-[scale] duration-300 group-hover:scale-105 motion-reduce:transition-none">
+                      <Play size={18} strokeWidth={1.75} fill="currentColor" aria-hidden="true" />
                     </span>
-                    {n.url && (
-                      <span className="flex items-center gap-1.5 text-[13px] text-(--mute) transition-colors duration-300 group-hover:text-(--ink) group-focus-visible:text-(--ink) motion-reduce:transition-none">
-                        Report: {n.source}
-                        <ArrowUpRight
-                          size={14}
-                          strokeWidth={1.75}
-                          aria-hidden="true"
-                          className="shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none"
-                        />
-                      </span>
-                    )}
-                  </>
-                );
+                    <span className="relative mt-6 block">
+                      <span className="block text-sm font-semibold">{GALLERY_VIDEO.title}</span>
+                      <span className="mt-1 block text-[13px] text-white/80">Watch on the Gallery page</span>
+                    </span>
+                  </Link>
 
-                const cardClass = `flex flex-col gap-4 ${place} ${rule}`;
-                return n.url ? (
-                  <a
-                    key={n.title}
-                    href={n.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`group ${cardClass} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--navy)`}
+                  {/* D) About the newsroom: counts taken from NEWS itself */}
+                  <div className={`flex flex-col bg-[color-mix(in_srgb,var(--heading)_6%,white)] p-6 lg:col-span-3 lg:col-start-7 lg:row-start-2 ${tileClass}`}>
+                    <h3 className="font-['Fira_Sans_Condensed'] text-xl font-semibold text-(--heading)">Ha-Meem in the press</h3>
+                    <p className="mt-2 text-sm text-(--ink)">Original reports from Bangladesh's business press, linked at the source.</p>
+                    <ul className="mt-auto flex flex-col gap-2 pt-6 text-sm text-(--ink)">
+                      <li className="flex items-center gap-2">
+                        <Newspaper size={16} strokeWidth={1.75} aria-hidden="true" className="text-(--navy)" />
+                        {NEWS.length} stories
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Building2 size={16} strokeWidth={1.75} aria-hidden="true" className="text-(--navy)" />
+                        {publications} publications
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* G) Social tiles: only the channels with a link; none, no tile */}
+                  {socials.length > 0 && (
+                    <ul className="grid grid-cols-3 gap-3 sm:col-span-2 lg:col-span-3 lg:col-start-4 lg:row-start-3">
+                      {socials.map((s) => (
+                        <li key={s.label}>
+                          <a
+                            href={s.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ "--brand": SOCIAL_COLOR[s.label] } as CSSProperties}
+                            className={`flex aspect-square size-full min-h-11 items-center justify-center bg-[color-mix(in_srgb,var(--brand)_6%,white)] text-sm font-semibold text-(--brand) ${tileClass} ${liftClass}`}
+                          >
+                            {s.label}
+                            <span className="sr-only"> (opens in a new tab)</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {/* H) Gallery link: a slim row with a round arrow */}
+                  <Link
+                    to="/gallery"
+                    className={`group flex items-center justify-between gap-6 bg-white p-6 sm:col-span-2 lg:col-span-6 lg:col-start-7 lg:row-start-3 ${tileClass} ${liftClass}`}
                   >
-                    {body}
-                    <span className="sr-only"> (opens the report on {n.source} in a new tab)</span>
-                  </a>
-                ) : (
-                  <article key={n.title} className={cardClass}>
-                    {body}
-                  </article>
-                );
-              })}
-            </div>
+                    <span>
+                      <span className="block font-['Fira_Sans_Condensed'] text-xl font-semibold text-(--heading)">Explore the gallery</span>
+                      <span className="mt-1 block text-sm text-(--mute)">Factories, people and 360° tours</span>
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="grid size-11 shrink-0 place-items-center rounded-full bg-(--ink) text-white transition-[rotate] duration-300 group-hover:rotate-45 group-focus-visible:rotate-45 motion-reduce:transition-none"
+                    >
+                      <ArrowUpRight size={18} strokeWidth={1.75} aria-hidden="true" />
+                    </span>
+                  </Link>
+                </div>
+              );
+            })()}
           </div>
         </section>
 
