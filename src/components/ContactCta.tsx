@@ -78,7 +78,7 @@ export default function ContactCta({ id }: { id?: string }) {
         className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_50%,rgba(10,14,18,0.6)_0%,rgba(10,14,18,0.3)_65%,transparent_100%)]"
       />
       <div data-reveal className="wrap relative z-1 flex w-full flex-col items-center justify-center section-y text-center">
-        <Eyebrow className="text-white!">WORK WITH US</Eyebrow>
+         <Eyebrow className="text-white!">WORK WITH US</Eyebrow>
         <h2 className="mt-head-eyebrow text-balance font-['Fira_Sans_Condensed'] text-statement font-black tracking-widest [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]">
           Sourcing from
           <br />
