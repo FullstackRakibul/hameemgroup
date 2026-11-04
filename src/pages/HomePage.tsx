@@ -709,7 +709,7 @@ export default function HomePage() {
                 with a one-line detail. Phones: a sideways snap row. */}
             <ul
               data-reveal-stagger
-              className="group/eco mt-section-head -mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 text-left [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 lg:flex lg:h-[380px] lg:[@media(hover:none)]:grid lg:[@media(hover:none)]:h-auto"
+              className="group/eco mt-section-head -mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 text-left scrollbar-none md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 lg:flex lg:h-95 lg:[@media(hover:none)]:grid lg:[@media(hover:none)]:h-auto"
             >
               {SUSTAINABILITY_STATS.map((s, i) => {
                 const [num, unit] = splitUnit(s.value);
@@ -723,7 +723,7 @@ export default function HomePage() {
                     onFocus={() => ecoLoops.setActive(i)}
                     onBlur={() => ecoLoops.setActive(null)}
                     style={{ "--accent": look.accent } as CSSProperties}
-                    className="group relative h-65 w-[78%] shrink-0 snap-start overflow-hidden rounded-sm border border-white/15 bg-[rgba(10,14,18,.62)] text-left backdrop-blur-md transition-[flex-grow,opacity,border-color] duration-600 ease-[cubic-bezier(.22,1,.36,1)] hover:border-white/35 focus-visible:border-white/35 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none md:h-[300px] md:w-auto lg:h-auto lg:flex-1 lg:group-hover/eco:opacity-75 lg:hover:flex-[2.2] lg:hover:opacity-100! lg:focus:flex-[2.2] lg:focus:opacity-100! lg:[@media(hover:none)]:h-[300px]"
+                    className="group relative h-65 w-[78%] shrink-0 snap-start overflow-hidden rounded-sm border border-white/15 bg-[rgba(10,14,18,.62)] text-left backdrop-blur-md transition-[flex-grow,opacity,border-color] duration-600 ease-[cubic-bezier(.22,1,.36,1)] hover:border-white/35 focus-visible:border-white/35 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none md:h-75 md:w-auto lg:h-auto lg:flex-1 lg:group-hover/eco:opacity-75 lg:hover:flex-[2.2] lg:hover:opacity-100! lg:focus:flex-[2.2] lg:focus:opacity-100! lg:[@media(hover:none)]:h-75"
                   >
                     {/* a) The topic loop, clear in the top 55%, sliding up and
                         brightening on the widened card. It plays only on

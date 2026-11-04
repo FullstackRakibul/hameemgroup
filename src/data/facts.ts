@@ -238,7 +238,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
     summary: "The group has established schools for its workers' children and the wider community.",
     points: ["M. A. Aziz High School", "M. A. Aziz Primary School", "Nurul Islam High School", "Refat Kowmi Madrasa"],
     tag: "Education",
-    image: "biz/gate.jpg",
+    image: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/hameem_group_school.jpeg",
     imageAlt: "Entrance to a Ha-Meem campus",
   },
   {
@@ -247,7 +247,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
     summary: "Ha-Meem Group funds scholarships for its workers' children.",
     points: ["For workers' children", "Funded by the group"],
     tag: "Education",
-    image: "people-knit.jpg",
+    image: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/hameem_school_scholarship.jpeg",
     imageAlt: "A knitting technician programming a Stoll machine",
   },
   {
@@ -256,7 +256,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
     summary: "A higher-education pathway with the Asian University for Women.",
     points: ["Partnership with the Asian University for Women"],
     tag: "Higher education",
-    image: "chain-sewing.jpg",
+    image: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/Asian_UniversityXhameem_group.jpeg",
     imageAlt: "Sewing line at a Ha-Meem factory",
   },
   {
@@ -265,7 +265,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
     summary: "We take part in career fairs and work with clubs at universities across Bangladesh.",
     points: ["University career fairs", "Student clubs and programmes"],
     tag: "Careers",
-    image: "cine/sewing.jpg",
+    image: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/career.jpeg",
     imageAlt: "Workers on a production floor",
   },
   {
@@ -279,7 +279,7 @@ export const PEOPLE_PROGRAMS: PeopleProgram[] = [
       "Tree plantation drives across the country",
     ],
     tag: "Environment",
-    image: "sustain-campus.jpg",
+    image: "https://api.hameemgroup.com:9012/Resources/hameemGroupWebsite/environment.jpeg",
     imageAlt: "Green campus of Ha-Meem Textiles at Mawna, Bangladesh",
   },
 ];

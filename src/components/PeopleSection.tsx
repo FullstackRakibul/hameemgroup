@@ -358,7 +358,7 @@ export default function PeopleSection() {
                 <div
                   ref={cardRef}
                   aria-hidden="true"
-                  className="pointer-events-none absolute right-6 top-0 z-10 w-[300px] will-change-transform"
+                  className="pointer-events-none absolute right-6 top-0 z-10 w-75 will-change-transform"
                 >
                   <div
                     data-shown={shown || undefined}
@@ -369,7 +369,7 @@ export default function PeopleSection() {
                         {PEOPLE_PROGRAMS.map((item, i) => (
                           <img
                             key={item.id}
-                            src={`${media}${item.image}`}
+                            src={item.image}
                             alt=""
                             loading={i === 0 ? "eager" : "lazy"}
                             decoding="async"
