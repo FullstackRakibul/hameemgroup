@@ -3,11 +3,10 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import gsap from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { Shirt } from "lucide-react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import FlagDefs from "./flags";
 import type { FlagCode } from "./flags";
 
-gsap.registerPlugin(MotionPathPlugin, ScrollTrigger);
+gsap.registerPlugin(MotionPathPlugin);
 
 const media = "/media/";
 
@@ -161,6 +160,9 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
       return () => reveals.forEach((p) => (p.style.strokeDashoffset = ""));
     }
 
+    // Two IntersectionObservers stand in for ScrollTrigger, which kept an empty
+    // frame loop (and GSAP's ticker) running on every page while idle
+    const observers: IntersectionObserver[] = [];
     const ctx = gsap.context(() => {
       const q = gsap.utils.selector(root);
       const pins = q(".wr-pin");
@@ -279,25 +281,29 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
       intro.to(flags, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.05 }, 0.1);
       intro.to(reveals, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut", stagger: 0.15 }, 0.35);
 
-      ScrollTrigger.create({
-        trigger: root,
-        start: "top 75%",
-        once: true,
-        onEnter: () => intro.play(),
-      });
-      const onScreen = ScrollTrigger.create({
-        trigger: root,
-        start: "top bottom",
-        end: "bottom top",
-        onToggle: (self) => {
-          visible = self.isActive;
-          sync();
+      // The intro plays once the map's top passes 75% of the way up the screen
+      const enter = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          intro.play();
+          enter.disconnect();
         },
+        { rootMargin: "0px 0px -25% 0px" },
+      );
+      enter.observe(root);
+      // The loops run only while any of the map is on screen
+      const onScreen = new IntersectionObserver(([e]) => {
+        visible = e.isIntersecting;
+        sync();
       });
-      visible = onScreen.isActive;
+      onScreen.observe(root);
+      observers.push(enter, onScreen);
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      observers.forEach((o) => o.disconnect());
+      ctx.revert();
+    };
   }, []);
 
   const unit = (VB_W / (width || 1232)) * (compact ? COMPACT_SCALE : 1);

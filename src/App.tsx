@@ -12,11 +12,8 @@ import SmoothScroll from "./components/SmoothScroll";
 import { getLenis, scrollToTarget } from "./lib/scroll";
 import { AiAssistant } from "./features/ai-assistant";
 import { megaMenuData } from "./data/navigation";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import routes from "./router/routes";
 
-gsap.registerPlugin(ScrollTrigger);
 
 const PRELOADER_KEY = "hm-preloader-seen";
 
