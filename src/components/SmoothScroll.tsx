@@ -25,13 +25,27 @@ export default function SmoothScroll() {
   useEffect(() => {
     if (reduced) return;
 
-    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true, anchors: false });
+    // Lenis drives its own frame loop (autoRaf), so there is no second loop here
+    const lenis = new Lenis({
+      autoRaf: true,
+      lerp: 0.085,
+      wheelMultiplier: 1,
+      smoothWheel: true,
+      syncTouch: false,
+      anchors: false,
+    });
     setLenis(lenis);
 
-    let frame = requestAnimationFrame(function raf(time: number) {
-      lenis.raf(time);
-      frame = requestAnimationFrame(raf);
-    });
+    // html.is-scrolling while the page moves, off 150ms after it stops: costly
+    // decoration (the floating garment icons) holds still meanwhile
+    const root = document.documentElement;
+    let idle: number | undefined;
+    const onScroll = () => {
+      if (!root.classList.contains("is-scrolling")) root.classList.add("is-scrolling");
+      window.clearTimeout(idle);
+      idle = window.setTimeout(() => root.classList.remove("is-scrolling"), 150);
+    };
+    lenis.on("scroll", onScroll);
 
     // The body scroll lock is the signal that something modal is open; a native
     // <dialog> (the gallery lightbox) locks the page itself, without touching it.
@@ -51,7 +65,9 @@ export default function SmoothScroll() {
     return () => {
       observer.disconnect();
       dialogObserver.disconnect();
-      cancelAnimationFrame(frame);
+      window.clearTimeout(idle);
+      root.classList.remove("is-scrolling");
+      lenis.off("scroll", onScroll);
       lenis.destroy();
       setLenis(null);
     };

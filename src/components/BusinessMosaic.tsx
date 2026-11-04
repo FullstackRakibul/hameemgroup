@@ -106,9 +106,10 @@ function Tile({ b, order }: { b: Business; order: number }) {
         />
       </span>
 
-      {/* Frosted caption bar: title and unit on the left, the figure on the
+      {/* Caption bar (a translucent ink fill; no backdrop blur, since nine of
+          them can be on screen at once): title and unit on the left, the figure on the
           right; on hover it grows upward to show the description */}
-      <span className="absolute inset-x-3 bottom-3 z-1 rounded-xs border border-white/25 bg-white/14 px-4 py-3 backdrop-blur-md">
+      <span className="absolute inset-x-3 bottom-3 z-1 rounded-xs border border-white/25 bg-[rgba(17,20,24,0.38)] px-4 py-3">
         <span className="flex items-end justify-between gap-4">
           <span className="min-w-0">
             <strong
@@ -187,7 +188,7 @@ function CtaTile({ order }: { order: number }) {
 }
 
 /* ── What we do: a mixed-size mosaic ──
-   Tall, wide and small photo tiles, each with a frosted caption bar, and one
+   Tall, wide and small photo tiles, each with a caption bar, and one
    solid call-to-action tile (slot g). In the DOM the tiles run in the lg
    reading order (a…f, g, h…j); below md the CTA moves up after the fourth
    business with `order`. */

@@ -165,7 +165,7 @@ export default function PeopleSection() {
   };
 
   return (
-    <section ref={sectionRef} id="people" className="bg-(--mist) section-y">
+    <section ref={sectionRef} id="people" className="bg-(--mist) section-y [content-visibility:auto] [contain-intrinsic-size:auto_1000px]">
       <div className="wrap">
         <SectionHeader
           eyebrow="PEOPLE"

@@ -706,9 +706,12 @@ footer[id] { scroll-margin-top: var(--header-h); }
 }
 .garment-float {
   animation: garmentFloat 9s ease-in-out infinite;
+  will-change: transform;
 }
+/* Held while the page scrolls (SmoothScroll toggles html.is-scrolling) */
+.is-scrolling .garment-float { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
-  .garment-float { animation: none; }
+  .garment-float { animation: none; will-change: auto; }
 }
 
 /* ── What we do mosaic ──

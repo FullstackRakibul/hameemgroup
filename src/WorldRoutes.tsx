@@ -327,6 +327,8 @@ export default function WorldRoutes({ className = "" }: { className?: string }) 
     >
       <img
         src={`${media}world-solid.svg`}
+        loading="lazy"
+        decoding="async"
         alt="World map showing Ha-Meem export markets"
         draggable={false}
         className="absolute inset-0 w-full h-full opacity-95 select-none"

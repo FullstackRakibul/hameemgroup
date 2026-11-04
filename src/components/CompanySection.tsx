@@ -167,7 +167,8 @@ function CompanyThread() {
   );
 }
 
-/* Frosted mosaic cells over the band's film, in fixed patterns (col, row on a
+/* Lit mosaic cells over the band's film (a faint white fill, no blur: ten blurred
+   cells cost a re-blur every frame), in fixed patterns (col, row on a
    12 × 6 grid of squares); each film change moves them to the next pattern. */
 const MOSAIC: [number, number][][] = [
   [[0, 0], [3, 1], [11, 0], [7, 2], [1, 4], [10, 3], [5, 5], [8, 5], [2, 2], [11, 5]],
@@ -274,7 +275,7 @@ function StatsBand() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.045)_0_1px,transparent_1px_5px)]"
       />
-      {/* A tile mosaic: faint square lines and ten frosted cells, lg only */}
+      {/* A tile mosaic: faint square lines and ten lit cells, lg only */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 hidden auto-rows-[calc(100cqw/12)] grid-cols-12 bg-[linear-gradient(to_right,rgb(255_255_255/0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgb(255_255_255/0.06)_1px,transparent_1px)] bg-size-[calc(100cqw/12)_calc(100cqw/12)] lg:motion-safe:grid"
@@ -282,7 +283,7 @@ function StatsBand() {
         {pattern.map(([col, row], n) => (
           <span
             key={`${video}-${n}`}
-            className="bg-white/[0.04] backdrop-blur-sm animate-[awardIn_500ms_ease-out_both] [--award-from:scale(1)]"
+            className="bg-white/[0.07] animate-[awardIn_500ms_ease-out_both] [--award-from:scale(1)]"
             style={{ gridColumnStart: col + 1, gridRowStart: row + 1, animationDelay: `${n * 50}ms` }}
           />
         ))}

@@ -92,7 +92,14 @@ export default function SiteHeader({ menus }: { menus: Record<MenuKey, MegaMenu>
 
   // Scroll state; runs once on mount so a reload mid-page starts solid.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    // Only a flip renders the header; scrolling on either side of 50px doesn't
+    let last = false; // the initial state, so the first call below can set it
+    const onScroll = () => {
+      const next = window.scrollY > 50;
+      if (next === last) return;
+      last = next;
+      setScrolled(next);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);

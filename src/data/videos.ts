@@ -36,6 +36,11 @@ export const VIDEOS = {
     poster: "gallery/chain-wash.jpg",
     label: "RFID-tracked production",
   },
+  // The sustainability cards' topic loops (MP4s converted from the old GIFs)
+  solar: { id: "solar", src: "/media/sustain/solar.mp4", poster: "sustain/solar.jpg", label: "Solar power" },
+  water: { id: "water", src: "/media/sustain/water.mp4", poster: "sustain/water.jpg", label: "Water recycling" },
+  fiber: { id: "fiber", src: "/media/sustain/fiber.mp4", poster: "sustain/fiber.jpg", label: "Power co-generation" },
+  recycle: { id: "recycle", src: "/media/sustain/recycle.mp4", poster: "sustain/recycle.jpg", label: "Fibre recycling" },
 } satisfies Record<string, VideoAsset>;
 
 export type VideoId = keyof typeof VIDEOS;

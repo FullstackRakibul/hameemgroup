@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback, Suspense } from "react";
 import { HashRouter, Outlet, useLocation, useRoutes } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
+import type { RefObject } from "react";
 import Preloader from "./Preloader";
 import { whenHeroReady } from "./lib/heroReady";
 import SiteHeader from "./SiteHeader";
@@ -27,10 +28,10 @@ function preloaderSeen() {
   }
 }
 
-/* ── Stitch Scrollbar ── */
-function StitchScrollbar({ progress }: { progress: number }) {
-  const totalLength = 800;
-  const offset = totalLength - totalLength * progress;
+/* ── Stitch Scrollbar ──
+   The progress line's dash offset is written straight to the DOM by the
+   Shell's scroll listener (no React render while scrolling). */
+function StitchScrollbar({ lineRef }: { lineRef: RefObject<SVGLineElement | null> }) {
   return (
     <div className="stitch-track hidden md:block">
       <svg
@@ -46,10 +47,11 @@ function StitchScrollbar({ progress }: { progress: number }) {
           y1="0"
           x2="1.5"
           y2="800"
+          ref={lineRef}
           className="stitch-progress"
           fill="none"
           strokeWidth="2"
-          style={{ strokeDashoffset: offset }}
+          style={{ strokeDashoffset: 800 }}
         />
       </svg>
     </div>
@@ -126,7 +128,8 @@ function Shell() {
   const { pathname } = useLocation();
   const [loading, setLoading] = useState(() => !preloaderSeen());
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const stitchRef = useRef<SVGLineElement>(null);
+  const ringRef = useRef<SVGCircleElement>(null);
   const [renderedPath, setRenderedPath] = useState<string | null>(null);
   const pageReady = renderedPath === pathname;
 
@@ -172,17 +175,37 @@ function Shell() {
     Promise.all([fonts, hero]).then(finishPreloader).catch(finishPreloader);
   }, [finishPreloader, pathname]);
 
-  // Scroll handler: back-to-top + scroll progress (header state lives in SiteHeader).
-  // Re-measured on route change, since the new page has a different height.
+  // Scroll progress (the stitch scrollbar and the back-to-top ring) and the
+  // back-to-top switch. No React render while scrolling: one passive listener
+  // (Lenis drives the native scroll, so it fires either way), batched to one
+  // update a frame, writes the progress straight to the two SVG lines, and
+  // the back-to-top state changes only when it flips. Re-measured on route
+  // change, since the new page has a different height.
   useEffect(() => {
-    const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 500);
+    let frame = 0;
+    let shown = window.scrollY > 500;
+    setShowBackToTop(shown);
+    const update = () => {
+      frame = 0;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress(docHeight > 0 ? window.scrollY / docHeight : 0);
+      const progress = docHeight > 0 ? Math.min(1, window.scrollY / docHeight) : 0;
+      if (stitchRef.current) stitchRef.current.style.strokeDashoffset = String(800 - 800 * progress);
+      if (ringRef.current) ringRef.current.style.strokeDashoffset = String(1 - progress);
+      const next = window.scrollY > 500;
+      if (next !== shown) {
+        shown = next;
+        setShowBackToTop(next);
+      }
     };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [pathname]);
 
   // Page entrance: on first load (once the preloader lifts) and on every route
@@ -211,7 +234,7 @@ function Shell() {
       <SmoothScroll />
       <RouteEffects ready={pageReady} />
 
-      <StitchScrollbar progress={scrollProgress} />
+      <StitchScrollbar lineRef={stitchRef} />
 
       {/* Back to top: the upper slot of the floating dock, right above the
           assistant's launcher. A thin navy ring shows how far down the page
@@ -240,7 +263,8 @@ function Shell() {
             strokeWidth="1.5"
             pathLength={1}
             strokeDasharray="1"
-            strokeDashoffset={1 - scrollProgress}
+            ref={ringRef}
+            style={{ strokeDashoffset: 1 }}
           />
         </svg>
       </button>

@@ -27,17 +27,17 @@ import {
 } from "../data/facts";
 import { NEWS, type NewsItem } from "../data/news";
 import { GALLERY_VIDEO } from "../data/gallery";
-import { VIDEOS } from "../data/videos";
+import { VIDEOS, type VideoId } from "../data/videos";
+import useLoopPlayback from "../components/useLoopPlayback";
 
 const media = "/media/";
 
-// Sustainability cards: icon, accent (the rule under the figure only) and loop per topic.
-// The loops are GIFs until the MP4 conversion in docs/PROJECT_GUIDE.md lands.
-const ECO_LOOK: Record<string, { Icon: LucideIcon; accent: string; image: string }> = {
-  "Solar capacity": { Icon: Sun, accent: "#f5a524", image: "sustain/solar.gif" },
-  "Water recycling": { Icon: Droplets, accent: "#4fb3d9", image: "sustain/water.gif" },
-  "Power co-generation": { Icon: Zap, accent: "#f2c94c", image: "sustain/fiber.gif" },
-  "Fiber recycled a day": { Icon: Recycle, accent: "#6fbf73", image: "sustain/recycle.gif" },
+// Sustainability cards: icon, accent (the rule under the figure only) and loop per topic
+const ECO_LOOK: Record<string, { Icon: LucideIcon; accent: string; loop: VideoId }> = {
+  "Solar capacity": { Icon: Sun, accent: "#f5a524", loop: "solar" },
+  "Water recycling": { Icon: Droplets, accent: "#4fb3d9", loop: "water" },
+  "Power co-generation": { Icon: Zap, accent: "#f2c94c", loop: "fiber" },
+  "Fiber recycled a day": { Icon: Recycle, accent: "#6fbf73", loop: "recycle" },
 };
 
 
@@ -177,6 +177,8 @@ export default function HomePage() {
   const heroSlide = hero.current;
   const [heroPaused, setHeroPaused] = useState(false);
   const heroVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  // The sustainability cards' loops: on screen only, two at most
+  const ecoLoops = useLoopPlayback(2);
   const heroFirstImgRef = useRef<HTMLImageElement>(null);
 
   usePageMeta(HOME_TITLE, HOME_DESCRIPTION, true);
@@ -194,11 +196,24 @@ export default function HomePage() {
     setHeroSlide((prev) => (prev + 1) % heroSlides.length);
   }, [setHeroSlide]);
 
+  // Off screen the hero holds still: no slide changes (which would re-render
+  // the whole page while the visitor reads further down) and no video.
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const [heroOffscreen, setHeroOffscreen] = useState(false);
   useEffect(() => {
-    if (heroPaused) return;
+    const el = heroSectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setHeroOffscreen(!e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const heroIdle = heroPaused || heroOffscreen;
+
+  useEffect(() => {
+    if (heroIdle) return;
     const timer = setTimeout(advanceSlide, slideMs(heroSlide));
     return () => clearTimeout(timer);
-  }, [heroPaused, heroSlide, advanceSlide]);
+  }, [heroIdle, heroSlide, advanceSlide]);
 
   // A cached first slide can finish loading before React attaches onLoad, so
   // the event would never fire. Check the element directly on mount and
@@ -224,11 +239,14 @@ export default function HomePage() {
         video.pause();
         return;
       }
+      if (heroIdle) {
+        video.pause();
+        return;
+      }
       if (video.currentTime > 0.1) video.currentTime = 0;
-      if (heroPaused) video.pause();
-      else void video.play().catch(() => {});
+      void video.play().catch(() => {});
     });
-  }, [heroSlide, heroPaused]);
+  }, [heroSlide, heroIdle]);
 
   const prevSlide = () =>
     setHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
@@ -242,7 +260,7 @@ export default function HomePage() {
     return (
       <svg
         // Remounted on each slide change or resume, which restarts the sewing
-        key={current ? `${heroSlide}-${heroPaused}` : undefined}
+        key={current ? `${heroSlide}-${heroIdle}` : undefined}
         aria-hidden="true"
         width="22"
         height="4"
@@ -303,6 +321,7 @@ export default function HomePage() {
       {/* Full screen (svh, so mobile browser bars cannot cut it), and taller
           if the copy needs it: the copy sits in flow at the foot. */}
       <section
+        ref={heroSectionRef}
         id="top"
         data-hero
         className="relative flex min-h-svh flex-col justify-end overflow-hidden text-white bg-(--ink) [--ring:#fff]"
@@ -344,6 +363,7 @@ export default function HomePage() {
                 ref={first ? heroFirstImgRef : undefined}
                 src={slide.src}
                 alt={slide.alt}
+                loading={first ? "eager" : "lazy"}
                 decoding="async"
                 fetchPriority={first ? "high" : undefined}
                 className={`hero-slide ${state}`}
@@ -587,7 +607,7 @@ export default function HomePage() {
         </section>
 
         {/* ── VERTICAL INTEGRATION (Steps accordion) ── */}
-        <section id="chain" className="bg-white pt-section">
+        <section id="chain" className="bg-white pt-section [content-visibility:auto] [contain-intrinsic-size:auto_960px]">
           <div className="wrap pb-section-head">
             <SectionHeader eyebrow="VERTICAL INTEGRATION" title="Six steps, all ours.">
               <p>
@@ -601,7 +621,10 @@ export default function HomePage() {
         </section>
 
         {/* ── BUSINESSES ── */}
-        <section id="businesses" className="bg-white section-y">
+        {/* Heavy sections below the fold skip rendering while off screen
+            (content-visibility: auto); contain-intrinsic-size holds their
+            space, so the page doesn't jump as they come in. */}
+        <section id="businesses" className="bg-white section-y [content-visibility:auto] [contain-intrinsic-size:auto_1300px]">
           <div className="wrap">
             <SectionHeader
               eyebrow="WHAT WE DO"
@@ -624,7 +647,7 @@ export default function HomePage() {
         </section>
 
         {/* ── RECOGNITION & AWARDS ── */}
-        <section id="recognition" className="relative isolate bg-white section-y">
+        <section id="recognition" className="relative isolate bg-white section-y [content-visibility:auto] [contain-intrinsic-size:auto_1150px]">
           <div className="wrap">
             <SectionHeader
               eyebrow={<>RECOGNITION &amp; AWARDS</>}
@@ -650,10 +673,12 @@ export default function HomePage() {
         {/* ── SUSTAINABILITY ── */}
         <section
           id="sustainability"
-          className="relative isolate overflow-hidden bg-(--ink) text-white"
+          className="relative isolate overflow-hidden bg-(--ink) text-white [content-visibility:auto] [contain-intrinsic-size:auto_900px]"
         >
           <img
             src={`${media}sustain-campus.jpg`}
+            loading="lazy"
+            decoding="async"
             alt="Ha-Meem Textiles at Mawna"
             className="absolute inset-0 -z-10 h-full w-full object-cover"
           />
@@ -693,18 +718,27 @@ export default function HomePage() {
                   <li
                     key={s.label}
                     tabIndex={0}
+                    onPointerEnter={(e) => e.pointerType === "mouse" && ecoLoops.setActive(i)}
+                    onPointerLeave={() => ecoLoops.setActive(null)}
+                    onFocus={() => ecoLoops.setActive(i)}
+                    onBlur={() => ecoLoops.setActive(null)}
                     style={{ "--accent": look.accent } as CSSProperties}
                     className="group relative h-65 w-[78%] shrink-0 snap-start overflow-hidden rounded-sm border border-white/15 bg-[rgba(10,14,18,.62)] text-left backdrop-blur-md transition-[flex-grow,opacity,border-color] duration-600 ease-[cubic-bezier(.22,1,.36,1)] hover:border-white/35 focus-visible:border-white/35 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none md:h-[300px] md:w-auto lg:h-auto lg:flex-1 lg:group-hover/eco:opacity-75 lg:hover:flex-[2.2] lg:hover:opacity-100! lg:focus:flex-[2.2] lg:focus:opacity-100! lg:[@media(hover:none)]:h-[300px]"
                   >
                     {/* a) The topic loop, clear in the top 55%, sliding up and
-                        brightening on the widened card; hidden if missing */}
-                    <img
-                      src={`${media}${look.image}`}
-                      alt=""
+                        brightening on the widened card. It plays only on
+                        screen, two at most (useLoopPlayback); the poster
+                        stands in everywhere else. */}
+                    <video
+                      ref={ecoLoops.loop(i)}
+                      src={VIDEOS[look.loop].src}
+                      poster={`${media}${VIDEOS[look.loop].poster}`}
+                      muted
+                      loop
+                      playsInline
+                      preload="none"
                       aria-hidden="true"
-                      loading="lazy"
-                      decoding="async"
-                      onError={(e) => (e.currentTarget.style.display = "none")}
+                      tabIndex={-1}
                       className="pointer-events-none absolute inset-x-0 top-0 h-[calc(55%+8px)] w-full object-cover opacity-55 mask-[linear-gradient(to_bottom,black_55%,transparent)] transition-[opacity,translate] duration-600 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-2 group-hover:opacity-75 group-focus:-translate-y-2 group-focus:opacity-75 motion-reduce:transition-none"
                     />
                     {/* b) Fading into the dark glass below */}
@@ -823,7 +857,7 @@ export default function HomePage() {
             under them; the film (with the social tiles, once their links exist)
             and the gallery link close row 3. Two columns from 640px, one below,
             in reading order: lead, stories, figures, film, press note, links. */}
-        <section id="news" className="bg-white section-y">
+        <section id="news" className="bg-white section-y [content-visibility:auto] [contain-intrinsic-size:auto_1300px]">
           <div className="wrap">
             <SectionHeader eyebrow="NEWSROOM" title="Latest from the group.">
               <p>Plant openings, sustainability milestones and awards, with links to the original press reports.</p>

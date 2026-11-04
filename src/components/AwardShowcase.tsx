@@ -105,6 +105,7 @@ function Trophy({ award }: { award: TimelineAward }) {
     <div className="relative">
       <img
         src={src}
+        loading="lazy"
         alt={`${award.title}, ${award.years}`}
         decoding="async"
         draggable={false}
@@ -113,6 +114,7 @@ function Trophy({ award }: { award: TimelineAward }) {
       {/* Reflection on the floor */}
       <img
         src={src}
+        loading="lazy"
         alt=""
         aria-hidden="true"
         draggable={false}

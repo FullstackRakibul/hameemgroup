@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useInViewOnce from "./useInViewOnce";
 
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -39,7 +39,15 @@ export default function CountUp({ text, className = "", delay = 0 }: { text: str
   const [ref, inView] = useInViewOnce<HTMLSpanElement>(0.4);
   const { value, prefix, suffix, decimals, grouped } = parseFigure(text);
   const [shown, setShown] = useState(0);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const format = (n: number) =>
+    prefix +
+    n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals, useGrouping: grouped }) +
+    suffix;
 
+  // The count writes straight into its text node each frame and commits to
+  // React state only once, when it lands: a figure counting while the page
+  // scrolls costs no renders.
   useEffect(() => {
     if (!inView) return;
     if (reducedMotion() || typeof requestAnimationFrame === "undefined") {
@@ -50,24 +58,22 @@ export default function CountUp({ text, className = "", delay = 0 }: { text: str
     let frame = 0;
     const tick = (now: number) => {
       const t = Math.min(Math.max(now - start, 0) / 1600, 1);
-      setShown(value * easeOutCubic(t));
-      if (t < 1) frame = requestAnimationFrame(tick);
+      const node = textRef.current?.firstChild;
+      if (t < 1) {
+        if (node) node.nodeValue = format(value * easeOutCubic(t));
+        frame = requestAnimationFrame(tick);
+      } else setShown(value);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, value, delay]);
 
   return (
     <span ref={ref} className={className}>
       {/* The final text equals `text` exactly: screen readers get that, not the count */}
-      <span aria-hidden="true">
-        {prefix}
-        {shown.toLocaleString("en-US", {
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-          useGrouping: grouped,
-        })}
-        {suffix}
+      <span ref={textRef} aria-hidden="true">
+        {format(shown)}
       </span>
       <span className="sr-only">{text}</span>
     </span>

@@ -47,6 +47,8 @@ export default function ContactCta({ id }: { id?: string }) {
           crops a 16:9 frame far less than a wide strip did (only the sides on a phone); centring keeps the subject. */}
       <img
         src={`/media/${CONTACT_VIDEO.poster}`}
+        loading="lazy"
+        decoding="async"
         alt=""
         className="absolute inset-0 size-full object-cover object-center"
       />
